@@ -53,7 +53,7 @@ typedef struct {
     int phase_resistor; // 1 means 1 mOh
     TIM_HandleTypeDef* encoder_timer;
     int16_t encoder_offset;
-    int32_t encoder_state;
+    int32_t encoder_state; //编码器角度
     int phase;
     float pll_pos;
     float pll_vel;
@@ -61,6 +61,14 @@ typedef struct {
     float pll_ki;
 } Motor_t;
 
+typedef enum{
+    Incremental=0U,
+    Default = 1U,
+    Unknown_2 = 2U,
+    Tamagawa=4U,
+    Tamagawa_1=5U,
+    Unknown_8=8U,
+}Encoder_Type_e;
 enum Motor_thread_signals {
     M_SIGNAL_PH_CURRENT_MEAS = 1u << 0
 };
@@ -102,10 +110,13 @@ extern int drv8301_error;
 // extern short hall_u,hall.v,hall.w,hall.state,hall.state_back;
 extern ENC_Z enc_z;
 extern Hall_t hall;
+extern Encoder_Type_e feedback_type;
+
+
 extern short hall_phase[],ENC_Z_Offset,hall_phase_offset,ENC_Z_Phase,ENC_Z_Phase_B,ENC_Z_Phase_Err,start_calibrate_hall_phase;
 extern int hall_position,hall_position_b;
 extern short encoder_offset_diff,hall_phase_offset_diff;
-extern uint16_t feedback_type,poles_num,motor_code; 
+extern uint16_t poles_num,motor_code; 
 extern int feedback_resolution;
 extern short tamagawa_offset,tamagawa_dir;
 extern short over_voltage,under_voltage,chop_voltage,over_temperature;
@@ -127,7 +138,8 @@ extern int vel_lim,kpi_sum_limit;
 
 extern short position_in_lpf_a,position_out_lpf_a;
 
-extern int display_speed_loop_count,display_speed_update,display_speed,display_encoder_state_b;
+//extern int display_speed_loop_count,display_speed_update,display_speed,display_encoder_state_b;
+extern int display_speed;
 extern s32 profile_acce,profile_dece,profile_speed,end_speed,target_speed_now,searching_speed;
 extern s32 profile_target_position,profile_target_position_b;
 extern s32 home_offest,homing_speed,homing_acce;
@@ -153,9 +165,6 @@ extern int led_blink_counter,led_blink_period;
 extern char display_buff[40];
 extern short OLED_count,OLED_Period;
 
-extern int t1,t2,t3,t4,t5,t6;
-extern int tt1,tt2,tt3,tt4,tt5,tt6;
-extern int ttt1,ttt2,ttt3,ttt4;
 
 extern u16 store_parameter;
 extern u32 software_version;

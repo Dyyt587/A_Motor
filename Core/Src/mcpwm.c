@@ -28,7 +28,8 @@ int commutation_current = 2000, motor_rated_current = 2000, motor_peak_current =
 short commutation_founded = 0, commutation_mode = 0, commutation_time = 1000;
 int loop_counter_c = 0, loop_counter_v = 1, loop_counter_p = 2, current_loop_ready = 0, velocity_loop_ready = 0, position_loop_ready = 0;
 int phase_view;
-uint16_t feedback_type = 1, poles_num = 2, motor_code = 0;
+uint16_t  poles_num = 2, motor_code = 0;
+Encoder_Type_e feedback_type = Default;
 int feedback_resolution = 4000;
 short over_voltage, under_voltage, chop_voltage, over_temperature;
 short tamagawa_offset = 0, tamagawa_dir = 1;
@@ -108,7 +109,7 @@ void init_motor_control(void)
 	Driver_Ready = 1;
 
 	delay_ms(20);
-	if (feedback_type == 4)
+	if (feedback_type == Tamagawa)
 	{
 		if (Tamagawa_First < 10)
 		{
@@ -246,9 +247,9 @@ void find_commutation(void)
 	case 0:
 		switch (feedback_type)
 		{
-		case 1:
-		case 4:
-		case 8:
+		case Default:
+		case Tamagawa:
+		case Unknown_8:
 			phase_dir = 1; // must set back to the default value
 			start_pwm(&htim1);
 			motor_on = 1;
@@ -281,7 +282,7 @@ void find_commutation(void)
 					motor.encoder_offset = feedback_resolution - my_p0 % feedback_resolution;
 				}
 			}
-			if (feedback_type == 4)
+			if (feedback_type == Tamagawa)
 			{
 				if (commutation_founded == 1)
 				{
@@ -338,12 +339,12 @@ void update_motor(Motor_t *motors)
 	switch (feedback_type)
 	{
 	case 0:
-	case 1:
-	case 2:
+	case Default:
+	case Unknown_2:
 		delta_enc = (int16_t)motors->encoder_timer->Instance->CNT - (int16_t)motors->encoder_state;
 		motors->encoder_state += (int32_t)delta_enc;
 		break;
-	case 4:
+	case Tamagawa:
 		delta_enc = tamagawa_angle - tamagawa_angle_b;
 		if (delta_enc < (-feedback_resolution / 2))
 			delta_enc += feedback_resolution;
@@ -361,7 +362,7 @@ void update_motor(Motor_t *motors)
 		tamagawa_angle_b = tamagawa_angle;
 		motors->encoder_state += (int32_t)delta_enc;
 		break;
-	case 8:
+	case Unknown_8:
 
 		break;
 	default:
@@ -380,12 +381,19 @@ void update_motor(Motor_t *motors)
 
 	int ph;
 	// compute electrical phase
+	int32_t enc_state_mod = motors->encoder_state % feedback_resolution;
 	if (phase_dir == 1)
-		ph = M_PI / 2 + (rad_of_round * ((motors->encoder_state % feedback_resolution) - motors->encoder_offset)) / feedback_resolution;
+		ph = M_PI / 2 + (rad_of_round * (enc_state_mod - motors->encoder_offset)) / feedback_resolution;
 	else
-		ph = M_PI / 2 + (rad_of_round * ((feedback_resolution - (motors->encoder_state % feedback_resolution)) - motors->encoder_offset)) / feedback_resolution;
+		ph = M_PI / 2 + (rad_of_round * ((feedback_resolution - enc_state_mod) - motors->encoder_offset)) / feedback_resolution;
 
+	//ph = fmod(ph, 2 * M_PI);
 	ph = ph % (2 * M_PI);
+
+
+
+
+
 	// if(ph<0)
 	//	ph+=2*M_PI;
 

@@ -168,7 +168,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	{
 		switch(feedback_type)
 		{
-			case 4:
+			case Tamagawa:
 				Tamagawa_calCRC=Tamagawa_RX_BUFF[0]^Tamagawa_RX_BUFF[1]^Tamagawa_RX_BUFF[2]^Tamagawa_RX_BUFF[3]^Tamagawa_RX_BUFF[4]^Tamagawa_RX_BUFF[5];
 				if(Tamagawa_calCRC==0)
 				{
@@ -184,6 +184,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				{
 					Tamagawa_CRC_count++;
 				}
+			break;
+			default:
 			break;				
 		}
 	}

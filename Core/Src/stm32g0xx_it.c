@@ -258,7 +258,7 @@ t1=SysTick->VAL;
 			//HAL_GPIO_WritePin(ERR_GPIO_Port, ERR_Pin, GPIO_PIN_SET);
 			switch(feedback_type)
 			{
-				case 4:
+				case Tamagawa:
 					// take about 25us
 					if(set_tamagawa_zero==0)
 					{
@@ -289,9 +289,9 @@ t1=SysTick->VAL;
 					}
 				
 					break;
-				case 8:
-					//spi read take about 15us
-				break;
+//				case 8:
+//					//spi read take about 15us
+//				break;
 				default:
 					break;
 			}

@@ -50,7 +50,7 @@ void Init_Motor_Parameter(void)
 	vel_dir=-1;
 	tamagawa_dir=1;        //通讯编码器方向，1或-1
 	tamagawa_offset=0;      //通讯编码器位置偏移
-	feedback_type=4;       	//编码器反馈类型，1表示增量式编码器，4表示多摩川通讯式编码器
+	feedback_type=Tamagawa;       	//编码器反馈类型，1表示增量式编码器，4表示多摩川通讯式编码器
 
 }
 

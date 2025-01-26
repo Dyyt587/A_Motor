@@ -78,12 +78,14 @@ void Tamagawa_Read_Cmd(uint8_t *buf,uint16_t len)
 	//delay_us(5);
 	switch(feedback_type)
 	{
-		case 4:
+		case Tamagawa:
 			HAL_UART_Receive_DMA(&huart3,Tamagawa_RX_BUFF,6);
 			//UART_Start_Receive_DMA(&huart3,Tamagawa_RX_BUFF,6);
 		break;
-		case 5:
+		case Tamagawa_1:
 			HAL_UART_Receive_DMA(&huart3,Tamagawa_RX_BUFF,11);
+		break;
+		default:
 		break;
 	}
 	Tamagawa_TX_EN=0;		
