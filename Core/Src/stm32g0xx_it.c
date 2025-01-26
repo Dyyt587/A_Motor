@@ -230,7 +230,7 @@ t1=SysTick->VAL;
 	ADCValue[3]=ADC_Value[3];
 	ADCValue[4]=ADC_Value[4];
 	ADCValue[5]=ADC_Value[5];
-	HAL_ADC_Start_DMA(&hadc1, ADC_Value, 6);
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value, 6);
 	
 	vbus_voltage=(ADCValue[3]*19)/106;
 

@@ -36,7 +36,7 @@
 #if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 __asm (".global __use_no_semihosting\n\t");
  
-FILE __stdout;
+//FILE __stdout;
  
 /* __use_no_semihosting was requested, but _sys_exit was */
 void _sys_exit(int x)

@@ -69,7 +69,9 @@ void Tamagawa_Read_Cmd(uint8_t *buf,uint16_t len)
 		while((USART3->ISR&0X40)==0); //循环发送,直到发送完毕   
 		USART3->TDR = buf[i]; 
 	} 
-	while((USART3->ISR&0X40)==0);//循环发送,直到发送完毕   
+	while((USART3->ISR&0X40)==0)
+	{
+	}//循环发送,直到发送完毕   
 	//delay_us(2);
   HAL_GPIO_WritePin(TAMAGAWA_TX_EN_GPIO_Port,TAMAGAWA_TX_EN_Pin,GPIO_PIN_RESET);
 	//delay_us(5);

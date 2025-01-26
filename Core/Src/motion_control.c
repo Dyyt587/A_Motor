@@ -546,11 +546,11 @@ void OLED_Process(void)
 		temp=device_temperature/10.0;
 		sprintf(display_buff3,"%s%.1f%s","Temp:",temp,"");
 		
-	  OLED_ShowString(0,2,display_buff,12);
-	  OLED_ShowString(0,3,display_buff1,12);
-	  OLED_ShowString(0,0,display_buff4,16);
-	  OLED_ShowString(50,0,display_buff2,12);
-	  OLED_ShowString(50,1,display_buff3,12);
+	  OLED_ShowString(0,2,(u8*)display_buff,12);
+	  OLED_ShowString(0,3,(u8*)display_buff1,12);
+	  OLED_ShowString(0,0,(u8*)display_buff4,16);
+	  OLED_ShowString(50,0,(u8*)display_buff2,12);
+	  OLED_ShowString(50,1,(u8*)display_buff3,12);
 		
 }
 
