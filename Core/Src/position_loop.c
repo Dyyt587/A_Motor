@@ -1,0 +1,208 @@
+#include <stm32g0xx_hal.h> //Sets up the correct chip specifc defines required by arm_math
+//#define ARM_MATH_CM4
+//#include <arm_math.h>
+
+#include <mcpwm.h>
+
+#include <stdlib.h>
+#include <math.h>
+//#include <cmsis_os.h>
+
+#include <main.h>
+#include <adc.h>
+#include <tim.h>
+#include <spi.h>
+#include <utils.h>
+#include "delay.h"
+
+int vel_lim=50000;
+short kpp=10,kpi=1;
+s32 pos_actual,pos_offest=0;
+int pos_err,vel_des;
+int kpi_sum=0,kpi_sum_limit=3000;
+short position_in_lpf_a=1000,position_out_lpf_a=1000;
+
+int check_pos_overshot_p=0,check_pos_overshot_n=0;
+int Position_loop_first=0;
+void Position_Loop(Motor_t* motors, int target_pos)
+{
+	if(operation_mode<11)
+	{
+		switch(feedback_type)
+		{
+			case 1:
+			case 4:
+				pos_actual=motors->encoder_state-pos_offest;
+			break;
+				
+				
+		}
+		
+	}
+	else if(operation_mode>10)
+		pos_actual=hall_position;
+	
+	ENC_Z_Check();
+	switch(operation_mode)
+	{
+		case 1:
+		case 3:
+		case 7:	
+			if(commutation_founded&&motor_on)
+			{
+				pos_err = target_pos - pos_actual;
+				vel_des = kpp * pos_err+kpi_sum;
+				kpi_sum=kpi_sum+kpi*pos_err;
+				
+				if(kpi_sum > kpi_sum_limit)kpi_sum = kpi_sum_limit;
+				if(kpi_sum < -kpi_sum_limit)kpi_sum = -kpi_sum_limit;
+				if (vel_des >  vel_lim) vel_des =  vel_lim;
+				if (vel_des < -vel_lim) vel_des = -vel_lim;
+				
+				speed_demand=Low_pass_filter_1(position_out_lpf_a,vel_des,speed_demand);
+				//speed_demand=vel_des;
+			}
+			if(target_pos>0)
+			{
+					if(pos_err<check_pos_overshot_p)
+						check_pos_overshot_p=pos_err;
+			}
+			if(target_pos<0)
+			{
+					if(pos_err>check_pos_overshot_n)
+						check_pos_overshot_n=pos_err;
+			}
+			break;
+		case 11:
+		case 13:
+		case 17:	
+			if(commutation_founded&&motor_on)
+			{
+				pos_err = target_pos - pos_actual;
+				/*
+				if((pos_err<3)&&(pos_err<-3))
+				{
+					pos_err=0;
+					kpi_sum=0;
+				}*/
+				vel_des = kpp * pos_err+kpi_sum;
+				kpi_sum=kpi_sum+kpi*pos_err;
+				
+				if(kpi_sum > kpi_sum_limit)kpi_sum = kpi_sum_limit;
+				if(kpi_sum < -kpi_sum_limit)kpi_sum = -kpi_sum_limit;
+				if (vel_des >  vel_lim) vel_des =  vel_lim;
+				if (vel_des < -vel_lim) vel_des = -vel_lim;
+				
+				speed_demand=Low_pass_filter_1(position_out_lpf_a,vel_des,speed_demand);
+				//speed_demand=vel_des;
+			}
+			if(target_pos>0)
+			{
+					if(pos_err<check_pos_overshot_p)
+						check_pos_overshot_p=pos_err;
+			}
+			if(target_pos<0)
+			{
+					if(pos_err>check_pos_overshot_n)
+						check_pos_overshot_n=pos_err;
+			}
+			break;
+		default:
+			break;
+	}
+	Check_DCBus();
+	Check_Temperature();
+	//Check_IIt();
+	//Check_drv8301();
+}
+
+void ENC_Z_Check(void)
+{
+	if(ENC_Z_Trig)
+	{
+		ENC_Z_Trig=0;
+		ENC_Z_Pos_Offset=ENC_Z_Pos%feedback_resolution;
+		ENC_Z_Pos_Diff=ENC_Z_Pos-ENC_Z_Pos_B;
+		#if 0
+		if(ENC_Z_Diff>=0)
+		{
+			if(((ENC_Z_Diff % feedback_resolution)>ENC_Z_DIFF_ERROR)&&((ENC_Z_Diff % feedback_resolution)<(feedback_resolution-ENC_Z_DIFF_ERROR)))
+			{
+				ENC_Z_Diff_B=ENC_Z_Diff;
+				ENC_Counting_Error++;
+			}
+		}
+		else
+		{
+			if(((ENC_Z_Diff % feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((ENC_Z_Diff % feedback_resolution)>(ENC_Z_DIFF_ERROR-feedback_resolution)))
+			{
+				ENC_Z_Diff_B=ENC_Z_Diff;
+				ENC_Counting_Error++;
+			}
+		}
+		#else
+		if(ENC_Z_Pos_Diff>=0)
+		{
+			if(((ENC_Z_Pos_Diff % feedback_resolution)>ENC_Z_DIFF_ERROR)&&((ENC_Z_Pos_Diff % feedback_resolution)<(feedback_resolution-ENC_Z_DIFF_ERROR)))
+			{
+				ENC_Z_Pos_Diff_B=ENC_Z_Pos_Diff;
+				ENC_Counting_Error++;
+			}
+		}
+		else
+		{
+			if(((ENC_Z_Pos_Diff % feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((ENC_Z_Pos_Diff % feedback_resolution)>(ENC_Z_DIFF_ERROR-feedback_resolution)))
+			{
+				ENC_Z_Pos_Diff_B=ENC_Z_Pos_Diff;
+				ENC_Counting_Error++;
+			}
+		}
+		#endif
+		if((commutation_founded==1)&&(commutation_mode==1))
+			if(ENC_Z_First==0)
+			{
+				motor.encoder_offset-=encoder_offset_diff;
+				ENC_Z_First=1;
+			}
+	}
+}
+
+void Check_DCBus(void)
+{
+	if(vbus_voltage>over_voltage)
+		Error_State.bits.voltage_high=1;
+	if(vbus_voltage<under_voltage)
+		Error_State.bits.voltage_low=1;
+	
+	//if(vbus_voltage>chop_voltage)
+	//	HAL_GPIO_WritePin(BRAKE_GPIO_Port, BRAKE_Pin, GPIO_PIN_RESET);
+	//if(vbus_voltage<(chop_voltage-10))
+	//	HAL_GPIO_WritePin(BRAKE_GPIO_Port, BRAKE_Pin, GPIO_PIN_SET);
+}
+
+void Check_Temperature(void)
+{
+	if(device_temperature>over_temperature)
+		Error_State.bits.over_temperature=1;
+}
+
+void Check_IIt(void)
+{
+	Driver_IIt_Real=IIt_filter(Driver_IIt_Filter,Iq_real,Driver_IIt_Real);
+	if(Driver_IIt_Real>Driver_IIt_Current)
+		Error_State.bits.over_load=1;
+	
+	Driver_IIt_Real_DC=IIt_DC_filter(Driver_IIt_Filter_DC,Iq_real,Driver_IIt_Real_DC);
+	if(Driver_IIt_Real_DC>Driver_IIt_Current_DC)
+		Error_State.bits.over_load=1;
+}
+
+
+void Error_process(void)
+{
+	if(Error_State.all)
+	{
+		status_word.bits.operation_enable=0;
+		status_word.bits.error=1;
+	}
+}
