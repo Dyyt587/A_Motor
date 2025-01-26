@@ -133,7 +133,7 @@ Section Cross References
     ds402.o(i.DS402_process) refers to motion_control.o(.data) for target_speed_now
     ds402.o(i.DS402_process) refers to position_loop.o(.data) for pos_actual
     ds402.o(i.DS402_process) refers to mcpwm.o(.data) for drv8301_error
-    ds402.o(i.DS402_process) refers to mcpwm.o(.data) for ENC_Counting_Error
+    ds402.o(i.DS402_process) refers to mcpwm.o(.data) for enc_z.counting_error
     modbus.o(.rev16_text) refers (Special) to use_no_semi_2.o(.text) for __use_no_semihosting
     modbus.o(.revsh_text) refers (Special) to use_no_semi_2.o(.text) for __use_no_semihosting
     modbus.o(i.HAL_UART_RxCpltCallback) refers (Special) to use_no_semi_2.o(.text) for __use_no_semihosting
@@ -443,14 +443,14 @@ Section Cross References
     position_loop.o(i.Check_IIt) refers to current_loop.o(.data) for Driver_IIt_Filter_DC
     position_loop.o(i.Check_IIt) refers to current_loop.o(.data) for Driver_IIt_Current_DC
     position_loop.o(i.ENC_Z_Check) refers to aeabi_sdiv.o(.text) for __aeabi_idivmod
-    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for ENC_Z_Trig
+    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for enc_z.trig
     position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for feedback_resolution
-    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for ENC_Z_Pos
-    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for ENC_Z_Pos_Offset
-    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for ENC_Z_Pos_B
-    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for ENC_Z_Pos_Diff
-    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for ENC_Counting_Error
-    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for ENC_Z_Pos_Diff_B
+    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for enc_z.pos
+    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for enc_z.pos_offset
+    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for enc_z.pos_back
+    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for enc_z.pos_diff
+    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for enc_z.counting_error
+    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for enc_z.pos_diff_back
     position_loop.o(i.Error_process) refers to mcpwm.o(.data) for Error_State
     position_loop.o(i.Error_process) refers to ds402.o(.data) for status_word
     position_loop.o(i.Position_Loop) refers to position_loop.o(i.ENC_Z_Check) for ENC_Z_Check
@@ -3203,9 +3203,9 @@ Image Symbol Table
     tamagawa_offset                          0x20000012   Data           2  mcpwm.o(.data)
     tamagawa_dir                             0x20000014   Data           2  mcpwm.o(.data)
     Driver_Ready                             0x20000016   Data           2  mcpwm.o(.data)
-    ENC_Z_Count                              0x20000018   Data           2  mcpwm.o(.data)
-    ENC_Z_Count_B                            0x2000001a   Data           2  mcpwm.o(.data)
-    ENC_Z_First                              0x2000001c   Data           2  mcpwm.o(.data)
+    enc_z.count                              0x20000018   Data           2  mcpwm.o(.data)
+    enc_z.count_back                            0x2000001a   Data           2  mcpwm.o(.data)
+    enc_z.first                              0x2000001c   Data           2  mcpwm.o(.data)
     hall_u                                   0x2000001e   Data           2  mcpwm.o(.data)
     hall.v                                   0x20000020   Data           2  mcpwm.o(.data)
     hall.w                                   0x20000022   Data           2  mcpwm.o(.data)
@@ -3258,13 +3258,13 @@ Image Symbol Table
     position_loop_ready                      0x200000fc   Data           4  mcpwm.o(.data)
     motor_code                               0x20000100   Data           2  mcpwm.o(.data)
     drv8301_error                            0x20000104   Data           4  mcpwm.o(.data)
-    ENC_Z_Trig                               0x20000108   Data           2  mcpwm.o(.data)
-    ENC_Counting_Error                       0x2000010a   Data           2  mcpwm.o(.data)
-    ENC_Z_Pos                                0x2000010c   Data           4  mcpwm.o(.data)
-    ENC_Z_Pos_B                              0x20000110   Data           4  mcpwm.o(.data)
-    ENC_Z_Pos_Offset                         0x20000114   Data           4  mcpwm.o(.data)
-    ENC_Z_Pos_Diff                           0x20000118   Data           4  mcpwm.o(.data)
-    ENC_Z_Pos_Diff_B                         0x2000011c   Data           4  mcpwm.o(.data)
+    enc_z.trig                               0x20000108   Data           2  mcpwm.o(.data)
+    enc_z.counting_error                       0x2000010a   Data           2  mcpwm.o(.data)
+    enc_z.pos                                0x2000010c   Data           4  mcpwm.o(.data)
+    enc_z.pos_back                              0x20000110   Data           4  mcpwm.o(.data)
+    enc_z.pos_offset                         0x20000114   Data           4  mcpwm.o(.data)
+    enc_z.pos_diff                           0x20000118   Data           4  mcpwm.o(.data)
+    enc_z.pos_diff_back                         0x2000011c   Data           4  mcpwm.o(.data)
     ENC_Z_Offset                             0x20000120   Data           2  mcpwm.o(.data)
     hall_position_b                          0x20000124   Data           4  mcpwm.o(.data)
     led_blink_counter                        0x20000128   Data           4  mcpwm.o(.data)

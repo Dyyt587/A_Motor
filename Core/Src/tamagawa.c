@@ -6,6 +6,7 @@
 #include "mcpwm.h"
 #include "tamagawa.h"	
 
+//多摩川协议
 
 //接收状态
 //bit15，	接收完成标志

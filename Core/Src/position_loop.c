@@ -118,51 +118,51 @@ void Position_Loop(Motor_t* motors, int target_pos)
 
 void ENC_Z_Check(void)
 {
-	if(ENC_Z_Trig)
+	if(enc_z.trig)
 	{
-		ENC_Z_Trig=0;
-		ENC_Z_Pos_Offset=ENC_Z_Pos%feedback_resolution;
-		ENC_Z_Pos_Diff=ENC_Z_Pos-ENC_Z_Pos_B;
+		enc_z.trig=0;
+		enc_z.pos_offset=enc_z.pos%feedback_resolution;
+		enc_z.pos_diff=enc_z.pos-enc_z.pos_back;
 		#if 0
-		if(ENC_Z_Diff>=0)
+		if(enc_z.diff>=0)
 		{
-			if(((ENC_Z_Diff % feedback_resolution)>ENC_Z_DIFF_ERROR)&&((ENC_Z_Diff % feedback_resolution)<(feedback_resolution-ENC_Z_DIFF_ERROR)))
+			if(((enc_z.diff % feedback_resolution)>ENC_Z_DIFF_ERROR)&&((enc_z.diff % feedback_resolution)<(feedback_resolution-ENC_Z_DIFF_ERROR)))
 			{
-				ENC_Z_Diff_B=ENC_Z_Diff;
-				ENC_Counting_Error++;
+				enc_z.diff_back=enc_z.diff;
+				enc_z.counting_error++;
 			}
 		}
 		else
 		{
-			if(((ENC_Z_Diff % feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((ENC_Z_Diff % feedback_resolution)>(ENC_Z_DIFF_ERROR-feedback_resolution)))
+			if(((enc_z.diff % feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((enc_z.diff % feedback_resolution)>(ENC_Z_DIFF_ERROR-feedback_resolution)))
 			{
-				ENC_Z_Diff_B=ENC_Z_Diff;
-				ENC_Counting_Error++;
+				enc_z.diff_back=enc_z.diff;
+				enc_z.counting_error++;
 			}
 		}
 		#else
-		if(ENC_Z_Pos_Diff>=0)
+		if(enc_z.pos_diff>=0)
 		{
-			if(((ENC_Z_Pos_Diff % feedback_resolution)>ENC_Z_DIFF_ERROR)&&((ENC_Z_Pos_Diff % feedback_resolution)<(feedback_resolution-ENC_Z_DIFF_ERROR)))
+			if(((enc_z.pos_diff % feedback_resolution)>ENC_Z_DIFF_ERROR)&&((enc_z.pos_diff % feedback_resolution)<(feedback_resolution-ENC_Z_DIFF_ERROR)))
 			{
-				ENC_Z_Pos_Diff_B=ENC_Z_Pos_Diff;
-				ENC_Counting_Error++;
+				enc_z.pos_diff_back=enc_z.pos_diff;
+				enc_z.counting_error++;
 			}
 		}
 		else
 		{
-			if(((ENC_Z_Pos_Diff % feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((ENC_Z_Pos_Diff % feedback_resolution)>(ENC_Z_DIFF_ERROR-feedback_resolution)))
+			if(((enc_z.pos_diff % feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((enc_z.pos_diff % feedback_resolution)>(ENC_Z_DIFF_ERROR-feedback_resolution)))
 			{
-				ENC_Z_Pos_Diff_B=ENC_Z_Pos_Diff;
-				ENC_Counting_Error++;
+				enc_z.pos_diff_back=enc_z.pos_diff;
+				enc_z.counting_error++;
 			}
 		}
 		#endif
 		if((commutation_founded==1)&&(commutation_mode==1))
-			if(ENC_Z_First==0)
+			if(enc_z.first==0)
 			{
 				motor.encoder_offset-=encoder_offset_diff;
-				ENC_Z_First=1;
+				enc_z.first=1;
 			}
 	}
 }

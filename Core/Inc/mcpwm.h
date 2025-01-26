@@ -64,7 +64,12 @@ typedef struct {
 enum Motor_thread_signals {
     M_SIGNAL_PH_CURRENT_MEAS = 1u << 0
 };
-
+typedef struct
+{
+	unsigned short  count,  count_back,  count_c,  first,  trig,  counting_error;
+	short  diff,  diff_back;
+	int  pos,  pos_back,  pos_offset,  pos_diff,  pos_diff_back;
+} ENC_Z;
 typedef struct{
     short u;
     short v;
@@ -91,10 +96,11 @@ extern union Control_uint16_t  control_word,control_word_b;
 extern u16 motor_on;
 extern short Driver_Ready;
 extern int drv8301_error;
-extern unsigned short ENC_Z_Count,ENC_Z_Count_B,ENC_Z_Count_C,ENC_Z_First,ENC_Z_Trig,ENC_Counting_Error;
-extern short ENC_Z_Diff,ENC_Z_Diff_B;
-extern int ENC_Z_Pos,ENC_Z_Pos_B,ENC_Z_Pos_Offset,ENC_Z_Pos_Diff,ENC_Z_Pos_Diff_B;
+// extern unsigned short enc_z.count,enc_z.count_back,enc_z.count_c,enc_z.first,enc_z.trig,enc_z.counting_error;
+// extern short enc_z.diff,enc_z.diff_back;
+// extern int enc_z.pos,enc_z.pos_back,enc_z.pos_offset,enc_z.pos_diff,enc_z.pos_diff_back;
 // extern short hall_u,hall.v,hall.w,hall.state,hall.state_back;
+extern ENC_Z enc_z;
 extern Hall_t hall;
 extern short hall_phase[],ENC_Z_Offset,hall_phase_offset,ENC_Z_Phase,ENC_Z_Phase_B,ENC_Z_Phase_Err,start_calibrate_hall_phase;
 extern int hall_position,hall_position_b;

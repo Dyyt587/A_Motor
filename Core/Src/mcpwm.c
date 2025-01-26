@@ -34,10 +34,13 @@ short over_voltage, under_voltage, chop_voltage, over_temperature;
 short tamagawa_offset = 0, tamagawa_dir = 1;
 short Driver_Ready = 0;
 int drv8301_error = 0;
-unsigned short ENC_Z_Count = 0, ENC_Z_Count_B = 0, ENC_Z_Count_C = 0, ENC_Z_First = 0, ENC_Z_Trig = 0, ENC_Counting_Error = 0;
-short ENC_Z_Diff = 0, ENC_Z_Diff_B = 0;
-int ENC_Z_Pos = 0, ENC_Z_Pos_B = 0, ENC_Z_Pos_Offset = 0, ENC_Z_Pos_Diff = 0, ENC_Z_Pos_Diff_B = 0;
 
+// unsigned short enc_z.count = 0, enc_z.count_back = 0, enc_z.count_c = 0, enc_z.first = 0, enc_z.trig = 0, enc_z.counting_error = 0;
+// short enc_z.diff = 0, enc_z.diff_back = 0;
+// int enc_z.pos = 0, enc_z.pos_back = 0, enc_z.pos_offset = 0, enc_z.pos_diff = 0, enc_z.pos_diff_back = 0;
+
+
+ENC_Z enc_z={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 Hall_t hall = {0, 0, 0, 0, 0, 0}; // 霍尔传感器结构体
 
 short hall_count = 0, hall_get_position = 0, start_calibrate_hall_phase = 0;
@@ -147,8 +150,8 @@ void start_adc(void)
 
 /**
  * @brief 启动svpwm
- * 
- * @param htim 
+ *
+ * @param htim
  */
 void start_pwm(TIM_HandleTypeDef *htim)
 {
@@ -169,8 +172,8 @@ void start_pwm(TIM_HandleTypeDef *htim)
 
 /**
  * @brief 停止svpwm
- * 
- * @param htim 
+ *
+ * @param htim
  */
 void stop_pwm(TIM_HandleTypeDef *htim)
 {
@@ -190,9 +193,9 @@ void stop_pwm(TIM_HandleTypeDef *htim)
 }
 /**
  * @brief 计算电流
- * 
- * @param ADCValue 
- * @return int 
+ *
+ * @param ADCValue
+ * @return int
  */
 int phase_current_from_adcval(uint32_t ADCValue)
 {
@@ -302,9 +305,9 @@ void find_commutation(void)
 		{
 		case 1:
 			motor.encoder_state = 0;
-			ENC_Z_Count = 0;
-			ENC_Z_Count_B = 0;
-			ENC_Z_First = 0;
+			enc_z.count = 0;
+			enc_z.count_back = 0;
+			enc_z.first = 0;
 			commutation_founded = 1;
 			break;
 		case 4:
@@ -454,7 +457,7 @@ void update_motor(Motor_t *motors)
 
 	if ((commutation_founded == 1) && (commutation_mode == 2))
 	{
-		// ENC_Z_First=1;
+		// enc_z.first=1;
 		if ((hall.state == 4) && (hall.state_back == 5))
 		{
 			if (hall_phase_dir == 1)
@@ -465,10 +468,10 @@ void update_motor(Motor_t *motors)
 			hall_phase_offset_diff = hall_phase_offset_diff % (2 * M_PI);
 			encoder_offset_diff = hall_phase_offset_diff * feedback_resolution / (M_PI * poles_num * 2);
 			if ((commutation_founded == 1) && (commutation_mode == 2))
-				if (ENC_Z_First == 0)
+				if (enc_z.first == 0)
 				{
 					motors->encoder_offset -= encoder_offset_diff;
-					ENC_Z_First = 1;
+					enc_z.first = 1;
 				}
 		}
 		if ((hall.state == 5) && (hall.state_back == 4))
@@ -481,10 +484,10 @@ void update_motor(Motor_t *motors)
 			hall_phase_offset_diff = hall_phase_offset_diff % (2 * M_PI);
 			encoder_offset_diff = hall_phase_offset_diff * feedback_resolution / (M_PI * poles_num * 2);
 			if ((commutation_founded == 1) && (commutation_mode == 2))
-				if (ENC_Z_First == 0)
+				if (enc_z.first == 0)
 				{
 					motors->encoder_offset -= encoder_offset_diff;
-					ENC_Z_First = 1;
+					enc_z.first = 1;
 				}
 		}
 	}
@@ -496,9 +499,9 @@ void get_hall_edge_phase(Motor_t *motors)
 	{
 		motors->encoder_state = 0;
 		motors->encoder_timer->Instance->CNT = 0;
-		ENC_Z_Count = 0;
-		ENC_Z_Count_B = 0;
-		ENC_Z_First = 0;
+		enc_z.count = 0;
+		enc_z.count_back = 0;
+		enc_z.first = 0;
 		ENC_Z_Phase = 6800; // set bigger than 6280
 		hall_count = 0;
 		hall_get_position = 2;
