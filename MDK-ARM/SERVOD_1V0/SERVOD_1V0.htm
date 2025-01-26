@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\SERVOD_1V0\SERVOD_1V0.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\SERVOD_1V0\SERVOD_1V0.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6210000: Last Updated: Sun Jan 26 14:31:12 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6210000: Last Updated: Sun Jan 26 14:37:44 2025
 <BR><P>
 <H3>Maximum Stack Usage =        368 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -813,7 +813,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32g070xx.o(RESET)
 </UL>
 <P><STRONG><a name="[94]"></a>DS402_process</STRONG> (Thumb, 236 bytes, Stack size 16 bytes, ds402.o(.text.DS402_process))
-<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = DS402_process &rArr; find_commutation &rArr; delay_ms &rArr; get_system_ticks
+<BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = DS402_process &rArr; find_commutation &rArr; delay_ms &rArr; get_system_ticks
 </UL>
 <BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;find_commutation
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stop_pwm
@@ -2077,8 +2077,8 @@ Global Symbols
 <LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[96]"></a>find_commutation</STRONG> (Thumb, 524 bytes, Stack size 32 bytes, mcpwm.o(.text.find_commutation))
-<BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = find_commutation &rArr; delay_ms &rArr; get_system_ticks
+<P><STRONG><a name="[96]"></a>find_commutation</STRONG> (Thumb, 528 bytes, Stack size 40 bytes, mcpwm.o(.text.find_commutation))
+<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = find_commutation &rArr; delay_ms &rArr; get_system_ticks
 </UL>
 <BR>[Calls]<UL><LI><a href="#[121]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIMEx_PWMN_Stop
 <LI><a href="#[120]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PWM_Stop
@@ -2253,8 +2253,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[10f]"></a>update_motor</STRONG> (Thumb, 624 bytes, Stack size 48 bytes, mcpwm.o(.text.update_motor))
-<BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = update_motor &rArr; __aeabi_idiv
+<P><STRONG><a name="[10f]"></a>update_motor</STRONG> (Thumb, 624 bytes, Stack size 40 bytes, mcpwm.o(.text.update_motor))
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = update_motor &rArr; __aeabi_idiv
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idiv
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
