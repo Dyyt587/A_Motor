@@ -146,7 +146,7 @@ void Motion_process(void)
 				if(distance_diff>=0)
 				{
 					direction=1;
-					acce_diatance=Acce_distance_cal(profile_acce,profile_speed);// ¼ÆËã¼Ó¼õËÙ¾àÀë
+					acce_diatance=Acce_distance_cal(profile_acce,profile_speed);// è®¡ç®—åŠ å‡é€Ÿè·ç¦»
 					dece_diatance=Acce_distance_cal(profile_dece,profile_speed);
 					accelerating=1;
 					decelerating=0;
@@ -558,7 +558,7 @@ int key1_state,key2_state,key3_state,key1_state_b,key2_state_b,key3_state_b,key1
 void KEY_Process(void)
 {
 
-	//Ilim=(motor_peak_current*ADCValue[4])/4096; //µçÎ»¼Æµ÷½ÚÏŞÖÆµÄµçÁ÷¼´Å¤¾Ø
+	//Ilim=(motor_peak_current*ADCValue[4])/4096; //ç”µä½è®¡è°ƒèŠ‚é™åˆ¶çš„ç”µæµå³æ‰­çŸ©
 	key1_state=HAL_GPIO_ReadPin(KEY1_GPIO_Port,KEY1_Pin);
 	key2_state=HAL_GPIO_ReadPin(KEY2_GPIO_Port,KEY2_Pin);
 	key3_state=HAL_GPIO_ReadPin(KEY3_GPIO_Port,KEY3_Pin);

@@ -9,182 +9,121 @@ License Information: d 805207319@qq.com, d, LIC=RC93N-Y6I5C-749S0-BB47H-1DVAV-GF
  
 Tool Versions:
 Toolchain:       MDK-ARM Plus  Version: 5.39.0.0
-Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
-C Compiler:      Armcc.exe V5.06 update 7 (build 960)
-Assembler:       Armasm.exe V5.06 update 7 (build 960)
-Linker/Locator:  ArmLink.exe V5.06 update 7 (build 960)
-Library Manager: ArmAr.exe V5.06 update 7 (build 960)
-Hex Converter:   FromElf.exe V5.06 update 7 (build 960)
+Toolchain Path:  C:\Keil_v5\ARM\ARMCLANG\Bin
+C Compiler:      ArmClang.exe V6.21
+Assembler:       Armasm.exe V6.21
+Linker/Locator:  ArmLink.exe V6.21
+Library Manager: ArmAr.exe V6.21
+Hex Converter:   FromElf.exe V6.21
 CPU DLL:         SARMCM3.DLL V5.39.0.0
 Dialog DLL:      DARMCM1.DLL V1.19.6.0
-Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.2.0.0
+Target DLL:      CMSIS_AGDI.dll V1.33.16.0
 Dialog DLL:      TARMCM1.DLL V1.14.6.0
  
 <h2>Project:</h2>
-C:\Users\33368\Documents\SERVOD_1V3\SERVOD_070R_1V3◊ ¡œ\¿˝≥Ã¥˙¬Î\  ≈‰36ST79µÁª˙\2°¢SERVOD_G070R_1V3(ÀŸ∂»±’ª∑£¨∞¥º¸µ˜ÀŸ)\MDK-ARM\SERVOD_1V0.uvprojx
+D:\A_Motor\MDK-ARM\SERVOD_1V0.uvprojx
 Project File Date:  01/26/2025
 
 <h2>Output:</h2>
-*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
-Build target 'SERVOD_1V0'
+*** Using Compiler 'V6.21', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
+Rebuild target 'SERVOD_1V0'
 assembling startup_stm32g070xx.s...
-compiling utils.c...
-compiling sys.c...
-compiling ntc_calculate.c...
-../Core/Inc/NTC_Calculate.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\Core\Src\ntc_calculate.c: 1 warning, 0 errors
 compiling parameter.c...
-../Core/Inc/NTC_Calculate.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\Core\Src\parameter.c: 1 warning, 0 errors
-compiling sin_table.c...
-../Core/Inc/NTC_Calculate.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\Core\Src\sin_table.c: 1 warning, 0 errors
-compiling current_loop.c...
-../Core/Inc/NTC_Calculate.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\Core\Src\current_loop.c(19): warning:  #177-D: variable "one_by_sqrt3"  was declared but never referenced
-  static const int one_by_sqrt3 = 577;
-..\Core\Src\current_loop.c(20): warning:  #177-D: variable "sqrt3_by_2"  was declared but never referenced
-  static const int sqrt3_by_2 = 866;
-..\Core\Src\current_loop.c: 3 warnings, 0 errors
-compiling oled.c...
-../Core/Inc/oled.h(44): warning:  #1295-D: Deprecated declaration Picture - give arg types
-  void Picture();
-../Core/Inc/oled.h(45): warning:  #1295-D: Deprecated declaration IIC_Start - give arg types
-  void IIC_Start();
-../Core/Inc/oled.h(46): warning:  #1295-D: Deprecated declaration IIC_Stop - give arg types
-  void IIC_Stop();
-../Core/Inc/oled.h(51): warning:  #1295-D: Deprecated declaration IIC_Wait_Ack - give arg types
-  void IIC_Wait_Ack();
-..\Core\Src\oled.c: 4 warnings, 0 errors
-compiling motion_control.c...
-../Core/Inc/NTC_Calculate.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-../Core/Inc/oled.h(44): warning:  #1295-D: Deprecated declaration Picture - give arg types
-  void Picture();
-../Core/Inc/oled.h(45): warning:  #1295-D: Deprecated declaration IIC_Start - give arg types
-  void IIC_Start();
-../Core/Inc/oled.h(46): warning:  #1295-D: Deprecated declaration IIC_Stop - give arg types
-  void IIC_Stop();
-../Core/Inc/oled.h(51): warning:  #1295-D: Deprecated declaration IIC_Wait_Ack - give arg types
-  void IIC_Wait_Ack();
-..\Core\Src\motion_control.c(50): warning:  #177-D: variable "temp32a"  was declared but never referenced
-  	int temp32a,temp32b;
-..\Core\Src\motion_control.c(50): warning:  #177-D: variable "temp32b"  was declared but never referenced
-  	int temp32a,temp32b;
-..\Core\Src\motion_control.c(51): warning:  #177-D: variable "temp64c"  was declared but never referenced
-  	int64_t temp64a,temp64b,temp64c,temp64d;
-..\Core\Src\motion_control.c(51): warning:  #177-D: variable "temp64d"  was declared but never referenced
-  	int64_t temp64a,temp64b,temp64c,temp64d;
-..\Core\Src\motion_control.c(549): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
-  	  OLED_ShowString(0,2,display_buff,12);
-..\Core\Src\motion_control.c(550): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
-  	  OLED_ShowString(0,3,display_buff1,12);
-..\Core\Src\motion_control.c(551): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
-  	  OLED_ShowString(0,0,display_buff4,16);
-..\Core\Src\motion_control.c(552): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
-  	  OLED_ShowString(50,0,display_buff2,12);
-..\Core\Src\motion_control.c(553): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "u8 *"
-  	  OLED_ShowString(50,1,display_buff3,12);
-..\Core\Src\motion_control.c: 14 warnings, 0 errors
-compiling delay.c...
 compiling position_loop.c...
-../Core/Inc/NTC_Calculate.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\Core\Src\position_loop.c: 1 warning, 0 errors
-compiling velocity_loop.c...
-../Core/Inc/NTC_Calculate.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\Core\Src\velocity_loop.c(178): warning:  #177-D: variable "temp"  was declared but never referenced
-  	int temp;
-..\Core\Src\velocity_loop.c: 2 warnings, 0 errors
+compiling ntc_calculate.c...
+compiling sys.c...
+../Core/Src/tamagawa.c(72): warning: while loop has empty body [-Wempty-body]
+   72 |         while((USART3->ISR&0X40)==0);//Âæ™ÁéØÂèëÈÄÅ,Áõ¥Âà∞ÂèëÈÄÅÂÆåÊØï   
+      |                                     ^
+../Core/Src/tamagawa.c(72): note: put the semicolon on a separate line to silence this warning
+1 warning generated.
 compiling tamagawa.c...
-../Core/Inc/NTC_Calculate.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\Core\Src\tamagawa.c: 1 warning, 0 errors
-compiling ds402.c...
-../Core/Inc/NTC_Calculate.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\Core\Src\ds402.c: 1 warning, 0 errors
 compiling crc_16.c...
-compiling mcpwm.c...
-../Core/Inc/NTC_Calculate.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\Core\Src\mcpwm.c(210): warning:  #177-D: variable "current_step"  was declared but never referenced
-  	int32_t phase_offset,current_step,i;
-..\Core\Src\mcpwm.c(210): warning:  #177-D: variable "i"  was declared but never referenced
-  	int32_t phase_offset,current_step,i;
-..\Core\Src\mcpwm.c(545): warning:  #177-D: variable "i"  was declared but never referenced
-  	int i,j;
-..\Core\Src\mcpwm.c(545): warning:  #177-D: variable "j"  was declared but never referenced
-  	int i,j;
-..\Core\Src\mcpwm.c(85): warning:  #177-D: variable "one_by_sqrt3"  was declared but never referenced
-  static const int one_by_sqrt3 = 577;
-..\Core\Src\mcpwm.c(86): warning:  #177-D: variable "sqrt3_by_2"  was declared but never referenced
-  static const int sqrt3_by_2 = 866;
-..\Core\Src\mcpwm.c: 7 warnings, 0 errors
+compiling delay.c...
+compiling utils.c...
+compiling sin_table.c...
+compiling ds402.c...
+compiling current_loop.c...
+../Core/Src/motion_control.c(549): warning: passing 'char[40]' to parameter of type 'u8 *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+  549 |           OLED_ShowString(0,2,display_buff,12);
+      |                               ^~~~~~~~~~~~
+../Core/Inc\oled.h(37): note: passing argument to parameter 'p' here
+   37 | void OLED_ShowString(u8 x,u8 y, u8 *p,u8 Char_Size);     
+      |                                     ^
+../Core/Src/motion_control.c(550): warning: passing 'char[40]' to parameter of type 'u8 *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+  550 |           OLED_ShowString(0,3,display_buff1,12);
+      |                               ^~~~~~~~~~~~~
+../Core/Inc\oled.h(37): note: passing argument to parameter 'p' here
+   37 | void OLED_ShowString(u8 x,u8 y, u8 *p,u8 Char_Size);     
+      |                                     ^
+../Core/Src/motion_control.c(551): warning: passing 'char[40]' to parameter of type 'u8 *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+  551 |           OLED_ShowString(0,0,display_buff4,16);
+      |                               ^~~~~~~~~~~~~
+../Core/Inc\oled.h(37): note: passing argument to parameter 'p' here
+   37 | void OLED_ShowString(u8 x,u8 y, u8 *p,u8 Char_Size);     
+      |                                     ^
+../Core/Src/motion_control.c(552): warning: passing 'char[40]' to parameter of type 'u8 *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+  552 |           OLED_ShowString(50,0,display_buff2,12);
+      |                                ^~~~~~~~~~~~~
+../Core/Inc\oled.h(37): note: passing argument to parameter 'p' here
+   37 | void OLED_ShowString(u8 x,u8 y, u8 *p,u8 Char_Size);     
+      |                                     ^
+../Core/Src/motion_control.c(553): warning: passing 'char[40]' to parameter of type 'u8 *' (aka 'unsigned char *') converts between pointers to integer types where one is of the unique plain 'char' type and the other is not [-Wpointer-sign]
+  553 |           OLED_ShowString(50,1,display_buff3,12);
+      |                                ^~~~~~~~~~~~~
+../Core/Inc\oled.h(37): note: passing argument to parameter 'p' here
+   37 | void OLED_ShowString(u8 x,u8 y, u8 *p,u8 Char_Size);     
+      |                                     ^
+5 warnings generated.
+compiling motion_control.c...
 compiling modbus.c...
-../Core/Inc/NTC_Calculate.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-..\Core\Src\modbus.c(108): warning:  #177-D: variable "res"  was declared but never referenced
-    char res;
-..\Core\Src\modbus.c: 2 warnings, 0 errors
-compiling stm32g0xx_ll_adc.c...
-compiling stm32g0xx_ll_rcc.c...
+compiling oled.c...
+compiling mcpwm.c...
 compiling main.c...
-../Core/Inc/NTC_Calculate.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-../Core/Inc/oled.h(44): warning:  #1295-D: Deprecated declaration Picture - give arg types
-  void Picture();
-../Core/Inc/oled.h(45): warning:  #1295-D: Deprecated declaration IIC_Start - give arg types
-  void IIC_Start();
-../Core/Inc/oled.h(46): warning:  #1295-D: Deprecated declaration IIC_Stop - give arg types
-  void IIC_Stop();
-../Core/Inc/oled.h(51): warning:  #1295-D: Deprecated declaration IIC_Wait_Ack - give arg types
-  void IIC_Wait_Ack();
-../Core/Src/main.c: 5 warnings, 0 errors
 compiling gpio.c...
-compiling spi.c...
 compiling adc.c...
-compiling tim.c...
-compiling stm32g0xx_ll_dma.c...
-compiling usart.c...
-compiling stm32g0xx_hal_flash_ex.c...
-compiling stm32g0xx_hal_adc_ex.c...
+compiling velocity_loop.c...
 compiling dma.c...
-compiling stm32g0xx_it.c...
-../Core/Inc/NTC_Calculate.h(7): warning:  #1-D: last line of file ends without a newline
-  #endif
-../Core/Src/stm32g0xx_it.c(233): warning:  #167-D: argument of type "int *" is incompatible with parameter of type "uint32_t *"
-  	HAL_ADC_Start_DMA(&hadc1, ADC_Value, 6);
-../Core/Src/stm32g0xx_it.c: 2 warnings, 0 errors
+compiling spi.c...
 compiling stm32g0xx_hal_msp.c...
-compiling stm32g0xx_hal_rcc_ex.c...
+compiling usart.c...
+compiling tim.c...
+../Core/Src/stm32g0xx_it.c(233): warning: passing 'int[6]' to parameter of type 'uint32_t *' (aka 'unsigned int *') converts between pointers to integer types with different sign [-Wpointer-sign]
+  233 |         HAL_ADC_Start_DMA(&hadc1, ADC_Value, 6);
+      |                                   ^~~~~~~~~
+../Drivers/STM32G0xx_HAL_Driver/Inc\stm32g0xx_hal_adc.h(1688): note: passing argument to parameter 'pData' here
+ 1688 | HAL_StatusTypeDef       HAL_ADC_Start_DMA(ADC_HandleTypeDef *hadc, uint32_t *pData, uint32_t Length);
+      |                                                                              ^
+1 warning generated.
+compiling stm32g0xx_it.c...
+compiling stm32g0xx_ll_adc.c...
 compiling stm32g0xx_hal_adc.c...
+compiling stm32g0xx_ll_rcc.c...
+compiling stm32g0xx_hal_adc_ex.c...
+compiling stm32g0xx_hal_rcc_ex.c...
+compiling stm32g0xx_ll_dma.c...
+compiling stm32g0xx_hal_gpio.c...
+compiling stm32g0xx_hal_flash_ex.c...
 compiling stm32g0xx_hal_flash.c...
 compiling stm32g0xx_hal_rcc.c...
-compiling stm32g0xx_hal_gpio.c...
-compiling stm32g0xx_hal_dma_ex.c...
 compiling stm32g0xx_hal_dma.c...
+compiling stm32g0xx_hal_dma_ex.c...
 compiling stm32g0xx_hal_pwr.c...
 compiling stm32g0xx_hal_pwr_ex.c...
 compiling stm32g0xx_hal_cortex.c...
-compiling stm32g0xx_hal_exti.c...
-compiling stm32g0xx_hal_spi_ex.c...
-compiling stm32g0xx_hal_tim_ex.c...
 compiling stm32g0xx_hal.c...
-compiling stm32g0xx_hal_uart_ex.c...
+compiling stm32g0xx_hal_spi_ex.c...
+compiling stm32g0xx_hal_exti.c...
 compiling system_stm32g0xx.c...
+compiling stm32g0xx_hal_uart_ex.c...
+compiling stm32g0xx_hal_tim_ex.c...
 compiling stm32g0xx_hal_spi.c...
 compiling stm32g0xx_hal_uart.c...
 compiling stm32g0xx_hal_tim.c...
 linking...
-Program Size: Code=38948 RO-data=7336 RW-data=1036 ZI-data=14396  
+Program Size: Code=45668 RO-data=7668 RW-data=348 ZI-data=15084  
 FromELF: creating hex file...
-".\SERVOD_1V0\SERVOD_1V0.axf" - 0 Error(s), 45 Warning(s).
+".\SERVOD_1V0\SERVOD_1V0.axf" - 0 Error(s), 7 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -207,7 +146,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE@6.0.0
-Build Time Elapsed:  00:00:10
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>

@@ -5,41 +5,99 @@
 #include "usart.h"
 #include "mcpwm.h"
 
-//////////////////////////////////////////////////////////////////
-//¼ÓÈëÒÔÏÂ´úÂë,Ö§³Öprintfº¯Êı,¶ø²»ĞèÒªÑ¡Ôñuse MicroLIB	  
-#pragma import(__use_no_semihosting)             
-//±ê×¼¿âĞèÒªµÄÖ§³Öº¯Êı                 
-struct __FILE 
-{ 
-	int handle; 
+////////////////////////////////////////////////////////////////////
+////åŠ å…¥ä»¥ä¸‹ä»£ç ,æ”¯æŒprintfå‡½æ•°,è€Œä¸éœ€è¦é€‰æ‹©use MicroLIB	  
+//#pragma import(__use_no_semihosting)             
+////æ ‡å‡†åº“éœ€è¦çš„æ”¯æŒå‡½æ•°                 
+//struct __FILE 
+//{ 
+//	int handle; 
 
-}; 
+//}; 
 
-FILE __stdout;       
-//¶¨Òå_sys_exit()ÒÔ±ÜÃâÊ¹ÓÃ°ëÖ÷»úÄ£Ê½    
-void _sys_exit(int x) 
-{ 
-	x = x; 
-} 
-//ÖØ¶¨Òåfputcº¯Êı 
-int fputc(int ch, FILE *f)
-{      
-	while((USART1->ISR&0X40)==0); //Ñ­»··¢ËÍ,Ö±µ½·¢ËÍÍê±Ï   
-    
-	USART1->TDR = (u8) ch;      
+//FILE __stdout;       
+////å®šä¹‰_sys_exit()ä»¥é¿å…ä½¿ç”¨åŠä¸»æœºæ¨¡å¼    
+//void _sys_exit(int x) 
+//{ 
+//	x = x; 
+//} 
+////é‡å®šä¹‰fputcå‡½æ•° 
+//int fputc(int ch, FILE *f)
+//{      
+//	while((USART1->ISR&0X40)==0); //å¾ªç¯å‘é€,ç›´åˆ°å‘é€å®Œæ¯•   
+//    
+//	USART1->TDR = (u8) ch;      
+//	return ch;
+//}
+
+
+#if !defined(__MICROLIB)  
+ 
+#if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+__asm (".global __use_no_semihosting\n\t");
+ 
+FILE __stdout;
+ 
+/* __use_no_semihosting was requested, but _sys_exit was */
+void _sys_exit(int x)
+{
+    x = x;
+}
+/* __use_no_semihosting was requested, but _ttywrch was */
+void _ttywrch(int ch)
+{
+    ch = ch;
+}
+#elif defined(__CC_ARM)
+#pragma import(__use_no_semihosting)
+ 
+struct __FILE
+{
+    int handle;
+};
+FILE __stdout;
+ 
+/* __use_no_semihosting was requested, but _sys_exit was */
+void _sys_exit(int x)
+{
+    x = x;
+}
+#endif /* __ARMCC_VERSION */
+ 
+#endif /* __MICROLIB */
+ 
+#if defined ( __GNUC__ ) && !defined (__clang__) 
+/* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
+   set to 'Yes') calls __io_putchar() */
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif /* __GNUC__ */
+ 
+/**
+ * @brief  Retargets the C library printf function to the USART.
+ * @param  None
+ * @retval None
+ */
+PUTCHAR_PROTOTYPE
+{
+	HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 1000);
 	return ch;
 }
-//½ÓÊÕ×´Ì¬
-//bit15£¬	½ÓÊÕÍê³É±êÖ¾
-//bit14£¬	½ÓÊÕµ½0x0d
-//bit13~0£¬	½ÓÊÕµ½µÄÓĞĞ§×Ö½ÚÊıÄ¿
-u16 USART1_RX_STA=0;       //½ÓÊÕ×´Ì¬±ê¼Ç	  
-u32 USART1_RX_TIMECHK;
-u8 USART1RxBuffer[RXBUFFERSIZE];//HAL¿âÊ¹ÓÃµÄ´®¿Ú½ÓÊÕ»º³å
 
-u16 USART2_RX_STA=0;       //½ÓÊÕ×´Ì¬±ê¼Ç	  
+
+
+//æ¥æ”¶çŠ¶æ€
+//bit15ï¼Œ	æ¥æ”¶å®Œæˆæ ‡å¿—
+//bit14ï¼Œ	æ¥æ”¶åˆ°0x0d
+//bit13~0ï¼Œ	æ¥æ”¶åˆ°çš„æœ‰æ•ˆå­—èŠ‚æ•°ç›®
+u16 USART1_RX_STA=0;       //æ¥æ”¶çŠ¶æ€æ ‡è®°	  
+u32 USART1_RX_TIMECHK;
+u8 USART1RxBuffer[RXBUFFERSIZE];//HALåº“ä½¿ç”¨çš„ä¸²å£æ¥æ”¶ç¼“å†²
+
+u16 USART2_RX_STA=0;       //æ¥æ”¶çŠ¶æ€æ ‡è®°	  
 u32 USART2_RX_TIMECHK;
-u8 USART2RxBuffer[RXBUFFERSIZE];//HAL¿âÊ¹ÓÃµÄ´®¿Ú½ÓÊÕ»º³å
+u8 USART2RxBuffer[RXBUFFERSIZE];//HALåº“ä½¿ç”¨çš„ä¸²å£æ¥æ”¶ç¼“å†²
 
 
 uint8_t RS485_FrameFlag=0;
@@ -68,37 +126,37 @@ uint16_t calCRC;
 uint16_t *Modbus_Output_Reg[MODBUS_REG_NUM];
 u32 software_version;
   
-//³õÊ¼»¯IO ´®¿Ú1 
-//bound:²¨ÌØÂÊ
+//åˆå§‹åŒ–IO ä¸²å£1 
+//bound:æ³¢ç‰¹ç‡
 void uart1_init(u32 baudrate)
 {	
-	//UART ³õÊ¼»¯ÉèÖÃ
+	//UART åˆå§‹åŒ–è®¾ç½®
 	huart1.Instance=USART1;					    //USART3
-	huart1.Init.BaudRate=baudrate;				    //²¨ÌØÂÊ
-	huart1.Init.WordLength=UART_WORDLENGTH_8B;   //×Ö³¤Îª8Î»Êı¾İ¸ñÊ½
-	huart1.Init.StopBits=UART_STOPBITS_1;	    //Ò»¸öÍ£Ö¹Î»
-	huart1.Init.Parity=UART_PARITY_NONE;		    //ÎŞÆæÅ¼Ğ£ÑéÎ»
-	huart1.Init.HwFlowCtl=UART_HWCONTROL_NONE;   //ÎŞÓ²¼şÁ÷¿Ø
-	huart1.Init.Mode=UART_MODE_TX_RX;		    //ÊÕ·¢Ä£Ê½
-	HAL_UART_Init(&huart1);					    //HAL_UART_Init()»áÊ¹ÄÜuart3
+	huart1.Init.BaudRate=baudrate;				    //æ³¢ç‰¹ç‡
+	huart1.Init.WordLength=UART_WORDLENGTH_8B;   //å­—é•¿ä¸º8ä½æ•°æ®æ ¼å¼
+	huart1.Init.StopBits=UART_STOPBITS_1;	    //ä¸€ä¸ªåœæ­¢ä½
+	huart1.Init.Parity=UART_PARITY_NONE;		    //æ— å¥‡å¶æ ¡éªŒä½
+	huart1.Init.HwFlowCtl=UART_HWCONTROL_NONE;   //æ— ç¡¬ä»¶æµæ§
+	huart1.Init.Mode=UART_MODE_TX_RX;		    //æ”¶å‘æ¨¡å¼
+	HAL_UART_Init(&huart1);					    //HAL_UART_Init()ä¼šä½¿èƒ½uart3
 	
-	HAL_UART_Receive_IT(&huart1, (u8 *)USART1RxBuffer, RXBUFFERSIZE);//¸Ãº¯Êı»á¿ªÆô½ÓÊÕÖĞ¶Ï£º±êÖ¾Î»UART_IT_RXNE£¬²¢ÇÒÉèÖÃ½ÓÊÕ»º³åÒÔ¼°½ÓÊÕ»º³å½ÓÊÕ×î´óÊı¾İÁ¿
+	HAL_UART_Receive_IT(&huart1, (u8 *)USART1RxBuffer, RXBUFFERSIZE);//è¯¥å‡½æ•°ä¼šå¼€å¯æ¥æ”¶ä¸­æ–­ï¼šæ ‡å¿—ä½UART_IT_RXNEï¼Œå¹¶ä¸”è®¾ç½®æ¥æ”¶ç¼“å†²ä»¥åŠæ¥æ”¶ç¼“å†²æ¥æ”¶æœ€å¤§æ•°æ®é‡
   
 }
 
 void uart2_init(u32 baudrate)
 {	
-	//UART ³õÊ¼»¯ÉèÖÃ
+	//UART åˆå§‹åŒ–è®¾ç½®
 	huart2.Instance=USART2;					    //USART2
-	huart2.Init.BaudRate=baudrate;				    //²¨ÌØÂÊ
-	huart2.Init.WordLength=UART_WORDLENGTH_8B;   //×Ö³¤Îª8Î»Êı¾İ¸ñÊ½
-	huart2.Init.StopBits=UART_STOPBITS_1;	    //Ò»¸öÍ£Ö¹Î»
-	huart2.Init.Parity=UART_PARITY_NONE;		    //ÎŞÆæÅ¼Ğ£ÑéÎ»
-	huart2.Init.HwFlowCtl=UART_HWCONTROL_NONE;   //ÎŞÓ²¼şÁ÷¿Ø
-	huart2.Init.Mode=UART_MODE_TX_RX;		    //ÊÕ·¢Ä£Ê½
-	HAL_UART_Init(&huart2);					    //HAL_UART_Init()»áÊ¹ÄÜuart3
+	huart2.Init.BaudRate=baudrate;				    //æ³¢ç‰¹ç‡
+	huart2.Init.WordLength=UART_WORDLENGTH_8B;   //å­—é•¿ä¸º8ä½æ•°æ®æ ¼å¼
+	huart2.Init.StopBits=UART_STOPBITS_1;	    //ä¸€ä¸ªåœæ­¢ä½
+	huart2.Init.Parity=UART_PARITY_NONE;		    //æ— å¥‡å¶æ ¡éªŒä½
+	huart2.Init.HwFlowCtl=UART_HWCONTROL_NONE;   //æ— ç¡¬ä»¶æµæ§
+	huart2.Init.Mode=UART_MODE_TX_RX;		    //æ”¶å‘æ¨¡å¼
+	HAL_UART_Init(&huart2);					    //HAL_UART_Init()ä¼šä½¿èƒ½uart3
 	
-	HAL_UART_Receive_IT(&huart2, (u8 *)USART2RxBuffer, RXBUFFERSIZE);//¸Ãº¯Êı»á¿ªÆô½ÓÊÕÖĞ¶Ï£º±êÖ¾Î»UART_IT_RXNE£¬²¢ÇÒÉèÖÃ½ÓÊÕ»º³åÒÔ¼°½ÓÊÕ»º³å½ÓÊÕ×î´óÊı¾İÁ¿
+	HAL_UART_Receive_IT(&huart2, (u8 *)USART2RxBuffer, RXBUFFERSIZE);//è¯¥å‡½æ•°ä¼šå¼€å¯æ¥æ”¶ä¸­æ–­ï¼šæ ‡å¿—ä½UART_IT_RXNEï¼Œå¹¶ä¸”è®¾ç½®æ¥æ”¶ç¼“å†²ä»¥åŠæ¥æ”¶ç¼“å†²æ¥æ”¶æœ€å¤§æ•°æ®é‡
   
 }
 char shot=0;
@@ -129,37 +187,37 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 			break;				
 		}
 	}
-	if(huart->Instance==USART2)//Èç¹ûÊÇ´®¿Ú3
+	if(huart->Instance==USART2)//å¦‚æœæ˜¯ä¸²å£3
 	{
-			if((USART2_RX_STA&0x8000)==0)//½ÓÊÕÎ´Íê³É
+			if((USART2_RX_STA&0x8000)==0)//æ¥æ”¶æœªå®Œæˆ
 			{
 				USART2_RX_TIMECHK=HAL_GetTick();
 				RS232_RX_BUFF[USART2_RX_STA&0X3FFF]=USART2RxBuffer[0] ;
 				USART2_RX_STA++;
-				if(USART2_RX_STA>(USART2_REC_LEN-1))USART2_RX_STA=0;//½ÓÊÕÊı¾İ´íÎó,ÖØĞÂ¿ªÊ¼½ÓÊÕ	  	 
+				if(USART2_RX_STA>(USART2_REC_LEN-1))USART2_RX_STA=0;//æ¥æ”¶æ•°æ®é”™è¯¯,é‡æ–°å¼€å§‹æ¥æ”¶	  	 
 			}
 	}
-	if(huart->Instance==USART1)//Èç¹ûÊÇ´®¿Ú3
+	if(huart->Instance==USART1)//å¦‚æœæ˜¯ä¸²å£3
 	{
 		if(RS485_TX_EN==0)
-			if((USART1_RX_STA&0x8000)==0)//½ÓÊÕÎ´Íê³É
+			if((USART1_RX_STA&0x8000)==0)//æ¥æ”¶æœªå®Œæˆ
 			{
 				USART1_RX_TIMECHK=HAL_GetTick();
 				RS485_RX_BUFF[USART1_RX_STA&0X3FFF]=USART1RxBuffer[0] ;
 				USART1_RX_STA++;
-				if(USART1_RX_STA>(USART1_REC_LEN-1))USART1_RX_STA=0;//½ÓÊÕÊı¾İ´íÎó,ÖØĞÂ¿ªÊ¼½ÓÊÕ	  	 
+				if(USART1_RX_STA>(USART1_REC_LEN-1))USART1_RX_STA=0;//æ¥æ”¶æ•°æ®é”™è¯¯,é‡æ–°å¼€å§‹æ¥æ”¶	  	 
 			}
 	}
 	/*
-	if(huart->Instance==USART1)//Èç¹ûÊÇ´®¿Ú3
+	if(huart->Instance==USART1)//å¦‚æœæ˜¯ä¸²å£3
 	{
 		if(Tamagawa_TX_EN==0)
-			if((USART1_RX_STA&0x8000)==0)//½ÓÊÕÎ´Íê³É
+			if((USART1_RX_STA&0x8000)==0)//æ¥æ”¶æœªå®Œæˆ
 			{
 				USART1_RX_TIMECHK=HAL_GetTick();
 				Tamagawa_RX_BUFF[USART1_RX_STA&0X3FFF]=USART1RxBuffer[0] ;
 				USART1_RX_STA++;
-				if(USART1_RX_STA>(USART1_REC_LEN-1))USART1_RX_STA=0;//½ÓÊÕÊı¾İ´íÎó,ÖØĞÂ¿ªÊ¼½ÓÊÕ	  	 
+				if(USART1_RX_STA>(USART1_REC_LEN-1))USART1_RX_STA=0;//æ¥æ”¶æ•°æ®é”™è¯¯,é‡æ–°å¼€å§‹æ¥æ”¶	  	 
 			}
 	}*/
 }
@@ -200,7 +258,7 @@ void Modbus_Solve_485_Enable(void)
 void Modbus_Solve_485_Disenable(void)
 {
 	int i;
-  for(i=0;i<35500;i++){}//ÇĞ»»ÑÓÊ±
+  for(i=0;i<35500;i++){}//åˆ‡æ¢å»¶æ—¶
   HAL_GPIO_WritePin(RS485_EN_GPIO_Port,RS485_EN_Pin,GPIO_PIN_RESET);	
 }
 
@@ -211,7 +269,7 @@ void Modbus_Solve_PutString(uint8_t *buf,uint16_t len)
    Modbus_Solve_485_Enable();
 		for(i=0;i<len;i++)
 		{
-			while((USART1->ISR&0X40)==0); //Ñ­»··¢ËÍ,Ö±µ½·¢ËÍÍê±Ï   
+			while((USART1->ISR&0X40)==0); //å¾ªç¯å‘é€,ç›´åˆ°å‘é€å®Œæ¯•   
 			USART1->TDR = buf[i]; 
 		} 
   Modbus_Solve_485_Disenable();	
@@ -223,7 +281,7 @@ void RS232_Solve_PutString(uint8_t *buf,uint16_t len)
 	RS232_TX_EN=1;
 		for(i=0;i<len;i++)
 		{
-			while((USART2->ISR&0X40)==0); //Ñ­»··¢ËÍ,Ö±µ½·¢ËÍÍê±Ï   
+			while((USART2->ISR&0X40)==0); //å¾ªç¯å‘é€,ç›´åˆ°å‘é€å®Œæ¯•   
 			USART2->TDR = buf[i]; 
 		} 
 	RS232_TX_EN=0;		

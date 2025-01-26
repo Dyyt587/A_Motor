@@ -6,7 +6,7 @@ uint16_t swap_uint16(uint16_t data)
 		return (data<<8)|(data>>8);
 }
 
-/****** �ײ�ӿڲ��� ******/
+/****** 底层接口部分 ******/
 void Lcd_WR_DATA8(unsigned char data)
 {	
 		LCD_DC_Set();
@@ -17,7 +17,7 @@ void Lcd_WR_DATA(uint16_t data)
 {
 		data = swap_uint16(data);
 		LCD_DC_Set();
-		/* note: ʹ��HAL��һ�η��������ֽ�˳������Ļ����˳���෴ */
+		/* note: 使用HAL库一次发送两个字节顺序与屏幕定义顺序相反 */
 		HAL_SPI_Transmit(&SPI_LCD, (uint8_t *)&data, 0x02, 0x10);
 }	  
 
@@ -35,63 +35,63 @@ void Lcd_WR_REG(unsigned char data)
 
 
 /******************************************************************************
-      ����˵����������ʼ�ͽ�����ַ
-      ������ݣ�x1,x2 �����е���ʼ�ͽ�����ַ
-                y1,y2 �����е���ʼ�ͽ�����ַ
-      ����ֵ��  ��
+      函数说明：设置起始和结束地址
+      入口数据：x1,x2 设置列的起始和结束地址
+                y1,y2 设置行的起始和结束地址
+      返回值：  无
 ******************************************************************************/
 void Lcd_Address_Set(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
 {
 	if(USE_HORIZONTAL==0)
 	{
-		Lcd_WR_REG(0x2a);//�е�ַ����
+		Lcd_WR_REG(0x2a);//列地址设置
 		Lcd_WR_DATA(x1+26);
 		Lcd_WR_DATA(x2+26);
-		Lcd_WR_REG(0x2b);//�е�ַ����
+		Lcd_WR_REG(0x2b);//行地址设置
 		Lcd_WR_DATA(y1+1);
 		Lcd_WR_DATA(y2+1);
-		Lcd_WR_REG(0x2c);//������д
+		Lcd_WR_REG(0x2c);//储存器写
 	}
 	else if(USE_HORIZONTAL==1)
 	{
-		Lcd_WR_REG(0x2a);//�е�ַ����
+		Lcd_WR_REG(0x2a);//列地址设置
 		Lcd_WR_DATA(x1+26);
 		Lcd_WR_DATA(x2+26);
-		Lcd_WR_REG(0x2b);//�е�ַ����
+		Lcd_WR_REG(0x2b);//行地址设置
 		Lcd_WR_DATA(y1+1);
 		Lcd_WR_DATA(y2+1);
-		Lcd_WR_REG(0x2c);//������д
+		Lcd_WR_REG(0x2c);//储存器写
 	}
 	else if(USE_HORIZONTAL==2)
 	{
-		Lcd_WR_REG(0x2a);//�е�ַ����
+		Lcd_WR_REG(0x2a);//列地址设置
 		Lcd_WR_DATA(x1+1);
 		Lcd_WR_DATA(x2+1);
-		Lcd_WR_REG(0x2b);//�е�ַ����
+		Lcd_WR_REG(0x2b);//行地址设置
 		Lcd_WR_DATA(y1+26);
 		Lcd_WR_DATA(y2+26);
-		Lcd_WR_REG(0x2c);//������д
+		Lcd_WR_REG(0x2c);//储存器写
 	}
 	else
 	{
-		Lcd_WR_REG(0x2a);//�е�ַ����
+		Lcd_WR_REG(0x2a);//列地址设置
 		Lcd_WR_DATA(x1+1);
 		Lcd_WR_DATA(x2+1);
-		Lcd_WR_REG(0x2b);//�е�ַ����
+		Lcd_WR_REG(0x2b);//行地址设置
 		Lcd_WR_DATA(y1+26);
 		Lcd_WR_DATA(y2+26);
-		Lcd_WR_REG(0x2c);//������д
+		Lcd_WR_REG(0x2c);//储存器写
 	}
 }
 
 void Lcd_Init(void)
 {
-	LCD_RES_Clr();  //��λ
+	LCD_RES_Clr();  //复位
 	HAL_Delay(100);
 	LCD_RES_Set();
 	HAL_Delay(100);
 	
-	//LCD_BLK_Set();//�򿪱���
+	//LCD_BLK_Set();//打开背光
   //HAL_Delay(100);
 	
 	Lcd_WR_REG(0x11);     //Sleep out

@@ -4,20 +4,20 @@
 #include "sys.h" 
 
 
-#define USART1_REC_LEN  			200  		//¶¨Òå×î´ó½ÓÊÕ×Ö½ÚÊı 200
-#define EN_USART1_RX 			1			//Ê¹ÄÜ£¨1£©/½ûÖ¹£¨0£©´®¿Ú1½ÓÊÕ
+#define USART1_REC_LEN  			200  		//å®šä¹‰æœ€å¤§æ¥æ”¶å­—èŠ‚æ•° 200
+#define EN_USART1_RX 			1			//ä½¿èƒ½ï¼ˆ1ï¼‰/ç¦æ­¢ï¼ˆ0ï¼‰ä¸²å£1æ¥æ”¶
 #define USART1_RX_TIEMOUT 			1			//
 
-#define USART2_REC_LEN  			200  		//¶¨Òå×î´ó½ÓÊÕ×Ö½ÚÊı 200
-#define EN_USART2_RX 			1			//Ê¹ÄÜ£¨1£©/½ûÖ¹£¨0£©´®¿Ú1½ÓÊÕ
+#define USART2_REC_LEN  			200  		//å®šä¹‰æœ€å¤§æ¥æ”¶å­—èŠ‚æ•° 200
+#define EN_USART2_RX 			1			//ä½¿èƒ½ï¼ˆ1ï¼‰/ç¦æ­¢ï¼ˆ0ï¼‰ä¸²å£1æ¥æ”¶
 #define USART2_RX_TIEMOUT 			5			//
 	  	
 #define MODBUS_REG_NUM     500
 
-extern u16 USART1_RX_STA;         			//½ÓÊÕ×´Ì¬±ê¼Ç	
+extern u16 USART1_RX_STA;         			//æ¥æ”¶çŠ¶æ€æ ‡è®°	
 extern u32 USART1_RX_TIMECHK;
 
-extern u16 USART2_RX_STA;         			//½ÓÊÕ×´Ì¬±ê¼Ç	
+extern u16 USART2_RX_STA;         			//æ¥æ”¶çŠ¶æ€æ ‡è®°	
 extern u32 USART2_RX_TIMECHK;
 
 extern uint8_t RS232_FrameFlag;
@@ -41,11 +41,11 @@ extern u32 RS485_Baudrate;
 extern u16 RS485_Protocol;
 extern uint16_t *Modbus_Output_Reg[];
 
-#define RXBUFFERSIZE   1 					//»º´æ´óĞ¡
-extern u8 USART1RxBuffer[RXBUFFERSIZE];			//HAL¿âUSART½ÓÊÕBuffer
-extern u8 USART2RxBuffer[RXBUFFERSIZE];			//HAL¿âUSART½ÓÊÕBuffer
+#define RXBUFFERSIZE   1 					//ç¼“å­˜å¤§å°
+extern u8 USART1RxBuffer[RXBUFFERSIZE];			//HALåº“USARTæ¥æ”¶Buffer
+extern u8 USART2RxBuffer[RXBUFFERSIZE];			//HALåº“USARTæ¥æ”¶Buffer
 
-//Èç¹ûÏë´®¿ÚÖĞ¶Ï½ÓÊÕ£¬Çë²»Òª×¢ÊÍÒÔÏÂºê¶¨Òå
+//å¦‚æœæƒ³ä¸²å£ä¸­æ–­æ¥æ”¶ï¼Œè¯·ä¸è¦æ³¨é‡Šä»¥ä¸‹å®å®šä¹‰
 void uart1_init(u32 baudrate);
 void uart2_init(u32 baudrate);
 void Modbus_Solve_PutString(uint8_t *buf,uint16_t len);

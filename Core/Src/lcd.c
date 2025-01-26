@@ -27,7 +27,7 @@ void Lcd_DrawPoint(uint16_t x,uint16_t y,uint16_t color)
 		Lcd_WR_DATA(color);
 } 	 
 
-/* ÔÚÖ¸¶¨ÇøÓòÄÚÌî³äÖ¸¶¨ÑÕÉ« */
+/* åœ¨æŒ‡å®šåŒºåŸŸå†…å¡«å……æŒ‡å®šé¢œè‰² */
 void Lcd_Fill(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t color)
 {          
 		uint16_t i,j; 
@@ -39,29 +39,29 @@ void Lcd_Fill(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t color)
 		} 					  	    
 }  
 
-/* x1,y1:Æğµã×ø±ê x2,y2:ÖÕµã×ø±ê*/
+/* x1,y1:èµ·ç‚¹åæ ‡ x2,y2:ç»ˆç‚¹åæ ‡*/
 void Lcd_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color)
 {
 		uint16_t t; 
 		int xerr=0,yerr=0,delta_x,delta_y,distance; 
 		int incx,incy,uRow,uCol; 
 
-		delta_x=x2-x1; //¼ÆËã×ø±êÔöÁ¿ 
+		delta_x=x2-x1; //è®¡ç®—åæ ‡å¢é‡ 
 		delta_y=y2-y1; 
 		uRow=x1; 
 		uCol=y1; 
-		if(delta_x>0)incx=1; //ÉèÖÃµ¥²½·½Ïò 
-		else if(delta_x==0)incx=0;//´¹Ö±Ïß 
+		if(delta_x>0)incx=1; //è®¾ç½®å•æ­¥æ–¹å‘ 
+		else if(delta_x==0)incx=0;//å‚ç›´çº¿ 
 		else {incx=-1;delta_x=-delta_x;} 
 		if(delta_y>0)incy=1; 
-		else if(delta_y==0)incy=0;//Ë®Æ½Ïß 
+		else if(delta_y==0)incy=0;//æ°´å¹³çº¿ 
 		else{incy=-1;delta_y=-delta_y;} 
-		if( delta_x>delta_y)distance=delta_x; //Ñ¡È¡»ù±¾ÔöÁ¿×ø±êÖá 
+		if( delta_x>delta_y)distance=delta_x; //é€‰å–åŸºæœ¬å¢é‡åæ ‡è½´ 
 		else distance=delta_y; 
 		
-		for(t=0;t<=distance+1;t++ )//»­ÏßÊä³ö 
+		for(t=0;t<=distance+1;t++ )//ç”»çº¿è¾“å‡º 
 		{  
-				Lcd_DrawPoint(uRow,uCol, color);//»­µã 
+				Lcd_DrawPoint(uRow,uCol, color);//ç”»ç‚¹ 
 				xerr+=delta_x ; 
 				yerr+=delta_y ; 
 				if(xerr>distance) 
@@ -92,7 +92,7 @@ void Draw_Circle(uint16_t x, uint16_t y, uint16_t r, uint16_t color)
 		int b = r;
 		int di;
   
-		di=3-(r<<1);             //ÅĞ¶ÏÏÂ¸öµãÎ»ÖÃµÄ±êÖ¾
+		di=3-(r<<1);             //åˆ¤æ–­ä¸‹ä¸ªç‚¹ä½ç½®çš„æ ‡å¿—
 		while(a<=b)
 		{
 				Lcd_DrawPoint(x-b,y-a, color);             //3           
@@ -106,7 +106,7 @@ void Draw_Circle(uint16_t x, uint16_t y, uint16_t r, uint16_t color)
 				Lcd_DrawPoint(x-b,y+a, color);     
 				a++;			
 			
-				//Ê¹ÓÃBresenhamËã·¨»­Ô²     
+				//ä½¿ç”¨Bresenhamç®—æ³•ç”»åœ†     
 				if(di<0)
 					di += 4*a+6;	  
 				else
@@ -118,8 +118,8 @@ void Draw_Circle(uint16_t x, uint16_t y, uint16_t r, uint16_t color)
 		}
 } 
 
-//ÔÚÖ¸¶¨Î»ÖÃÏÔÊ¾Ò»¸ö×Ö·û
-//num:ÒªÏÔÊ¾µÄ×Ö·û:" "--->"~"
+//åœ¨æŒ‡å®šä½ç½®æ˜¾ç¤ºä¸€ä¸ªå­—ç¬¦
+//num:è¦æ˜¾ç¤ºçš„å­—ç¬¦:" "--->"~"
 void Lcd_ShowChar(uint16_t x,uint16_t y, uint16_t num, uint16_t color)
 {
 		uint16_t temp;
@@ -128,11 +128,11 @@ void Lcd_ShowChar(uint16_t x,uint16_t y, uint16_t num, uint16_t color)
 		if(x>LCD_W-16||y>LCD_H-16)
 				return;	    
 		
-		num = num-' ';//µÃµ½Æ«ÒÆºóµÄÖµ
-		Lcd_Address_Set(x,y,x+8-1,y+16-1);      //ÉèÖÃ¹â±êÎ»ÖÃ 
+		num = num-' ';//å¾—åˆ°åç§»åçš„å€¼
+		Lcd_Address_Set(x,y,x+8-1,y+16-1);      //è®¾ç½®å…‰æ ‡ä½ç½® 
 		for(pos=0;pos<16;pos++)
 		{
-				temp=ascii_1608[(uint16_t)num*16+pos];		 //µ÷ÓÃ1608×ÖÌå
+				temp=ascii_1608[(uint16_t)num*16+pos];		 //è°ƒç”¨1608å­—ä½“
 				for(t=0;t<8;t++)
 				{                 
 						if(temp&0x01)
@@ -144,7 +144,7 @@ void Lcd_ShowChar(uint16_t x,uint16_t y, uint16_t num, uint16_t color)
 		} 	   	 	  
 }   
 
-/*** *p:×Ö·û´®ÆğÊ¼µØÖ· ÓÃ16×ÖÌå ***/
+/*** *p:å­—ç¬¦ä¸²èµ·å§‹åœ°å€ ç”¨16å­—ä½“ ***/
 void Lcd_ShowString(uint16_t x,uint16_t y,const uint8_t *p,uint16_t color)
 {         
     while(*p!='\0')

@@ -1,45 +1,46 @@
 #include "delay.h"
 #include "sys.h"
 
-static u32 fac_us=0;							//usÑÓÊ±±¶³ËÊı
+static u32 fac_us=0;							//uså»¶æ—¶å€ä¹˜æ•°
 			   
-//³õÊ¼»¯ÑÓ³Ùº¯Êı
-//µ±Ê¹ÓÃucosµÄÊ±ºò,´Ëº¯Êı»á³õÊ¼»¯ucosµÄÊ±ÖÓ½ÚÅÄ
-//SYSTICKµÄÊ±ÖÓ¹Ì¶¨ÎªAHBÊ±ÖÓ
-//SYSCLK:ÏµÍ³Ê±ÖÓÆµÂÊ
+//åˆå§‹åŒ–å»¶è¿Ÿå‡½æ•°
+//å½“ä½¿ç”¨ucosçš„æ—¶å€™,æ­¤å‡½æ•°ä¼šåˆå§‹åŒ–ucosçš„æ—¶é’ŸèŠ‚æ‹
+//SYSTICKçš„æ—¶é’Ÿå›ºå®šä¸ºAHBæ—¶é’Ÿ
+//SYSCLK:ç³»ç»Ÿæ—¶é’Ÿé¢‘ç‡
 void delay_init(u8 SYSCLK)
 {
 
-  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);//SysTickÆµÂÊÎªHCLK
+  HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);//SysTické¢‘ç‡ä¸ºHCLK
 	fac_us=SYSCLK;						
 
 }								    
 
-//ÑÓÊ±nus
-//nusÎªÒªÑÓÊ±µÄusÊı.	
-//nus:0~190887435(×î´óÖµ¼´2^32/fac_us@fac_us=22.5)	 
+
+//å»¶æ—¶nus
+//nusä¸ºè¦å»¶æ—¶çš„usæ•°.	
+//nus:0~190887435(æœ€å¤§å€¼å³2^32/fac_us@fac_us=22.5)	 
 void delay_us(u32 nus)
 {		
 	u32 ticks;
 	u32 told,tnow,tcnt=0;
-	u32 reload=SysTick->LOAD;				//LOADµÄÖµ	    	 
-	ticks=nus*fac_us; 						//ĞèÒªµÄ½ÚÅÄÊı 
-	told=SysTick->VAL;        				//¸Õ½øÈëÊ±µÄ¼ÆÊıÆ÷Öµ
+	u32 reload=SysTick->LOAD;				//LOADçš„å€¼	    	 
+	ticks=nus*fac_us; 						//éœ€è¦çš„èŠ‚æ‹æ•° 
+	told=SysTick->VAL;        				//åˆšè¿›å…¥æ—¶çš„è®¡æ•°å™¨å€¼
 	while(1)
 	{
 		tnow=SysTick->VAL;	
 		if(tnow!=told)
 		{	    
-			if(tnow<told)tcnt+=told-tnow;	//ÕâÀï×¢ÒâÒ»ÏÂSYSTICKÊÇÒ»¸öµİ¼õµÄ¼ÆÊıÆ÷¾Í¿ÉÒÔÁË.
+			if(tnow<told)tcnt+=told-tnow;	//è¿™é‡Œæ³¨æ„ä¸€ä¸‹SYSTICKæ˜¯ä¸€ä¸ªé€’å‡çš„è®¡æ•°å™¨å°±å¯ä»¥äº†.
 			else tcnt+=reload-tnow+told;	    
 			told=tnow;
-			if(tcnt>=ticks)break;			//Ê±¼ä³¬¹ı/µÈÓÚÒªÑÓ³ÙµÄÊ±¼ä,ÔòÍË³ö.
+			if(tcnt>=ticks)break;			//æ—¶é—´è¶…è¿‡/ç­‰äºè¦å»¶è¿Ÿçš„æ—¶é—´,åˆ™é€€å‡º.
 		}  
 	};
 }
 
-//ÑÓÊ±nms
-//nms:ÒªÑÓÊ±µÄmsÊı
+//å»¶æ—¶nms
+//nms:è¦å»¶æ—¶çš„msæ•°
 void delay_ms(u16 nms)
 {
 	u32 i;

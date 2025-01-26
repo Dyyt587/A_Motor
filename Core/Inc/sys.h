@@ -32,7 +32,7 @@
 
 /* USER CODE BEGIN Private defines */
 
-//?бзи░?и░?D?3бъио?ж╠?и║y?YидидDик?им1??и╣б┴? 
+//?┬б┬з┬и┬░?┬и┬░?D?3┬б├к┬и┬о?┬ж├М?┬и┬║y?Y┬и┬д┬и┬дD┬и┬к?┬и┬м1??┬и┬╣┬б├Б? 
 typedef int32_t  s32;
 typedef int16_t s16;
 typedef int8_t  s8;

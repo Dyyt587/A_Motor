@@ -7,13 +7,13 @@
 #include "tamagawa.h"	
 
 
-//½ÓÊÕ×´Ì¬
-//bit15£¬	½ÓÊÕÍê³É±êÖ¾
-//bit14£¬	½ÓÊÕµ½0x0d
-//bit13~0£¬	½ÓÊÕµ½µÄÓĞĞ§×Ö½ÚÊıÄ¿
-u16 USART3_RX_STA=0;       //½ÓÊÕ×´Ì¬±ê¼Ç	  
+//æ¥æ”¶çŠ¶æ€
+//bit15ï¼Œ	æ¥æ”¶å®Œæˆæ ‡å¿—
+//bit14ï¼Œ	æ¥æ”¶åˆ°0x0d
+//bit13~0ï¼Œ	æ¥æ”¶åˆ°çš„æœ‰æ•ˆå­—èŠ‚æ•°ç›®
+u16 USART3_RX_STA=0;       //æ¥æ”¶çŠ¶æ€æ ‡è®°	  
 u32 USART3_RX_TIMECHK;
-u8 USART3RxBuffer[RXBUFFERSIZE];//HAL¿âÊ¹ÓÃµÄ´®¿Ú½ÓÊÕ»º³å
+u8 USART3RxBuffer[RXBUFFERSIZE];//HALåº“ä½¿ç”¨çš„ä¸²å£æ¥æ”¶ç¼“å†²
 
 
 uint8_t Tamagawa_FrameFlag=0;
@@ -39,21 +39,21 @@ int16_t tamagawa_multi_turn=0;
 uint16_t tamagawa_angle_1=0,tamagawa_angle_2=0,tamagawa_angle_3=0,tamagawa_angle_4=0,tamagawa_angle_delta=0,tamagawa_angle_delta_1=0,tamagawa_angle_delta_2=0,tamagawa_angle_delta_3=0;
 	
 	
-//³õÊ¼»¯IO ´®¿Ú1 
-//bound:²¨ÌØÂÊ
+//åˆå§‹åŒ–IO ä¸²å£1 
+//bound:æ³¢ç‰¹ç‡
 void uart3_init(u32 baudrate)
 {	
-	//UART ³õÊ¼»¯ÉèÖÃ
+	//UART åˆå§‹åŒ–è®¾ç½®
 	huart3.Instance=USART3;					    //USART3
-	huart3.Init.BaudRate=baudrate;				    //²¨ÌØÂÊ
-	huart3.Init.WordLength=UART_WORDLENGTH_8B;   //×Ö³¤Îª8Î»Êı¾İ¸ñÊ½
-	huart3.Init.StopBits=UART_STOPBITS_1;	    //Ò»¸öÍ£Ö¹Î»
-	huart3.Init.Parity=UART_PARITY_NONE;		    //ÎŞÆæÅ¼Ğ£ÑéÎ»
-	huart3.Init.HwFlowCtl=UART_HWCONTROL_NONE;   //ÎŞÓ²¼şÁ÷¿Ø
-	huart3.Init.Mode=UART_MODE_TX_RX;		    //ÊÕ·¢Ä£Ê½
-	HAL_UART_Init(&huart3);					    //HAL_UART_Init()»áÊ¹ÄÜuart3
+	huart3.Init.BaudRate=baudrate;				    //æ³¢ç‰¹ç‡
+	huart3.Init.WordLength=UART_WORDLENGTH_8B;   //å­—é•¿ä¸º8ä½æ•°æ®æ ¼å¼
+	huart3.Init.StopBits=UART_STOPBITS_1;	    //ä¸€ä¸ªåœæ­¢ä½
+	huart3.Init.Parity=UART_PARITY_NONE;		    //æ— å¥‡å¶æ ¡éªŒä½
+	huart3.Init.HwFlowCtl=UART_HWCONTROL_NONE;   //æ— ç¡¬ä»¶æµæ§
+	huart3.Init.Mode=UART_MODE_TX_RX;		    //æ”¶å‘æ¨¡å¼
+	HAL_UART_Init(&huart3);					    //HAL_UART_Init()ä¼šä½¿èƒ½uart3
 	
-	//HAL_UART_Receive_IT(&huart1, (u8 *)USART1RxBuffer, RXBUFFERSIZE);//¸Ãº¯Êı»á¿ªÆô½ÓÊÕÖĞ¶Ï£º±êÖ¾Î»UART_IT_RXNE£¬²¢ÇÒÉèÖÃ½ÓÊÕ»º³åÒÔ¼°½ÓÊÕ»º³å½ÓÊÕ×î´óÊı¾İÁ¿
+	//HAL_UART_Receive_IT(&huart1, (u8 *)USART1RxBuffer, RXBUFFERSIZE);//è¯¥å‡½æ•°ä¼šå¼€å¯æ¥æ”¶ä¸­æ–­ï¼šæ ‡å¿—ä½UART_IT_RXNEï¼Œå¹¶ä¸”è®¾ç½®æ¥æ”¶ç¼“å†²ä»¥åŠæ¥æ”¶ç¼“å†²æ¥æ”¶æœ€å¤§æ•°æ®é‡
   
 }
 void Tamagawa_Read_Cmd(uint8_t *buf,uint16_t len)
@@ -66,10 +66,10 @@ void Tamagawa_Read_Cmd(uint8_t *buf,uint16_t len)
   HAL_GPIO_WritePin(TAMAGAWA_TX_EN_GPIO_Port,TAMAGAWA_TX_EN_Pin,GPIO_PIN_SET);
 	for(i=0;i<len;i++)
 	{
-		while((USART3->ISR&0X40)==0); //Ñ­»··¢ËÍ,Ö±µ½·¢ËÍÍê±Ï   
+		while((USART3->ISR&0X40)==0); //å¾ªç¯å‘é€,ç›´åˆ°å‘é€å®Œæ¯•   
 		USART3->TDR = buf[i]; 
 	} 
-	while((USART3->ISR&0X40)==0);//Ñ­»··¢ËÍ,Ö±µ½·¢ËÍÍê±Ï   
+	while((USART3->ISR&0X40)==0);//å¾ªç¯å‘é€,ç›´åˆ°å‘é€å®Œæ¯•   
 	//delay_us(2);
   HAL_GPIO_WritePin(TAMAGAWA_TX_EN_GPIO_Port,TAMAGAWA_TX_EN_Pin,GPIO_PIN_RESET);
 	//delay_us(5);

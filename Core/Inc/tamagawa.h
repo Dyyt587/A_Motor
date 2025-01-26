@@ -3,11 +3,11 @@
 #include "stdio.h"	
 //#include "sys.h" 
 
-#define USART3_REC_LEN  			200  		//¶¨Òå×î´ó½ÓÊÕ×Ö½ÚÊı 200
-#define EN_USART3_RX 			1			//Ê¹ÄÜ£¨1£©/½ûÖ¹£¨0£©´®¿Ú1½ÓÊÕ
+#define USART3_REC_LEN  			200  		//å®šä¹‰æœ€å¤§æ¥æ”¶å­—èŠ‚æ•° 200
+#define EN_USART3_RX 			1			//ä½¿èƒ½ï¼ˆ1ï¼‰/ç¦æ­¢ï¼ˆ0ï¼‰ä¸²å£1æ¥æ”¶
 #define USART3_RX_TIEMOUT 			5			//
 
-extern u16 USART3_RX_STA;         			//½ÓÊÕ×´Ì¬±ê¼Ç	
+extern u16 USART3_RX_STA;         			//æ¥æ”¶çŠ¶æ€æ ‡è®°	
 extern u32 USART3_RX_TIMECHK;
 
 extern uint8_t Tamagawa_FrameFlag;
@@ -28,8 +28,8 @@ extern uint32_t tamagawa_angle_32,tamagawa_ENID,tamagawa_ALMC;
 extern int16_t tamagawa_multi_turn;
 extern uint16_t tamagawa_angle_1,tamagawa_angle_2,tamagawa_angle_3,tamagawa_angle_4,tamagawa_angle_delta,tamagawa_angle_delta_1,tamagawa_angle_delta_2,tamagawa_angle_delta_3;
 
-#define RXBUFFERSIZE   1 					//»º´æ´óĞ¡
-extern u8 USART3RxBuffer[RXBUFFERSIZE];			//HAL¿âUSART½ÓÊÕBuffer
+#define RXBUFFERSIZE   1 					//ç¼“å­˜å¤§å°
+extern u8 USART3RxBuffer[RXBUFFERSIZE];			//HALåº“USARTæ¥æ”¶Buffer
 
 void uart3_init(u32 baudrate);
 void Tamagawa_Read_Cmd(uint8_t *buf,uint16_t len);

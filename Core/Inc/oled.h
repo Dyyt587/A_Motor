@@ -11,20 +11,20 @@
 #define	Brightness	0xFF 
 #define X_WIDTH 	128
 #define Y_WIDTH 	64	    						  
-//-----------------OLED IIC¶Ë¿Ú¶¨Òå----------------  					   
+//-----------------OLED IICç«¯å£å®šä¹‰----------------  					   
 
-#define OLED_SCLK_Clr() HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET)//SCL IIC½Ó¿ÚµÄÊ±ÖÓĞÅºÅ
+#define OLED_SCLK_Clr() HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_RESET)//SCL IICæ¥å£çš„æ—¶é’Ÿä¿¡å·
 #define OLED_SCLK_Set() HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, GPIO_PIN_SET)
 
-#define OLED_SDIN_Clr() HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, GPIO_PIN_RESET)//SDA IIC½Ó¿ÚµÄÊı¾İĞÅºÅ
+#define OLED_SDIN_Clr() HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, GPIO_PIN_RESET)//SDA IICæ¥å£çš„æ•°æ®ä¿¡å·
 #define OLED_SDIN_Set() HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, GPIO_PIN_SET)
 
  		     
-#define OLED_CMD  0	//Ğ´ÃüÁî
-#define OLED_DATA 1	//Ğ´Êı¾İ
+#define OLED_CMD  0	//å†™å‘½ä»¤
+#define OLED_DATA 1	//å†™æ•°æ®
 
 
-//OLED¿ØÖÆÓÃº¯Êı
+//OLEDæ§åˆ¶ç”¨å‡½æ•°
 void OLED_WR_Byte(unsigned dat,unsigned cmd);  
 void OLED_Display_On(void);
 void OLED_Display_Off(void);	   							   		    

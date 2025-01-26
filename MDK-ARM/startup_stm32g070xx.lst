@@ -362,13 +362,13 @@ ARM Macro Assembler    Page 6
               00000400 
               00000200 
               00000000 
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M0+ --apcs=inter
-work --depend=.\servod_1v0\startup_stm32g070xx.d -o.\servod_1v0\startup_stm32g0
-70xx.o -I.\RTE\_SERVOD_1V0 -IC:\Users\33368\AppData\Local\Arm\Packs\ARM\CMSIS\6
-.0.0\CMSIS\Core\Include -IC:\Users\33368\AppData\Local\Arm\Packs\Keil\STM32G0xx
-_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include --predefine="__UVISION_VER
-SION SETA 539" --predefine="_RTE_ SETA 1" --predefine="STM32G070xx SETA 1" --pr
-edefine="_RTE_ SETA 1" --list=startup_stm32g070xx.lst startup_stm32g070xx.s
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M0+ --dep
+end=.\servod_1v0\startup_stm32g070xx.d -o.\servod_1v0\startup_stm32g070xx.o -I.
+\RTE\_SERVOD_1V0 -IC:\Users\33368\AppData\Local\Arm\Packs\ARM\CMSIS\6.0.0\CMSIS
+\Core\Include -IC:\Users\33368\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0
+\Drivers\CMSIS\Device\ST\STM32G0xx\Include --predefine="__UVISION_VERSION SETA 
+539" --predefine="_RTE_ SETA 1" --predefine="STM32G070xx SETA 1" --predefine="_
+RTE_ SETA 1" --list=startup_stm32g070xx.lst startup_stm32g070xx.s
 
 
 
