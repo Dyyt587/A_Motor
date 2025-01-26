@@ -34,7 +34,8 @@ void Position_Loop(Motor_t* motors, int target_pos)
 			case Tamagawa:
 				pos_actual=motors->encoder_state-pos_offest;
 			break;
-				
+			default:
+			break;
 				
 		}
 		

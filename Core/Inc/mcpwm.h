@@ -9,6 +9,7 @@
 #include "parameter.h"
 #include "NTC_Calculate.h"
 #include "tamagawa.h"	
+#include "park.h"	
 
 #define CURRENT_MEAS_PERIOD ( (float)2*TIM_1_8_PERIOD_CLOCKS*(TIM_1_8_RCR+1) / (float)TIM_1_8_CLOCK_HZ )
 #define CURRENT_MEAS_HZ ( (float)(TIM_1_8_CLOCK_HZ) / (float)(2*TIM_1_8_PERIOD_CLOCKS*(TIM_1_8_RCR+1)) )
@@ -45,9 +46,9 @@ typedef struct {
     uint16_t PWM2_Duty;
     uint16_t PWM3_Duty;
     uint16_t control_deadline;
-    int PhaseU_current;
-    int PhaseV_current;
-    int PhaseW_current;
+    int PhaseU_current_ma;
+    int PhaseV_current_ma;
+    int PhaseW_current_ma;
     int shunt_conductance; // 100 means 1 mOh, current sensing resistor
     int phase_inductance; // 1 means 1 uH
     int phase_resistor; // 1 means 1 mOh
@@ -111,6 +112,7 @@ extern int drv8301_error;
 extern ENC_Z enc_z;
 extern Hall_t hall;
 extern Encoder_Type_e feedback_type;
+extern svpwm_t svpwm;
 
 
 extern short hall_phase[],ENC_Z_Offset,hall_phase_offset,ENC_Z_Phase,ENC_Z_Phase_B,ENC_Z_Phase_Err,start_calibrate_hall_phase;
@@ -213,6 +215,5 @@ void IO_Process(void);
 void calibrate_tamagawa_encoder(void);
 void calibrate_hall_phase(void);
 void KEY_Process(void);
-int arm_cos_f32(int pahse);
-int arm_sin_f32(int pahse);
+
 #endif //__LOW_LEVEL_H

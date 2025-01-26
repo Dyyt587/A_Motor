@@ -514,7 +514,7 @@ void OLED_Process(void)
 				case 13:
 				case 0:	
 					temp=Iq_real/1000.0;
-					sprintf(display_buff,"%s%.1f%s","Current:",temp,"      ");
+					sprintf(display_buff,"%s%.4f%s","Current:",temp,"      ");
 					sprintf(display_buff1,"%s%d%s","Speed:",(display_speed),"       ");
 				break;
 				case 1:

@@ -34,30 +34,37 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 	Id_des = -Id_des * phase_dir;
 	Iq_des = -Iq_des * phase_dir;
 
-	motors->PhaseU_current = phase_current_from_adcval(ADCValue[0] - ADC_Offset[0]);
+	motors->PhaseU_current_ma = phase_current_from_adcval(ADCValue[0] - ADC_Offset[0]);
 
-	motors->PhaseW_current = phase_current_from_adcval(ADCValue[1] - ADC_Offset[1]);
+	motors->PhaseW_current_ma = phase_current_from_adcval(ADCValue[1] - ADC_Offset[1]);
 
-	motors->PhaseV_current = -motors->PhaseU_current - motors->PhaseW_current;
+	motors->PhaseV_current_ma = -motors->PhaseU_current_ma - motors->PhaseW_current_ma;
 
 	// Clarke transform
-	Ialpha = motors->PhaseU_current;
-	Ibeta = (1000 * (motors->PhaseV_current - motors->PhaseW_current)) / 1732;
+	// Ialpha = motors->PhaseU_current_ma*1000;
+	// Ibeta =  (motors->PhaseV_current_ma - motors->PhaseW_current_ma)*577;
+
+	clarke_calc_3(&svpwm, motors->PhaseU_current_ma, motors->PhaseV_current_ma, motors->PhaseW_current_ma);
+
 
 	// Park transform
 	int c = arm_cos_f32(motors->phase);
 	int s = arm_sin_f32(motors->phase);
-	Id = (c * Ialpha + s * Ibeta) / 16384;
-	Iq = (c * Ibeta - s * Ialpha) / 16384;
+	// Id = (c * Ialpha + s * Ibeta) / 16384000;
+	// Iq = (c * Ibeta - s * Ialpha) / 16384000;
 
-	Iq_real = -Iq * phase_dir;
-	Id_real = -Id * phase_dir;
+
+	park_calc(&svpwm,  svpwm.Alpha, svpwm.Beta, motors->phase);
+	// Iq_real = -Iq * phase_dir;
+	// Id_real = -Id * phase_dir;
+	Iq_real = -svpwm.Qs * phase_dir;
+	Id_real = -svpwm.Ds * phase_dir;
 
 	if (motor_on)
 	{
 		// Current error
-		Ierr_d = Id_des - Id;
-		Ierr_q = Iq_des - Iq;
+		Ierr_d = Id_des - svpwm.Ds;
+		Ierr_q = Iq_des - svpwm.Qs;
 
 		//@TODO look into feed forward terms (esp omega, since PI pole maps to RL tau)
 		//@TODO current limit

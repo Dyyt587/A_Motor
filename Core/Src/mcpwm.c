@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <park.h>
 // #include <cmsis_os.h>
 
 #include <main.h>
@@ -43,7 +44,7 @@ int drv8301_error = 0;
 
 ENC_Z enc_z={0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 Hall_t hall = {0, 0, 0, 0, 0, 0}; // 霍尔传感器结构体
-
+svpwm_t svpwm = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 short hall_count = 0, hall_get_position = 0, start_calibrate_hall_phase = 0;
 int encoder_direction_temp = 0, encoder_direction_temp_b = 0;
 short hall_phase[8], ENC_Z_Offset = 2680, hall_phase_offset = 0, ENC_Z_Phase = 0, ENC_Z_Phase_B = 0, ENC_Z_Phase_Err = 0;
@@ -67,9 +68,9 @@ Motor_t motor = {
 	.PWM2_Duty = TIM_1_8_PERIOD_CLOCKS / 2,
 	.PWM3_Duty = TIM_1_8_PERIOD_CLOCKS / 2,
 	.control_deadline = TIM_1_8_PERIOD_CLOCKS,
-	.PhaseU_current = 0,
-	.PhaseV_current = 0,
-	.PhaseW_current = 0,
+	.PhaseU_current_ma = 0,
+	.PhaseV_current_ma = 0,
+	.PhaseW_current_ma = 0,
 
 	.shunt_conductance = 500, // 100 means 1 mOh, current sensing resistor
 	.phase_resistor = 5,	  //[S]
@@ -96,7 +97,7 @@ void init_motor_control(void)
 {
 	delay_ms(10);
 	// if(vbus_voltage<140)
-	//	Error_State=Error_State|0x0010;
+	// Error_State=Error_State|0x0010;
 
 	// if(Error_State*0x10==0)
 	start_adc();
@@ -202,10 +203,10 @@ int phase_current_from_adcval(uint32_t ADCValue)
 {
 	int amp_gain = AMP_GAIN;
 
-	int amp_out_volt = ONE_ADC_VOLTAGE * ADCValue;
-	int shunt_volt = amp_out_volt / amp_gain;
-	int current = (shunt_volt * 100) / motor.shunt_conductance; // unit mA
-	return current;
+	int amp_out_volt = ONE_ADC_VOLTAGE * ADCValue;//adc value to voltage /unit uv
+	int shunt_volt = amp_out_volt / amp_gain;//实际电阻两端电压/unit uv
+	int current_ma = (shunt_volt * 100) / motor.shunt_conductance; // unit mA=uv/mohm
+	return current_ma;
 }
 
 void Calibrate_ADC_Offset(void)
@@ -304,14 +305,14 @@ void find_commutation(void)
 	case 2:
 		switch (feedback_type)
 		{
-		case 1:
+		case Default:
 			motor.encoder_state = 0;
 			enc_z.count = 0;
 			enc_z.count_back = 0;
 			enc_z.first = 0;
 			commutation_founded = 1;
 			break;
-		case 4:
+		case Tamagawa:
 			phase_dir = tamagawa_dir;
 			motor.encoder_state = tamagawa_angle;
 			motor.encoder_offset = tamagawa_offset;
@@ -380,7 +381,7 @@ void update_motor(Motor_t *motors)
 	hall.state = hall.u + (hall.v << 1) + (hall.w << 2);
 
 	int ph;
-	// compute electrical phase
+	// 计算电角度
 	int32_t enc_state_mod = motors->encoder_state % feedback_resolution;
 	if (phase_dir == 1)
 		ph = M_PI / 2 + (rad_of_round * (enc_state_mod - motors->encoder_offset)) / feedback_resolution;
@@ -712,7 +713,7 @@ void calibrate_tamagawa_encoder(void)
 		{
 			target_Iq = 0;
 			target_speed = 0;
-			operation_mode = 2;
+			operation_mode = 2;//const speed
 			Tamagawa_count_temp = 0;
 			control_word.all = 0x86;
 			set_tamagawa_zero = 0;

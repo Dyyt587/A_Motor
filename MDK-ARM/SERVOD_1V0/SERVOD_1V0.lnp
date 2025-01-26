@@ -25,6 +25,8 @@
 ".\servod_1v0\usart.o"
 ".\servod_1v0\stm32g0xx_it.o"
 ".\servod_1v0\stm32g0xx_hal_msp.o"
+".\servod_1v0\park.o"
+".\servod_1v0\filter.o"
 ".\servod_1v0\stm32g0xx_hal_adc.o"
 ".\servod_1v0\stm32g0xx_hal_adc_ex.o"
 ".\servod_1v0\stm32g0xx_ll_adc.o"
