@@ -65,6 +65,15 @@ enum Motor_thread_signals {
     M_SIGNAL_PH_CURRENT_MEAS = 1u << 0
 };
 
+typedef struct{
+    short u;
+    short v;
+    short w;
+    short state;
+    short state_back;
+    short error; 
+}Hall_t;
+
 /* Exported constants --------------------------------------------------------*/
 extern short vbus_voltage,device_temperature;
 extern Motor_t motor;
@@ -85,7 +94,8 @@ extern int drv8301_error;
 extern unsigned short ENC_Z_Count,ENC_Z_Count_B,ENC_Z_Count_C,ENC_Z_First,ENC_Z_Trig,ENC_Counting_Error;
 extern short ENC_Z_Diff,ENC_Z_Diff_B;
 extern int ENC_Z_Pos,ENC_Z_Pos_B,ENC_Z_Pos_Offset,ENC_Z_Pos_Diff,ENC_Z_Pos_Diff_B;
-extern short hall_u,hall_v,hall_w,hall_state,hall_state_b;
+// extern short hall_u,hall.v,hall.w,hall.state,hall.state_back;
+extern Hall_t hall;
 extern short hall_phase[],ENC_Z_Offset,hall_phase_offset,ENC_Z_Phase,ENC_Z_Phase_B,ENC_Z_Phase_Err,start_calibrate_hall_phase;
 extern int hall_position,hall_position_b;
 extern short encoder_offset_diff,hall_phase_offset_diff;

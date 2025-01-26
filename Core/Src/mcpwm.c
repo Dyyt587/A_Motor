@@ -39,7 +39,9 @@ unsigned short ENC_Z_Count=0,ENC_Z_Count_B=0,ENC_Z_Count_C=0,ENC_Z_First=0,ENC_Z
 short ENC_Z_Diff=0,ENC_Z_Diff_B=0;
 int ENC_Z_Pos=0,ENC_Z_Pos_B=0,ENC_Z_Pos_Offset=0,ENC_Z_Pos_Diff=0,ENC_Z_Pos_Diff_B=0;
 
-short hall_u=0,hall_v=0,hall_w=0,hall_state=0,hall_state_b=0,hall_error=0;
+Hall_t hall={0,0,0,0,0,0};
+
+
 short hall_count=0,hall_get_position=0,start_calibrate_hall_phase=0;
 int encoder_direction_temp=0,encoder_direction_temp_b=0;
 short hall_phase[8],ENC_Z_Offset=2680,hall_phase_offset=0,ENC_Z_Phase=0,ENC_Z_Phase_B=0,ENC_Z_Phase_Err=0;
@@ -347,11 +349,15 @@ void update_motor(Motor_t* motors)
 		}
 	
 		//hall_u=HAL_GPIO_ReadPin(HALL_U_GPIO_Port,HALL_U_Pin);
-		//hall_v=HAL_GPIO_ReadPin(HALL_V_GPIO_Port,HALL_V_Pin);
-		//hall_w=HAL_GPIO_ReadPin(HALL_W_GPIO_Port,HALL_W_Pin);
+		//hall.v=HAL_GPIO_ReadPin(HALL_V_GPIO_Port,HALL_V_Pin);
+		//hall.w=HAL_GPIO_ReadPin(HALL_W_GPIO_Port,HALL_W_Pin);
 	
-		hall_state_b=hall_state;
-		hall_state=hall_u+(hall_v<<1)+(hall_w<<2);
+		// hall.state_back=hall.state;
+		// hall.state=hall_u+(hall.v<<1)+(hall.w<<2);
+		
+		hall.state_back = hall.state;
+		hall.state = hall.u + (hall.v << 1) + (hall.w << 2);
+
 		int ph;
     //compute electrical phase
 		if(phase_dir==1)
@@ -380,36 +386,36 @@ void update_motor(Motor_t* motors)
 			case 11:
 			case 17:
 				// hall 
-				if(hall_phase[hall_state]>hall_phase[hall_state_b])
+				if(hall_phase[hall.state]>hall_phase[hall.state_back])
 				{
-					if((hall_phase[hall_state]-hall_phase[hall_state_b])<M_PI)
+					if((hall_phase[hall.state]-hall_phase[hall.state_back])<M_PI)
 					{
 						hall_position+=1;
-						//ph=hall_phase[hall_state]-hall_phase_offset;
+						//ph=hall_phase[hall.state]-hall_phase_offset;
 					}
 					else
 					{
 						hall_position-=1;
-						//ph=hall_phase[hall_state_b]-hall_phase_offset;
+						//ph=hall_phase[hall.state_back]-hall_phase_offset;
 					}
 				}
-				else if(hall_phase[hall_state]<hall_phase[hall_state_b])
+				else if(hall_phase[hall.state]<hall_phase[hall.state_back])
 				{
-					if((hall_phase[hall_state_b]-hall_phase[hall_state])<M_PI)
+					if((hall_phase[hall.state_back]-hall_phase[hall.state])<M_PI)
 					{
 						hall_position-=1;
-						//ph=hall_phase[hall_state_b]-hall_phase_offset;
+						//ph=hall_phase[hall.state_back]-hall_phase_offset;
 					}
 					else
 					{
 						hall_position+=1;
-						//ph=hall_phase[hall_state]-hall_phase_offset;
+						//ph=hall_phase[hall.state]-hall_phase_offset;
 					}
 				}
 				if(speed_demand>0)
-					ph=hall_phase[hall_state]+hall_phase_offset+862;
+					ph=hall_phase[hall.state]+hall_phase_offset+862;
 				else
-					ph=hall_phase[hall_state]+hall_phase_offset+862;
+					ph=hall_phase[hall.state]+hall_phase_offset+862;
 				ph = ph%(2*M_PI);
 				if(ph<0)
 					ph+=2*M_PI;
@@ -433,12 +439,12 @@ void update_motor(Motor_t* motors)
 			if((commutation_founded==1)&&(commutation_mode==2))
 			{
 				//ENC_Z_First=1;
-				if((hall_state==4)&&(hall_state_b==5))
+				if((hall.state==4)&&(hall.state_back==5))
 				{
 					if(hall_phase_dir==1)		
-						hall_phase_offset_diff=((hall_phase[hall_state]+M_PI/2)-motors->phase);
+						hall_phase_offset_diff=((hall_phase[hall.state]+M_PI/2)-motors->phase);
 					else
-						hall_phase_offset_diff=((hall_phase[hall_state_b]+M_PI/2)-motors->phase);
+						hall_phase_offset_diff=((hall_phase[hall.state_back]+M_PI/2)-motors->phase);
 					
 					hall_phase_offset_diff=hall_phase_offset_diff%(2*M_PI);
 					encoder_offset_diff=hall_phase_offset_diff*feedback_resolution/(M_PI*poles_num*2);
@@ -449,12 +455,12 @@ void update_motor(Motor_t* motors)
 							ENC_Z_First=1;
 						}
 				}
-				if((hall_state==5)&&(hall_state_b==4))
+				if((hall.state==5)&&(hall.state_back==4))
 				{
 					if(hall_phase_dir==1)		
-						hall_phase_offset_diff=((hall_phase[hall_state_b]+M_PI/2)-motors->phase);
+						hall_phase_offset_diff=((hall_phase[hall.state_back]+M_PI/2)-motors->phase);
 					else
-						hall_phase_offset_diff=((hall_phase[hall_state]+M_PI/2)-motors->phase);
+						hall_phase_offset_diff=((hall_phase[hall.state]+M_PI/2)-motors->phase);
 					
 					hall_phase_offset_diff=hall_phase_offset_diff%(2*M_PI);
 					encoder_offset_diff=hall_phase_offset_diff*feedback_resolution/(M_PI*poles_num*2);
@@ -482,9 +488,9 @@ void get_hall_edge_phase(Motor_t* motors)
 			hall_count=0;
 			hall_get_position=2;
 	}
-	if(hall_state!=hall_state_b)
+	if(hall.state!=hall.state_back)
 	{
-		hall_phase[hall_state]=motors->phase;
+		hall_phase[hall.state]=motors->phase;
 		hall_count++;
 		encoder_direction_temp_b=encoder_direction_temp;
 		encoder_direction_temp=motor.encoder_state;
