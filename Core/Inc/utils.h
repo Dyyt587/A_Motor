@@ -71,7 +71,7 @@ static inline DateType fast_cos(DateType x) {
 }
 #elif defined(PARK_USE_INT32)
 static inline DateType fast_sin(DateType x) {
-    return arm_cos_f32(x);
+    return arm_sin_f32(x);
 }
 static inline DateType fast_cos(DateType x) {
     return arm_cos_f32(x);
@@ -163,24 +163,21 @@ static inline void clarke_calc_3(svpwm_t* v, DateType _A, DateType _B, DateType 
  * @retval      none
  */
 static inline void _park_calc(svpwm_t* v) {
-    DateType cosTh, sinTh;
 
     // v->Alpha = _Alpha;
     // v->Beta = _Beta;
     // v->Angle = _Angle;
 
-    sinTh = fast_sin(v->Angle);
-    cosTh = fast_cos(v->Angle);
-
-    v->Ds = ((v->Alpha * cosTh) + (v->Beta * sinTh))/16384;
-    v->Qs = ((v->Beta * cosTh) - (v->Alpha * sinTh))/16384;
+    v->Ds = ((v->Alpha * v->Cosine) + (v->Beta * v->Sine))/16384;
+    v->Qs = ((v->Beta * v->Cosine) - (v->Alpha * v->Sine))/16384;
 }
 static inline void park_calc(svpwm_t* v, DateType _Alpha, DateType _Beta, DateType _Angle) {
-    DateType cosTh, sinTh;
 
     v->Alpha = _Alpha;
     v->Beta = _Beta;
     v->Angle = _Angle;
+    v->Sine = fast_sin(_Angle);
+    v->Cosine = fast_cos(_Angle);
 
     _park_calc(v);
 }
@@ -205,25 +202,22 @@ static inline void park_calc(svpwm_t* v, DateType _Alpha, DateType _Beta, DateTy
  * @retval      none
  */
 static inline void _ipark_calc(svpwm_t* v) {
-    DateType Cosine, Sine;
 
     // v->Ds = _Ds;
     // v->Qs = _Qs;
     // v->Angle = _Angle;
 
-    Sine = fast_sin(v->Angle);
-    Cosine = fast_cos(v->Angle);
 
-    v->Alpha = ((v->Ds * Cosine) - (v->Qs * Sine))/16384;
-    v->Beta = ((v->Qs * Cosine) + (v->Ds * Sine))/16384;
+
+    v->Alpha = ((v->Ds * v->Cosine) - (v->Qs * v->Sine))/16384;
+    v->Beta = ((v->Qs * v->Cosine) + (v->Ds * v->Sine))/16384;
 }
 static inline void ipark_calc(svpwm_t* v, DateType _Ds, DateType _Qs, DateType _Angle) {
-    DateType Cosine, Sine;
-
     v->Ds = _Ds;
     v->Qs = _Qs;
     v->Angle = _Angle;
-
+    v->Sine = fast_sin(v->Angle);
+    v->Cosine = fast_cos(v->Angle);
     _ipark_calc(v);
 }
 

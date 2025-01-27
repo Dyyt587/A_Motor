@@ -15,8 +15,7 @@
                 "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\libcxx",
                 "d:\\A_Motor\\MDK-ARM",
                 "d:\\A_Motor\\Core\\Src",
-                "d:\\A_Motor\\Drivers\\STM32G0xx_HAL_Driver\\Src",
-                "D:/A_Motor/all_pid/src"
+                "d:\\A_Motor\\Drivers\\STM32G0xx_HAL_Driver\\Src"
             ],
             "defines": [
                 "USE_HAL_DRIVER",

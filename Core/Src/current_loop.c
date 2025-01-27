@@ -46,20 +46,11 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 	motors->PhaseV_current_ma = -motors->PhaseU_current_ma - motors->PhaseW_current_ma;
 
 	// Clarke transform
-	// Ialpha = motors->PhaseU_current_ma*1000;
-	// Ibeta =  (motors->PhaseV_current_ma - motors->PhaseW_current_ma)*577;
-
 	clarke_calc_3(&svpwm, motors->PhaseU_current_ma, motors->PhaseV_current_ma, motors->PhaseW_current_ma);
 
 	// Park transform
-	int c = arm_cos_f32(motors->phase);
-	int s = arm_sin_f32(motors->phase);
-	// Id = (c * Ialpha + s * Ibeta) / 16384000;
-	// Iq = (c * Ibeta - s * Ialpha) / 16384000;
-
 	park_calc(&svpwm, svpwm.Alpha, svpwm.Beta, motors->phase);
-	// Iq_real = -Iq * phase_dir;
-	// Id_real = -Id * phase_dir;
+
 	Iq_real = -svpwm.Qs * phase_dir;
 	Id_real = -svpwm.Ds * phase_dir;
 
@@ -111,26 +102,12 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 			// *IbusEst = mod_d * Id + mod_q * Iq;
 
 			// Inverse park transform
-			mod_alpha = (c * mod_d - s * mod_q) / 16384;
-			mod_beta = (c * mod_q + s * mod_d) / 16384;
-
-			mod_alpha = mod_alpha;
-			mod_beta = mod_beta;
-
+			//ipark_calc(&svpwm, mod_d, mod_q, motors->phase);
+			 svpwm.Ds = mod_d;
+			 svpwm.Qs = mod_q;
+			 _ipark_calc(&svpwm);
 			// Apply SVM
-			queue_modulation_timings(motors, mod_alpha, mod_beta);
-
-			// 测试代码
-			if (Iq_des > 0)
-			{
-				if (Ierr_q < check_current_overshot_p)
-					check_current_overshot_p = Ierr_q;
-			}
-			if (Iq_des < 0)
-			{
-				if (Ierr_q > check_current_overshot_n)
-					check_current_overshot_n = Ierr_q;
-			}
+			queue_modulation_timings(motors, svpwm.Alpha, svpwm.Beta);
 		}
 	}
 }

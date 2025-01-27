@@ -28,7 +28,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "delay.h"
 #include "mcpwm.h"
 #include "oled.h"
 #include "math.h"
@@ -159,8 +158,8 @@ int main(void)
 		
 		Auto_reserve_process();
 		
-		calibrate_hall_phase();
-		calibrate_tamagawa_encoder();
+		//calibrate_hall_phase();
+		//calibrate_tamagawa_encoder();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -314,7 +314,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>4</Optim>
+            <Optim>5</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -398,11 +398,6 @@
               <FileName>mcpwm.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\mcpwm.c</FilePath>
-            </File>
-            <File>
-              <FileName>delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\delay.c</FilePath>
             </File>
             <File>
               <FileName>crc_16.c</FileName>
