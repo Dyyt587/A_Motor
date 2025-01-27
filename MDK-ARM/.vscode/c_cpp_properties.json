@@ -458,6 +458,7 @@
                 "d:\\A_Motor\\Drivers\\STM32G0xx_HAL_Driver\\Inc\\Legacy",
                 "d:\\A_Motor\\Drivers\\CMSIS\\Device\\ST\\STM32G0xx\\Include",
                 "d:\\A_Motor\\Drivers\\CMSIS\\Include",
+                "d:\\A_Motor\\all_pid\\src",
                 "C:\\Keil_v5\\ARM\\ARMCLANG\\include",
                 "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\arm_linux",
                 "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\arm_linux_compat",

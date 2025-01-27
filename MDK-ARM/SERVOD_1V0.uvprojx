@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32G070xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32G0xx_HAL_Driver/Inc;../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32G0xx/Include;../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32G0xx_HAL_Driver/Inc;../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32G0xx/Include;../Drivers/CMSIS/Include;..\all_pid\src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -528,6 +528,26 @@
               <FileName>filter.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\filter.c</FilePath>
+            </File>
+            <File>
+              <FileName>apid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\all_pid\src\apid.c</FilePath>
+            </File>
+            <File>
+              <FileName>apid_auto_tune_ZNmode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\all_pid\src\apid_auto_tune_ZNmode.c</FilePath>
+            </File>
+            <File>
+              <FileName>apid_ex_fuzzy.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\all_pid\src\apid_ex_fuzzy.c</FilePath>
+            </File>
+            <File>
+              <FileName>apid_exfunc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\all_pid\src\apid_exfunc.c</FilePath>
             </File>
           </Files>
         </Group>
