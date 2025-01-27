@@ -24,6 +24,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "mcpwm.h"
+#include "string.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -224,12 +225,13 @@ t1=SysTick->VAL;
 			ttt2=ttt1;
 			if(ttt3>ttt4)
 				ttt4=ttt3;
-	ADCValue[0]=ADC_Value[0];
-	ADCValue[1]=ADC_Value[1];
-	ADCValue[2]=ADC_Value[2];
-	ADCValue[3]=ADC_Value[3];
-	ADCValue[4]=ADC_Value[4];
-	ADCValue[5]=ADC_Value[5];
+	// ADCValue[0]=ADC_Value[0];
+	// ADCValue[1]=ADC_Value[1];
+	// ADCValue[2]=ADC_Value[2];
+	// ADCValue[3]=ADC_Value[3];
+	// ADCValue[4]=ADC_Value[4];
+	// ADCValue[5]=ADC_Value[5];
+	memcpy(ADCValue,ADC_Value,sizeof(ADCValue));
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value, 6);
 	
 	vbus_voltage=(ADCValue[3]*19)/106;

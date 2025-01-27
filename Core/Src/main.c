@@ -32,6 +32,7 @@
 #include "mcpwm.h"
 #include "oled.h"
 #include "math.h"
+#include "apid.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,6 +68,7 @@ int i,j,k;
 int chanel1=2000,chanel2=2000,chanel3=2000
 	,chanel4=10;
 /* USER CODE END 0 */
+apid_t apid1 = {0};
 
 /**
   * @brief  The application entry point.
@@ -107,6 +109,9 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 	//delay_init(64);
+
+  APID_Init(&apid1, PID_INCREMENT, kcp, kci, 0);
+
 	Init_Modbus_Addr_List();
 
 	Init_System_Parameter();

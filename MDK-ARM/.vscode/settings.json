@@ -75,6 +75,7 @@
     "stdint.h": "c",
     "mcpwm.h": "c",
     "utils.h": "c",
-    "math.h": "c"
+    "math.h": "c",
+    "apid.h": "c"
   }
 }
