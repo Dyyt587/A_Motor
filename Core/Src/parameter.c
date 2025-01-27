@@ -56,7 +56,7 @@ void Init_Motor_Parameter(void)
 
 void Init_Control_Parameter(void)
 {
-	operation_mode=2;      //工作模式：1表示有加减速的位置模式，2表示速度模式，3表示有加减速的速度模式，4表示力矩模式，0表示开环速度模式
+	operation_mode=4;      //工作模式：1表示有加减速的位置模式，2表示速度模式，3表示有加减速的速度模式，4表示力矩模式，0表示开环速度模式
 	control_word.all=0x06;  //控制字：0x06表示去使能；0x0F表示使能；0x86表示清错
 	Iq_demand=0;          	//内部Q轴电流指令，单位是mA，只读
 	speed_demand=0;					//内部速度指令，单位是0.001转每秒，只读

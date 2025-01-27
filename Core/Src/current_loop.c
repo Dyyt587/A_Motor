@@ -23,11 +23,14 @@ static const int sqrt3_by_2 = 866;
 int vfactor = 1;
 int Ialpha, Ibeta, Ierr_d, Ierr_q, Vd, Vd_filter, Vq, Vq_filter, V_current_control_integral_d = 0, V_current_control_integral_q = 0, vfactor, mod_d, mod_q, mod_scalefactor, mod_alpha, mod_beta, mod_alpha_filter, mod_beta_filter;
 int Vq_out_limit = 700, Vd_out_limit = 700, kci_sum_limit = 100;
-short kcp = 20, kci = 30;
+short kcp = 20, kci = 0;
 short current_in_lpf_a = 1000, current_out_lpf_a = 1000;
 int check_current_overshot_p = 0, check_current_overshot_n = 0;
 int Driver_IIt_Real = 0, Driver_IIt_Current, Driver_IIt_Real_DC = 0, Driver_IIt_Current_DC;
 short Driver_IIt_Filter, Driver_IIt_Filter_DC;
+
+extern apid_t apidd;
+extern apid_t apidq;
 void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 {
 
@@ -60,16 +63,26 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 
 	if (motor_on)
 	{
+		APID_Set_Target(&apidd, Id_des);
+		APID_Set_Target(&apidq, Iq_des);
+
+		APID_Set_Present(&apidd, svpwm.Ds);
+		APID_Set_Present(&apidq, svpwm.Qs);
 		// Current error
-		Ierr_d = Id_des - svpwm.Ds;
-		Ierr_q = Iq_des - svpwm.Qs;
+		// Ierr_d = Id_des - svpwm.Ds;
+		// Ierr_q = Iq_des - svpwm.Qs;
 
 		//@TODO look into feed forward terms (esp omega, since PI pole maps to RL tau)
 		//@TODO current limit
 		// Apply PI control
-		Vd = (V_current_control_integral_d / 10 + (Ierr_d * kcp)) / 1000;
-		Vq = (V_current_control_integral_q / 10 + (Ierr_q * kcp)) / 1000;
+		// Vd = (V_current_control_integral_d / 10 + (Ierr_d * kcp)) / 1000;
+		// Vq = (V_current_control_integral_q / 10 + (Ierr_q * kcp)) / 1000;
 
+		APID_Hander(&apidd, 1);
+		APID_Hander(&apidq, 1);
+
+		Vd = apidd.parameter.out/1000;
+		Vq = apidq.parameter.out/1000;
 		Vq_filter = Low_pass_filter_1(current_out_lpf_a, Vq, Vq_filter);
 		Vd_filter = Low_pass_filter_1(current_out_lpf_a, Vd, Vd_filter);
 
@@ -87,49 +100,50 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 		//			if(tt3>tt4)
 		//				tt4=tt3;
 		// t2=t1;
-		if (mod_q > Vq_out_limit)
-		{
-			mod_q = Vq_out_limit;
-		}
-		else if (mod_q < -Vq_out_limit)
-		{
-			mod_q = -Vq_out_limit;
-		}
-		else
-		{
-			//@TODO look into fancier anti integrator windup than simple locking
-			V_current_control_integral_q += Ierr_q * kci;
-			if (V_current_control_integral_q > kci_sum_limit)
-			{
-				V_current_control_integral_q = kci_sum_limit;
-			}
-			if (V_current_control_integral_q < -kci_sum_limit)
-			{
-				V_current_control_integral_q = -kci_sum_limit;
-			}
-		}
 
-		if (mod_d > Vd_out_limit)
-		{
-			mod_d = Vd_out_limit;
-		}
-		else if (mod_d < -Vd_out_limit)
-		{
-			mod_d = -Vd_out_limit;
-		}
-		else
-		{
-			//@TODO look into fancier anti integrator windup than simple locking
-			V_current_control_integral_d += Ierr_d * kci;
-			if (V_current_control_integral_d > kci_sum_limit)
-			{
-				V_current_control_integral_d = kci_sum_limit;
-			}
-			if (V_current_control_integral_d < -kci_sum_limit)
-			{
-				V_current_control_integral_d = -kci_sum_limit;
-			}
-		}
+		// if (mod_q > Vq_out_limit)
+		// {
+		// 	mod_q = Vq_out_limit;
+		// }
+		// else if (mod_q < -Vq_out_limit)
+		// {
+		// 	mod_q = -Vq_out_limit;
+		// }
+		// else
+		// {
+		// 	//@TODO look into fancier anti integrator windup than simple locking
+		// 	// V_current_control_integral_q += Ierr_q * kci;
+		// 	// if (V_current_control_integral_q > kci_sum_limit)
+		// 	// {
+		// 	// 	V_current_control_integral_q = kci_sum_limit;
+		// 	// }
+		// 	// if (V_current_control_integral_q < -kci_sum_limit)
+		// 	// {
+		// 	// 	V_current_control_integral_q = -kci_sum_limit;
+		// 	// }
+		// }
+
+		// if (mod_d > Vd_out_limit)
+		// {
+		// 	mod_d = Vd_out_limit;
+		// }
+		// else if (mod_d < -Vd_out_limit)
+		// {
+		// 	mod_d = -Vd_out_limit;
+		// }
+		// else
+		// {
+		// 	//@TODO look into fancier anti integrator windup than simple locking
+		// 	// V_current_control_integral_d += Ierr_d * kci;
+		// 	// if (V_current_control_integral_d > kci_sum_limit)
+		// 	// {
+		// 	// 	V_current_control_integral_d = kci_sum_limit;
+		// 	// }
+		// 	// if (V_current_control_integral_d < -kci_sum_limit)
+		// 	// {
+		// 	// 	V_current_control_integral_d = -kci_sum_limit;
+		// 	// }
+		// }
 
 		// Compute estimated bus current
 		// *IbusEst = mod_d * Id + mod_q * Iq;

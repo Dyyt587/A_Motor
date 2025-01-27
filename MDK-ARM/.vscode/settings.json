@@ -76,6 +76,7 @@
     "mcpwm.h": "c",
     "utils.h": "c",
     "math.h": "c",
-    "apid.h": "c"
+    "apid.h": "c",
+    "oled.h": "c"
   }
 }

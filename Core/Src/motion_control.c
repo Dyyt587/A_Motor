@@ -15,6 +15,7 @@
 #include <utils.h>
 #include "delay.h"
 #include "oled.h"
+#include "apid.h"
 
 s32 profile_acce=5000,profile_dece=5000,profile_speed=5000,end_speed=0,profile_speed_b,target_speed_now=0,direction=1;
 s32 profile_target_position,profile_target_position_b;
@@ -35,6 +36,9 @@ short OLED_count=0,OLED_Period=200;
 
 int EN_state=0,EN_state_b=0,DIN1_state=0,DIN1_state_b=0,DIN2_state=0,DIN2_state_b=0,DIN3_state=0,DIN3_state_b=0,DOUT1_state=0,DOUT1_state_b=0;
 
+
+extern apid_t apidd;
+extern apid_t apidq;
 s32 Acce_distance_cal(int acce,int speed)
 {
 	int64_t v,a,r,d;
@@ -541,10 +545,12 @@ void OLED_Process(void)
 			}
 			*/
 		}
-		temp=vbus_voltage/10.0;
-		sprintf(display_buff2,"%s%.1f%s","Volt:",temp,"");
-		temp=device_temperature/10.0;
-		sprintf(display_buff3,"%s%.1f%s","Temp:",temp,"");
+		//temp=vbus_voltage/10.0;
+		temp=apidd.parameter.target - apidd.parameter.present;
+		sprintf(display_buff2,"%s%.1f%s","e:",temp,"");
+		extern int Vd;
+		temp=apidd.parameter.present;
+		sprintf(display_buff3,"%s%.1f%s","p:",temp,"");
 		
 	  OLED_ShowString(0,2,(u8*)display_buff,12);
 	  OLED_ShowString(0,3,(u8*)display_buff1,12);
