@@ -46,15 +46,13 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 
 	clarke_calc_3(&svpwm, motors->PhaseU_current_ma, motors->PhaseV_current_ma, motors->PhaseW_current_ma);
 
-
 	// Park transform
 	int c = arm_cos_f32(motors->phase);
 	int s = arm_sin_f32(motors->phase);
 	// Id = (c * Ialpha + s * Ibeta) / 16384000;
 	// Iq = (c * Ibeta - s * Ialpha) / 16384000;
 
-
-	park_calc(&svpwm,  svpwm.Alpha, svpwm.Beta, motors->phase);
+	park_calc(&svpwm, svpwm.Alpha, svpwm.Beta, motors->phase);
 	// Iq_real = -Iq * phase_dir;
 	// Id_real = -Id * phase_dir;
 	Iq_real = -svpwm.Qs * phase_dir;
@@ -150,6 +148,7 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 		motors->motor_timer->Instance->CCR2 = motors->PWM2_Duty;
 		motors->motor_timer->Instance->CCR3 = motors->PWM3_Duty;
 
+		// 测试代码
 		if (Iq_des > 0)
 		{
 			if (Ierr_q < check_current_overshot_p)

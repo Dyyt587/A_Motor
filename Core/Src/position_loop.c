@@ -38,7 +38,6 @@ void Position_Loop(Motor_t* motors, int target_pos)
 			break;
 				
 		}
-		
 	}
 	else if(operation_mode>10)
 		pos_actual=hall_position;
@@ -99,13 +98,13 @@ void Position_Loop(Motor_t* motors, int target_pos)
 			}
 			if(target_pos>0)
 			{
-					if(pos_err<check_pos_overshot_p)
-						check_pos_overshot_p=pos_err;
+				if(pos_err<check_pos_overshot_p)
+					check_pos_overshot_p=pos_err;
 			}
 			if(target_pos<0)
 			{
-					if(pos_err>check_pos_overshot_n)
-						check_pos_overshot_n=pos_err;
+				if(pos_err>check_pos_overshot_n)
+					check_pos_overshot_n=pos_err;
 			}
 			break;
 		default:

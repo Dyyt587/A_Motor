@@ -9,7 +9,7 @@
 #include "parameter.h"
 #include "NTC_Calculate.h"
 #include "tamagawa.h"	
-#include "park.h"	
+#include "utils.h"	
 
 #define CURRENT_MEAS_PERIOD ( (float)2*TIM_1_8_PERIOD_CLOCKS*(TIM_1_8_RCR+1) / (float)TIM_1_8_CLOCK_HZ )
 #define CURRENT_MEAS_HZ ( (float)(TIM_1_8_CLOCK_HZ) / (float)(2*TIM_1_8_PERIOD_CLOCKS*(TIM_1_8_RCR+1)) )
