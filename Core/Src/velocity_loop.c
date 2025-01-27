@@ -39,7 +39,7 @@ void Velocity_loop(Motor_t* motors, int target_vel)
 			case 2:
 			case 5:
 			case 7:	
-				if(commutation_founded)
+				if(motor.motion.commutation_founded)
 				{
 					if(low_pass_filter_on)
 						speed_err=target_vel-real_speed_filter;
@@ -75,7 +75,7 @@ void Velocity_loop(Motor_t* motors, int target_vel)
 					if(hall_speed_update==1)
 					{
 						hall_speed_update=0;
-						if(commutation_founded)
+						if(motor.motion.commutation_founded)
 						{
 							if(low_pass_filter_on)
 								speed_err=target_vel-real_speed_filter;
@@ -105,7 +105,7 @@ void Velocity_loop(Motor_t* motors, int target_vel)
 				}
 				break;
 			case 0:
-				commutation_founded=0;
+				motor.motion.commutation_founded=0;
 				Step_phase+=target_vel;
 			
 				Step_phase = Step_phase%(2*M_PI);

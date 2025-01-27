@@ -151,12 +151,12 @@ int main(void)
 		}
 		DS402_process();
 		KEY_Process();
-		RS232_Process();
-		RS232_Solve_Service();
+		//RS232_Process();
+		//RS232_Solve_Service();
 		RS485_Process();
 		Modbus_Solve_Service();
 		
-		Auto_reserve_process();
+		//Auto_reserve_process();
 		
 		//calibrate_hall_phase();
 		//calibrate_tamagawa_encoder();

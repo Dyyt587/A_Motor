@@ -232,7 +232,7 @@ void Motion_process(void)
 			Iq_demand=target_Iq;
 			break;
 		case 5:	
-			if(commutation_founded)
+			if(motor.motion.commutation_founded)
 			{
 				//pul_dir=HAL_GPIO_ReadPin(DIR_GPIO_Port,DIR_Pin);
 				//pluse_temp=__HAL_TIM_GET_COUNTER(&htim2);
@@ -267,115 +267,115 @@ void Motion_process(void)
 	
 }
 
-void Auto_reserve_process(void)
-{
-	if(auto_switch_on)
-	{
-		if(motor_on==0)
-			if(Error_State.all==0)
-				if(control_word.all==0x06)
-					control_word.all=0x0f;
-	}
-	
-	if(motor_on)	
-	if(auto_reverse_n_time||auto_reverse_p_time)
-	{
-		switch(auto_reverse_status)
-		{
-			case 0:
-				auto_reverse_time=HAL_GetTick();
-				auto_reverse_status=1;
-				break;
-			case 1:
-				if((HAL_GetTick()-auto_reverse_time)>auto_reverse_p_time)
-				{
-					auto_reverse_time=HAL_GetTick();
-					switch(operation_mode)
-					{
-						case 2:
-						case 3:
-						case 12:
-						case 13:
-							target_speed=auto_p_pos;
-						break;
-						case 1:
-						case 7:
-						case 11:
-						case 17:
-							target_position=auto_p_pos;
-						break;
-						case 4:
-						case 14:
-						//case 0:
-							target_Iq=auto_p_pos;
-						break;
-					}	
-					auto_reverse_status=2;
-				}
-				break;
-			case 2:
-				if((HAL_GetTick()-auto_reverse_time)>auto_reverse_n_time)
-				{
-					auto_reverse_time=HAL_GetTick();
-					switch(operation_mode)
-					{
-						case 2:
-						case 3:
-						case 12:
-						case 13:
-							target_speed=auto_n_pos;
-						break;
-						case 1:
-						case 7:
-						case 11:
-						case 17:
-							target_position=auto_n_pos;
-						break;
-						case 4:
-						case 14:
-						//case 0:
-							target_Iq=auto_n_pos;
-						break;
-					}
-					auto_reverse_status=1;
-				}
-				break;
-			default:
-				break;
-		}
-	}
-	if((auto_reverse_n_time==0)&&(auto_reverse_p_time==0))
-	{
-		auto_reverse_status=0;
-	}
+//void Auto_reserve_process(void)
+//{
+//	if(auto_switch_on)
+//	{
+//		if(motor_on==0)
+//			if(motor.motion.Error_State.all==0)
+//				if(control_word.all==0x06)
+//					control_word.all=0x0f;
+//	}
+//	
+//	if(motor_on)	
+//	if(auto_reverse_n_time||auto_reverse_p_time)
+//	{
+//		switch(auto_reverse_status)
+//		{
+//			case 0:
+//				auto_reverse_time=HAL_GetTick();
+//				auto_reverse_status=1;
+//				break;
+//			case 1:
+//				if((HAL_GetTick()-auto_reverse_time)>auto_reverse_p_time)
+//				{
+//					auto_reverse_time=HAL_GetTick();
+//					switch(operation_mode)
+//					{
+//						case 2:
+//						case 3:
+//						case 12:
+//						case 13:
+//							target_speed=auto_p_pos;
+//						break;
+//						case 1:
+//						case 7:
+//						case 11:
+//						case 17:
+//							target_position=auto_p_pos;
+//						break;
+//						case 4:
+//						case 14:
+//						//case 0:
+//							target_Iq=auto_p_pos;
+//						break;
+//					}	
+//					auto_reverse_status=2;
+//				}
+//				break;
+//			case 2:
+//				if((HAL_GetTick()-auto_reverse_time)>auto_reverse_n_time)
+//				{
+//					auto_reverse_time=HAL_GetTick();
+//					switch(operation_mode)
+//					{
+//						case 2:
+//						case 3:
+//						case 12:
+//						case 13:
+//							target_speed=auto_n_pos;
+//						break;
+//						case 1:
+//						case 7:
+//						case 11:
+//						case 17:
+//							target_position=auto_n_pos;
+//						break;
+//						case 4:
+//						case 14:
+//						//case 0:
+//							target_Iq=auto_n_pos;
+//						break;
+//					}
+//					auto_reverse_status=1;
+//				}
+//				break;
+//			default:
+//				break;
+//		}
+//	}
+//	if((auto_reverse_n_time==0)&&(auto_reverse_p_time==0))
+//	{
+//		auto_reverse_status=0;
+//	}
 
-}
+//}
 
-void IO_Process(void)
-{
-	//DIN1_state=HAL_GPIO_ReadPin(DIN1_GPIO_Port,DIN1_Pin);
-	//DIN2_state=HAL_GPIO_ReadPin(DIN2_GPIO_Port,DIN2_Pin);
-	//DIN3_state=HAL_GPIO_ReadPin(DIN3_GPIO_Port,DIN3_Pin);
-	
-	if(EN_state>EN_state_b)
-	{
-		control_word.all=0x0f;
-	}
-	else if(EN_state<EN_state_b)
-	{
-		control_word.all=0x06;
-	}
-	
-	EN_state_b=EN_state;
-	DIN1_state_b=DIN1_state;
-	DIN2_state_b=DIN2_state;
-	DIN3_state_b=DIN3_state;
-}
+//void IO_Process(void)
+//{
+//	//DIN1_state=HAL_GPIO_ReadPin(DIN1_GPIO_Port,DIN1_Pin);
+//	//DIN2_state=HAL_GPIO_ReadPin(DIN2_GPIO_Port,DIN2_Pin);
+//	//DIN3_state=HAL_GPIO_ReadPin(DIN3_GPIO_Port,DIN3_Pin);
+//	
+//	if(EN_state>EN_state_b)
+//	{
+//		control_word.all=0x0f;
+//	}
+//	else if(EN_state<EN_state_b)
+//	{
+//		control_word.all=0x06;
+//	}
+//	
+//	EN_state_b=EN_state;
+//	DIN1_state_b=DIN1_state;
+//	DIN2_state_b=DIN2_state;
+//	DIN3_state_b=DIN3_state;
+//}
 
 void LED_Process(void)
 {
 		led_blink_counter++;
-		if(Error_State.all==0)
+		if(motor.motion.Error_State.all==0)
 		{
 			if(motor_on)
 			{
@@ -462,10 +462,10 @@ void OLED_Process(void)
 		//OLED_Clear();
 		//Lcd_Clear(BLACK);
 		//Lcd_Fill(0,0,160,20,BLACK);
-		if(Error_State.all)
+		if(motor.motion.Error_State.all)
 		{		
 			sprintf(display_buff4,"ERROR");
-			switch(Error_State.all)
+			switch(motor.motion.Error_State.all)
 			{
 					case 2:
 						sprintf(display_buff1,"ADC_error     ");

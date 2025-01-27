@@ -33,5 +33,6 @@ extern u8 USART3RxBuffer[RXBUFFERSIZE];			//HAL库USART接收Buffer
 
 void uart3_init(u32 baudrate);
 void Tamagawa_Read_Cmd(uint8_t *buf,uint16_t len);
+void send_to_tamagawa(void);
 #endif
 

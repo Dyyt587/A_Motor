@@ -48,7 +48,7 @@ void Position_Loop(Motor_t* motors, int target_pos)
 		case 1:
 		case 3:
 		case 7:	
-			if(commutation_founded&&motor_on)
+			if(motor.motion.commutation_founded&&motor_on)
 			{
 				pos_err = target_pos - pos_actual;
 				vel_des = kpp * pos_err+kpi_sum;
@@ -76,7 +76,7 @@ void Position_Loop(Motor_t* motors, int target_pos)
 		case 11:
 		case 13:
 		case 17:	
-			if(commutation_founded&&motor_on)
+			if(motor.motion.commutation_founded&&motor_on)
 			{
 				pos_err = target_pos - pos_actual;
 				/*
@@ -158,7 +158,7 @@ void ENC_Z_Check(void)
 			}
 		}
 		#endif
-		if((commutation_founded==1)&&(commutation_mode==1))
+		if((motor.motion.commutation_founded==1)&&(motor.motion.commutation_mode==1))
 			if(enc_z.first==0)
 			{
 				motor.encoder_offset-=encoder_offset_diff;
@@ -170,9 +170,9 @@ void ENC_Z_Check(void)
 void Check_DCBus(void)
 {
 	if(vbus_voltage>over_voltage)
-		Error_State.bits.voltage_high=1;
+		motor.motion.Error_State.bits.voltage_high=1;
 	if(vbus_voltage<under_voltage)
-		Error_State.bits.voltage_low=1;
+		motor.motion.Error_State.bits.voltage_low=1;
 	
 	//if(vbus_voltage>chop_voltage)
 	//	HAL_GPIO_WritePin(BRAKE_GPIO_Port, BRAKE_Pin, GPIO_PIN_RESET);
@@ -183,24 +183,24 @@ void Check_DCBus(void)
 void Check_Temperature(void)
 {
 	if(device_temperature>over_temperature)
-		Error_State.bits.over_temperature=1;
+		motor.motion.Error_State.bits.over_temperature=1;
 }
 
 void Check_IIt(void)
 {
 	Driver_IIt_Real=IIt_filter(Driver_IIt_Filter,Iq_real,Driver_IIt_Real);
 	if(Driver_IIt_Real>Driver_IIt_Current)
-		Error_State.bits.over_load=1;
+		motor.motion.Error_State.bits.over_load=1;
 	
 	Driver_IIt_Real_DC=IIt_DC_filter(Driver_IIt_Filter_DC,Iq_real,Driver_IIt_Real_DC);
 	if(Driver_IIt_Real_DC>Driver_IIt_Current_DC)
-		Error_State.bits.over_load=1;
+		motor.motion.Error_State.bits.over_load=1;
 }
 
 
 void Error_process(void)
 {
-	if(Error_State.all)
+	if(motor.motion.Error_State.all)
 	{
 		status_word.bits.operation_enable=0;
 		status_word.bits.error=1;

@@ -28,7 +28,7 @@ void DS402_process(void)
 		switch(control_word.all)
 		{
 			case 0x0f:
-				if(Error_State.all==0)
+				if(motor.motion.Error_State.all==0)
 				{
 					//Scop_Start=1;
 					V_current_control_integral_d=0;
@@ -43,10 +43,10 @@ void DS402_process(void)
 						case 11:
 						case 17:
 							phase_dir=1;
-							commutation_founded=1;
+							motor.motion.commutation_founded=1;
 							//kci=0;	
 						case 0:
-							if(Error_State.all==0)
+							if(motor.motion.Error_State.all==0)
 							{
 								start_pwm(&htim1);
 								motor_on=1;
@@ -62,14 +62,14 @@ void DS402_process(void)
 						case 2:
 						case 5:
 						case 7:	
-							if(commutation_founded==0)
+							if(motor.motion.commutation_founded==0)
 							{
 								find_commutation();
 								delay_ms(1);
 							}
-							if(commutation_founded==1)
+							if(motor.motion.commutation_founded==1)
 							{
-								if(Error_State.all==0)
+								if(motor.motion.Error_State.all==0)
 								{
 									start_pwm(&htim1);
 									motor_on=1;
@@ -88,8 +88,8 @@ void DS402_process(void)
 			case 0x86:
 				stop_pwm(&htim1);
 				motor_on=0;
-				drv8301_error=0;
-				Error_State.all=0;
+				//drv8301_error=0;
+				motor.motion.Error_State.all=0;
 				enc_z.counting_error=0;
 				break;
 			default:
@@ -97,7 +97,7 @@ void DS402_process(void)
 		}
 		control_word_b=control_word;
 	}
-	if(Error_State.all)
+	if(motor.motion.Error_State.all)
 	{
 		stop_pwm(&htim1);
 		motor_on=0;	

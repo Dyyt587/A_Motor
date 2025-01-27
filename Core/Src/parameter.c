@@ -32,8 +32,8 @@ void Init_System_Parameter(void)
 void Init_Motor_Parameter(void)
 {
 	commutation_current=2000; //找磁场零位电流，2000表示2A，用于给到Q轴目标电流对齐磁场的。
-	commutation_mode=1;					//找磁场零位模式，0表示抖动找零位，1表示通过单圈绝对值位置找零位
-	commutation_time=1000;			//抖动找零位时的保持时间，1000表示1秒
+	motor.motion.commutation_mode=1;					//找磁场零位模式，0表示抖动找零位，1表示通过单圈绝对值位置找零位
+	motor.motion.commutation_time=1000;			//抖动找零位时的保持时间，1000表示1秒
 	feedback_resolution=16384;    //编码器分辨率
 	poles_num=2;                  //电机极对数
 	motor_peak_current=4000;      //电机最大电流

@@ -38,7 +38,14 @@ typedef struct {
     int v_current_control_integral_d; // [V]
     int v_current_control_integral_q; // [V]
 } Current_control_t;
+typedef struct{
+    union error_uint32_t Error_State;
+    short commutation_founded , commutation_mode , commutation_time;
 
+}motion_t;
+typedef struct{
+
+}control_t;
 typedef struct {
     //osThreadId motor_thread;
     TIM_HandleTypeDef* motor_timer; //PWM timer
@@ -60,6 +67,11 @@ typedef struct {
     float pll_vel;
     float pll_kp;
     float pll_ki;
+
+    uint16_t angle;//编码器原始角度
+    uint16_t angle_b;
+    control_t control;
+    motion_t motion;
 } Motor_t;
 
 typedef enum{
@@ -184,7 +196,7 @@ void Init_Driver_State(void);
 void start_adc(void);
 void start_pwm(TIM_HandleTypeDef* htim);
 void stop_pwm(TIM_HandleTypeDef* htim);
-void update_motor(Motor_t* motors);
+void update_motor(Motor_t *motors,uint16_t angle);
 void Calibrate_ADC_Offset(void);
 int phase_current_from_adcval(uint32_t ADCValue);
 void queue_modulation_timings(Motor_t* motor, int mod_alpha, int mod_beta);

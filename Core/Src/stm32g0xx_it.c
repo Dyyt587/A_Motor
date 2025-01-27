@@ -219,18 +219,6 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 void TIM1_CC_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_CC_IRQn 0 */
-t1=SysTick->VAL;
-			ttt1=SysTick->VAL;
-			ttt3=ttt2-ttt1;
-			ttt2=ttt1;
-			if(ttt3>ttt4)
-				ttt4=ttt3;
-	// ADCValue[0]=ADC_Value[0];
-	// ADCValue[1]=ADC_Value[1];
-	// ADCValue[2]=ADC_Value[2];
-	// ADCValue[3]=ADC_Value[3];
-	// ADCValue[4]=ADC_Value[4];
-	// ADCValue[5]=ADC_Value[5];
 	memcpy(ADCValue,ADC_Value,sizeof(ADCValue));
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value, 6);
 	
@@ -239,88 +227,15 @@ t1=SysTick->VAL;
 	NTC_R_Value=1000*ADCValue[2]/(4096-ADCValue[2]);
 	device_temperature=Get_NTC_Temperature(NTC_R_Value);
 	
-	if(Driver_Ready)
-	{
-		loop_counter_c++;
-		loop_counter_v++;
-		loop_counter_p++;
-		
-		update_motor(&motor);
-		//if(motor_on)
-			//if(loop_counter_c>1)
-		{
-			current_loop_ready=1;
-			Current_loop(&motor, Id_demand, Iq_demand);
-			loop_counter_c=0;
-		}
-		if(loop_counter_v>3)
-		{
-			//HAL_GPIO_TogglePin(ERR_GPIO_Port, ERR_Pin);
-			velocity_loop_ready=1;
-			//HAL_GPIO_WritePin(ERR_GPIO_Port, ERR_Pin, GPIO_PIN_SET);
-			switch(feedback_type)
-			{
-				case Tamagawa:
-					// take about 25us
-					if(set_tamagawa_zero==0)
-					{
-		
-						Tamagawa_TX_BUFF[0]=0x02;
-						Tamagawa_Read_Cmd(Tamagawa_TX_BUFF,1);
-						
-						if(Tamagawa_First==10)
-						{
-							Tamagawa_count_temp++;
-							if(Tamagawa_count_temp>1)
-							{
-								Tamagawa_lost++;
-							}
-							if(Tamagawa_count_temp>20)
-							{
-								if(set_tamagawa_zero==0)
-									Error_State.bits.ENC_error=1;
-							}
-						}
-					}
-					else if(set_tamagawa_zero==1)
-					{
-		
-						Tamagawa_TX_BUFF[0]=0xAA;
-						Tamagawa_Read_Cmd(Tamagawa_TX_BUFF,1);
-						set_tamagawa_zero=0;
-					}
-				
-					break;
-//				case 8:
-//					//spi read take about 15us
-//				break;
-				default:
-					break;
-			}
-			// take baout 6us
-			Velocity_loop(&motor,speed_demand);
-			//HAL_GPIO_WritePin(ERR_GPIO_Port, ERR_Pin, GPIO_PIN_RESET);
-			loop_counter_v=0;
-		}
 
-		if(loop_counter_p>7)
-		{
-			//HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_3);
-			position_loop_ready=1;
-			Position_Loop(&motor,position_demand);
-			loop_counter_p=0;
-		}
-	}
+
+	extern void motor_driver_handle(void);
+
+	motor_driver_handle();
+	// if(Scop_Start)
+	// 	Process_Scop_Data();
 	
-	if(Scop_Start)
-		Process_Scop_Data();
-	
-	tt2=SysTick->VAL;
-	//tt3=tt2-tt1;
-	tt3=t1-tt2;
-	if(tt3>tt4)
-		tt4=tt3;
-	//ttt3=t1-ttt1;
+
   /* USER CODE END TIM1_CC_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
   /* USER CODE BEGIN TIM1_CC_IRQn 1 */
@@ -335,15 +250,17 @@ void TIM6_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM6_IRQn 0 */
 
-		if(position_loop_ready==1)
-		{
-			//HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, GPIO_PIN_SET);
-			if(motor_on)
-				Motion_process();
-			position_loop_ready=0;
+		// if(position_loop_ready==1)
+		// {
+		// 	//HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, GPIO_PIN_SET);
+		// 	if(motor_on)
+		// 		Motion_process();
+		// 	position_loop_ready=0;
 			
-			//HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, GPIO_PIN_RESET);
-		}
+		// 	//HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, GPIO_PIN_RESET);
+		// }
+					if(motor_on)
+				Motion_process();
   /* USER CODE END TIM6_IRQn 0 */
   HAL_TIM_IRQHandler(&htim6);
   /* USER CODE BEGIN TIM6_IRQn 1 */
