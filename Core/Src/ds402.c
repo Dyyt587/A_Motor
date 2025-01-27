@@ -14,6 +14,7 @@
 #include <spi.h>
 #include <utils.h>
 #include "delay.h"
+#include "perf_counter.h"
 
 short operation_mode=1,operation_mode_buff=0;
 union Status_uint16_t status_word;

@@ -2,6 +2,7 @@
 #include "stdlib.h"
 #include "oledfont.h"  	 
 #include "delay.h"
+#include "perf_counter.h"
 
 //OLED的显存
 //存放格式如下.

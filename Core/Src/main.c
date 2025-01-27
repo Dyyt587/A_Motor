@@ -33,6 +33,8 @@
 #include "oled.h"
 #include "math.h"
 #include "apid.h"
+#include "perf_counter.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

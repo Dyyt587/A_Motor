@@ -12,6 +12,7 @@
 #include <tim.h>
 #include <utils.h>
 #include "delay.h"
+#include "perf_counter.h"
 
 /* Private defines -----------------------------------------------------------*/
 
@@ -227,6 +228,10 @@ void queue_modulation_timings(Motor_t *motors, int mod_alpha, int mod_beta)
 	motors->PWM1_Duty = (tC * TIM_1_8_PERIOD_CLOCKS) / 1000;
 	motors->PWM2_Duty = (tB * TIM_1_8_PERIOD_CLOCKS) / 1000;
 	motors->PWM3_Duty = (tA * TIM_1_8_PERIOD_CLOCKS) / 1000;
+
+	motors->motor_timer->Instance->CCR1 = motors->PWM1_Duty;
+	motors->motor_timer->Instance->CCR2 = motors->PWM2_Duty;
+	motors->motor_timer->Instance->CCR3 = motors->PWM3_Duty;
 }
 
 int32_t get_electric_phase(int commutation_current)

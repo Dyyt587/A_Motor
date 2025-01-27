@@ -16,6 +16,7 @@
 #include "delay.h"
 #include "oled.h"
 #include "apid.h"
+#include "perf_counter.h"
 
 s32 profile_acce=5000,profile_dece=5000,profile_speed=5000,end_speed=0,profile_speed_b,target_speed_now=0,direction=1;
 s32 profile_target_position,profile_target_position_b;
@@ -549,8 +550,10 @@ void OLED_Process(void)
 		temp=apidd.parameter.target - apidd.parameter.present;
 		sprintf(display_buff2,"%s%.1f%s","e:",temp,"");
 		extern int Vd;
+		extern uint64_t nCycleUsed;
+
 		temp=apidd.parameter.present;
-		sprintf(display_buff3,"%s%.1f%s","p:",temp,"");
+		sprintf(display_buff3,"%s%lld%s","p:",perfc_convert_ticks_to_us(nCycleUsed),"us");
 		
 	  OLED_ShowString(0,2,(u8*)display_buff,12);
 	  OLED_ShowString(0,3,(u8*)display_buff1,12);
