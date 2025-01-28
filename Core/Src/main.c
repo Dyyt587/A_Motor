@@ -142,6 +142,8 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+	control_word.all=0x0f;
+	motor.control.target_Iq  =600;
   while (1)
   {
 		if(OLED_count>OLED_Period)

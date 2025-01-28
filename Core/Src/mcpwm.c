@@ -104,6 +104,12 @@ int Position_loop_work_handle(wkc_t *wkc)
 	Position_Loop(&motor, position_demand);
 	return 0;
 }
+int Apply_SVM_PWM_work_handle(wkc_t *wkc)
+{
+	// Apply SVM
+	queue_modulation_timings(&motor);
+	return 0;
+}
 /* Private constant data -----------------------------------------------------*/
 static const int one_by_sqrt3 = 577;
 static const int sqrt3_by_2 = 866;
@@ -112,7 +118,10 @@ static const int sqrt3_by_2 = 866;
 wkc_work_t update_motor_work = {
 	.name = "update_motor",
 	.handle = update_motor_work_handle,
-	.licence = {0},
+	.licence = {
+		.bits.drv_ready = 1,
+		.bits.drv_init = 1,
+	},
 	.trig_level = 0, // 触发等级，每次触发
 	.trig_cnt = 0,
 	.next = 0,
@@ -121,7 +130,10 @@ wkc_work_t update_motor_work = {
 wkc_work_t Current_loop_work = {
 	.name = "Current_loop",
 	.handle = Current_loop_work_handle,
-	.licence = {0},
+	.licence = {
+		.bits.drv_ready = 1,
+		.bits.drv_init = 1,
+	},
 	.trig_level = 0, // 触发等级，每次触发
 	.trig_cnt = 0,
 	.next = 0,
@@ -130,18 +142,36 @@ wkc_work_t Current_loop_work = {
 wkc_work_t Velocity_loop_work = {
 	.name = "Velocity_loop",
 	.handle = Velocity_loop_work_handle,
-	.licence = {0},
+	.licence = {
+		.bits.drv_ready = 1,
+		.bits.drv_init = 1,
+	},
 	.trig_level = 3, // 触发等级，每4次触发
-	.trig_cnt = 1,//防止第一次超时
+	.trig_cnt = 1,	 // 防止第一次超时
 	.next = 0,
 	.user_date = &motor,
 };
 wkc_work_t Position_loop_work = {
 	.name = "Position_loop",
 	.handle = Position_loop_work_handle,
-	.licence = {0},
+	.licence = {
+		.bits.drv_ready = 1,
+		.bits.drv_init = 1,
+	},
 	.trig_level = 7, // 触发等级，每8次触发
 	.trig_cnt = 2,
+	.next = 0,
+	.user_date = &motor,
+};
+wkc_work_t Apply_SVM_PWM_work = {
+	.name = "Apply_SVM_PWM",
+	.handle = Apply_SVM_PWM_work_handle,
+	.licence = {
+		.bits.drv_ready = 1,
+		.bits.drv_init = 1,
+	},
+	.trig_level = 0, // 触发等级，每次触发
+	.trig_cnt = 0,
 	.next = 0,
 	.user_date = &motor,
 };
@@ -153,6 +183,7 @@ void init_motor_control(void)
 	wkc_work_add(&motor.wkc, &Current_loop_work);
 	wkc_work_add(&motor.wkc, &Velocity_loop_work);
 	wkc_work_add(&motor.wkc, &Position_loop_work);
+	wkc_work_add(&motor.wkc, &Apply_SVM_PWM_work);
 	delay_ms(10);
 	// if(vbus_voltage<140)
 	// motor.motion.Error_State=motor.motion.Error_State|0x0010;
@@ -166,6 +197,8 @@ void init_motor_control(void)
 	HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
 
 	Driver_Ready = 1;
+	motor.wkc.lic_aprove.bits.drv_init = 1;
+	motor.wkc.lic_aprove.bits.drv_ready = 1;
 
 	delay_ms(20);
 	if (feedback_type == Tamagawa)
@@ -278,10 +311,10 @@ void Calibrate_ADC_Offset(void)
 		motor.motion.Error_State.bits.ADC_error = 1;
 }
 int tA, tB, tC;
-void queue_modulation_timings(Motor_t *motors, int mod_alpha, int mod_beta)
+void queue_modulation_timings(Motor_t *motors)
 {
 
-	SVM(mod_alpha, mod_beta, &tA, &tB, &tC);
+	SVM(motors->svpwm.Alpha, motors->svpwm.Beta, &tA, &tB, &tC);
 	motors->PWM1_Duty = (tC * TIM_1_8_PERIOD_CLOCKS) / 1000;
 	motors->PWM2_Duty = (tB * TIM_1_8_PERIOD_CLOCKS) / 1000;
 	motors->PWM3_Duty = (tA * TIM_1_8_PERIOD_CLOCKS) / 1000;
@@ -469,10 +502,5 @@ void calibrate_tamagawa_encoder(void)
 
 void motor_driver_handle(void)
 {
-	static int loop_counter_c = 0, loop_counter_v = 1, loop_counter_p = 2, current_loop_ready = 0, velocity_loop_ready = 0, position_loop_ready = 0;
-
-	if (Driver_Ready)
-	{
-		wkc_handle(&motor.wkc);
-	}
+	wkc_handle(&motor.wkc);
 }

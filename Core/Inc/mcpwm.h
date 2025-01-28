@@ -211,7 +211,7 @@ void stop_pwm(TIM_HandleTypeDef* htim);
 void update_motor(Motor_t *motors,uint16_t angle);
 void Calibrate_ADC_Offset(void);
 int phase_current_from_adcval(uint32_t ADCValue);
-void queue_modulation_timings(Motor_t* motor, int mod_alpha, int mod_beta);
+void queue_modulation_timings(Motor_t* motor);
 int32_t get_electric_phase(int commutation_current);
 void Current_loop(Motor_t* motors, int Id_des, int Iq_des);
 void Update_Speed(Motor_t* motors);

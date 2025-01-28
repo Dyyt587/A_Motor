@@ -5,7 +5,9 @@ void wkc_init(wkc_t*wkc)
 }
 bool check_licence(wkc_t *wc, LicenseDomain licence)
 {
-	return true;
+	if((wc->lic_aprove.all & licence.all) == licence.all)
+		return true;
+	return false;
 }
 #define WKC_HANDLE_CHECK(x) if (x->handle)
 // #define WKC_HANDLE_CHECK(x)

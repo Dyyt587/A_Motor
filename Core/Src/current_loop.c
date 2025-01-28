@@ -107,8 +107,7 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 			 motors->svpwm.Ds = mod_d;
 			 motors->svpwm.Qs = mod_q;
 			 _ipark_calc(&motors->svpwm);
-			// Apply SVM
-			queue_modulation_timings(motors, motors->svpwm.Alpha, motors->svpwm.Beta);
+
 		}
 	}
 }

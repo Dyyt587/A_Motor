@@ -13,7 +13,7 @@ typedef union LicenseDomain
 	struct
 	{
 		uint8_t drv_init:1;						//0
-		uint8_t :1;						//1
+		uint8_t drv_ready:1;						//1
 		uint8_t :1;											//2
 		uint8_t enc_touched:1;						//3
 		uint8_t :1;			//4

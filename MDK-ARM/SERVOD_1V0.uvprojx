@@ -566,6 +566,11 @@
               <FilePath>../Core/Src/stm32g0xx_hal_msp.c</FilePath>
             </File>
             <File>
+              <FileName>apid_exfunc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\all_pid\src\apid_exfunc.c</FilePath>
+            </File>
+            <File>
               <FileName>filter.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\filter.c</FilePath>
@@ -635,11 +640,6 @@
               <FileName>apid_ex_fuzzy.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\all_pid\src\apid_ex_fuzzy.c</FilePath>
-            </File>
-            <File>
-              <FileName>apid_exfunc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\all_pid\src\apid_exfunc.c</FilePath>
             </File>
           </Files>
         </Group>
