@@ -2,8 +2,8 @@ Dependencies for Project 'SERVOD_1V0', Target 'SERVOD_1V0': (DO NOT MODIFY !)
 CompilerVersion: 6210000::V6.21::ARMCLANG
 F (startup_stm32g070xx.s)(0x6264B218)(--cpu Cortex-M0+ -g --diag_suppress=A1950W-I.\RTE\_SERVOD_1V0-IC:\Users\33368\AppData\Local\Arm\Packs\ARM\CMSIS\6.0.0\CMSIS\Core\Include-IC:\Users\33368\AppData\Local\Arm\Packs\GorgonMeducer\perf_counter\2.3.1-IC:\Users\33368\AppData\Local\Arm\Packs\Keil\STM32G0xx_DFP\1.5.0\Drivers\CMSIS\Device\ST\STM32G0xx\Include--pd "__UVISION_VERSION SETA 539"--pd "_RTE_ SETA 1"--pd "STM32G070xx SETA 1"--pd "_RTE_ SETA 1"--list startup_stm32g070xx.lst--xref -o .\servod_1v0\startup_stm32g070xx.o--depend .\servod_1v0\startup_stm32g070xx.d)
 F (..\Core\Src\mcpwm.c)(0x67989046)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/mcpwm.o -MD)
-I (RTE\_SERVOD_1V0\Pre_Include_Global.hø.\Core\Inc\mcpwm.h)(0x00000000)
-I (..\Core\Inc\delay.h_.\Core\Inc\sys.hø.\Core\Inc\main.h)(0x00000000)
+I (RTE\_SERVOD_1V0\Pre_Include_Global.hh.\Core\Inc\mcpwm.h)(0x00000000)
+I (..\Core\Inc\delay.h_.\Core\Inc\sys.hh.\Core\Inc\main.h)(0x00000000)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal.h)(0x619AEC26)
 I (..\Core\Inc\stm32g0xx_hal_conf.h)(0x6264B214)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_rcc.h)(0x619AEC26)
@@ -46,12 +46,15 @@ I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_uart.h)(0x619AEC26)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_uart_ex.h)(0x619AEC26)
 I (..\Core\Inc\modbus.h_:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x00000000)
 I (..\Core\Inc\parameter.hK.\Core\Inc\NTC_Calculate.h)(0x00000000)
-I (..\Core\Inc\tamagawa.hh.\Core\Inc\utils.h)(0x00000000)
+I (..\Core\Inc\tamagawa.hh.\Core\Inc\utils.hl.\all_pid\src\apid.h)(0x00000000)
+I (C:\Keil_v5\ARM\ARMCLANG\include\float.h..\all_pid\src\apid_cfg.h)(0x00000000)
+I (..\all_pid\src\apid_auto_tune_ZNmode.h)(0x6797008F)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
+I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x6569B012)
 I (C:\Keil_v5\ARM\ARMCLANG\include\math.h..\Core\Inc\park.h)(0x00000000)
 I (..\Core\Inc\adc.hM.\Core\Inc\tim.h)(0x00000000)
 I (C:\Users\33368\AppData\Local\Arm\Packs\GorgonMeducer\perf_counter\2.3.1\perf_counter.h)(0x663E28E2)
-I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
 I (C:\Users\33368\AppData\Local\Arm\Packs\GorgonMeducer\perf_counter\2.3.1\perfc_port_default.h)(0x663E28E2)
 I (..\Drivers\CMSIS\Include\cmsis_compiler.h)(0x619AEC26)
 F (..\Core\Src\crc_16.c)(0x6795AF68)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/crc_16.o -MD)
@@ -96,7 +99,7 @@ I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_tim.h)(0x619AEC26)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_tim_ex.h)(0x619AEC26)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_uart.h)(0x619AEC26)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_uart_ex.h)(0x619AEC26)
-F (..\Core\Src\current_loop.c)(0x67989046)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/current_loop.o -MD)
+F (..\Core\Src\current_loop.c)(0x6798913D)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/current_loop.o -MD)
 I (RTE\_SERVOD_1V0\Pre_Include_Global.h)(0x6795B30D)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal.h)(0x619AEC26)
 I (..\Core\Inc\stm32g0xx_hal_conf.h)(0x6264B214)
@@ -142,13 +145,13 @@ I (..\Core\Inc\mcpwm.hx.\Core\Inc\delay.hm.\Core\Inc\sys.h)(0x00000000)
 I (..\Core\Inc\main.hh.\Core\Inc\modbus.h)(0x00000000)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h..\Core\Inc\parameter.h)(0x00000000)
 I (..\Core\Inc\NTC_Calculate.hl.\Core\Inc\tamagawa.hc.\Core\Inc\utils.h)(0x00000000)
-I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x6569B012)
-I (C:\Keil_v5\ARM\ARMCLANG\include\math.h..\all_pid\src\apid.h)(0x00000000)
-I (C:\Keil_v5\ARM\ARMCLANG\include\float.h..\all_pid\src\apid_cfg.h)(0x00000000)
-I (..\all_pid\src\apid_auto_tune_ZNmode.h)(0x6797008F)
+I (..\all_pid\src\apid.hl:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x00000000)
+I (..\all_pid\src\apid_cfg.he.\all_pid\src\apid_auto_tune_ZNmode.h)(0x00000000)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
-I (..\all_pid\src\apid_ex_fuzzy.he.\Core\Inc\adc.hi.\Core\Inc\tim.h)(0x00000000)
-I (..\Core\Inc\spi.h)(0x624C157F)
+I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x6569B012)
+I (C:\Keil_v5\ARM\ARMCLANG\include\math.h..\Core\Inc\adc.h)(0x00000000)
+I (..\Core\Inc\tim.hM.\Core\Inc\spi.h)(0x00000000)
 I (C:\Users\33368\AppData\Local\Arm\Packs\GorgonMeducer\perf_counter\2.3.1\perf_counter.h)(0x663E28E2)
 I (C:\Users\33368\AppData\Local\Arm\Packs\GorgonMeducer\perf_counter\2.3.1\perfc_port_default.h)(0x663E28E2)
 I (..\Drivers\CMSIS\Include\cmsis_compiler.h)(0x619AEC26)
@@ -198,15 +201,18 @@ I (..\Core\Inc\mcpwm.hx.\Core\Inc\delay.hm.\Core\Inc\sys.h)(0x00000000)
 I (..\Core\Inc\main.hh.\Core\Inc\modbus.h)(0x00000000)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h..\Core\Inc\parameter.h)(0x00000000)
 I (..\Core\Inc\NTC_Calculate.hl.\Core\Inc\tamagawa.hc.\Core\Inc\utils.h)(0x00000000)
+I (..\all_pid\src\apid.hl:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x00000000)
+I (..\all_pid\src\apid_cfg.he.\all_pid\src\apid_auto_tune_ZNmode.h)(0x00000000)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
+I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x6569B012)
 I (C:\Keil_v5\ARM\ARMCLANG\include\math.h..\Core\Inc\adc.h)(0x00000000)
 I (..\Core\Inc\tim.hM.\Core\Inc\spi.h)(0x00000000)
 I (C:\Users\33368\AppData\Local\Arm\Packs\GorgonMeducer\perf_counter\2.3.1\perf_counter.h)(0x663E28E2)
-I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
 I (C:\Users\33368\AppData\Local\Arm\Packs\GorgonMeducer\perf_counter\2.3.1\perfc_port_default.h)(0x663E28E2)
 I (..\Drivers\CMSIS\Include\cmsis_compiler.h)(0x619AEC26)
 F (..\Core\Src\modbus.c)(0x679789DD)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/modbus.o -MD)
-I (RTE\_SERVOD_1V0\Pre_Include_Global.h.\Core\Inc\sys.h)(0x00000000)
+I (RTE\_SERVOD_1V0\Pre_Include_Global.hl.\Core\Inc\sys.h)(0x00000000)
 I (..\Core\Inc\main.he.\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal.h)(0x00000000)
 I (..\Core\Inc\stm32g0xx_hal_conf.h)(0x6264B214)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_rcc.h)(0x619AEC26)
@@ -251,9 +257,13 @@ I (..\Core\Inc\delay.hx.\Core\Inc\modbus.h)(0x00000000)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x6569B012)
 I (..\Core\Inc\usart.hL.\Core\Inc\mcpwm.hh.\Core\Inc\parameter.h)(0x00000000)
 I (..\Core\Inc\NTC_Calculate.hI.\Core\Inc\tamagawa.h\.\Core\Inc\utils.h)(0x00000000)
-F (..\Core\Src\motion_control.c)(0x67989046)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/motion_control.o -MD)
-I (RTE\_SERVOD_1V0\Pre_Include_Global.hn.\Core\Inc\mcpwm.h)(0x00000000)
-I (..\Core\Inc\delay.h_.\Core\Inc\sys.hn.\Core\Inc\main.h)(0x00000000)
+I (..\all_pid\src\apid.hl:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x00000000)
+I (..\all_pid\src\apid_cfg.he.\all_pid\src\apid_auto_tune_ZNmode.h)(0x00000000)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
+I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
+F (..\Core\Src\motion_control.c)(0x67989157)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/motion_control.o -MD)
+I (RTE\_SERVOD_1V0\Pre_Include_Global.ho.\Core\Inc\mcpwm.h)(0x00000000)
+I (..\Core\Inc\delay.h_.\Core\Inc\sys.ho.\Core\Inc\main.h)(0x00000000)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal.h)(0x619AEC26)
 I (..\Core\Inc\stm32g0xx_hal_conf.h)(0x6264B214)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_rcc.h)(0x619AEC26)
@@ -296,14 +306,14 @@ I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_uart.h)(0x619AEC26)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_uart_ex.h)(0x619AEC26)
 I (..\Core\Inc\modbus.h_:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x00000000)
 I (..\Core\Inc\parameter.hK.\Core\Inc\NTC_Calculate.h)(0x00000000)
-I (..\Core\Inc\tamagawa.hh.\Core\Inc\utils.h)(0x00000000)
+I (..\Core\Inc\tamagawa.hh.\Core\Inc\utils.hl.\all_pid\src\apid.h)(0x00000000)
+I (C:\Keil_v5\ARM\ARMCLANG\include\float.h..\all_pid\src\apid_cfg.h)(0x00000000)
+I (..\all_pid\src\apid_auto_tune_ZNmode.h)(0x6797008F)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
+I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x6569B012)
 I (C:\Keil_v5\ARM\ARMCLANG\include\math.h..\Core\Inc\adc.h)(0x00000000)
 I (..\Core\Inc\tim.hM.\Core\Inc\spi.ht.\Core\Inc\oled.h)(0x00000000)
-I (..\all_pid\src\apid.ho:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x00000000)
-I (..\all_pid\src\apid_cfg.he.\all_pid\src\apid_auto_tune_ZNmode.h)(0x00000000)
-I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
-I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
 I (C:\Users\33368\AppData\Local\Arm\Packs\GorgonMeducer\perf_counter\2.3.1\perf_counter.h)(0x663E28E2)
 I (C:\Users\33368\AppData\Local\Arm\Packs\GorgonMeducer\perf_counter\2.3.1\perfc_port_default.h)(0x663E28E2)
 I (..\Drivers\CMSIS\Include\cmsis_compiler.h)(0x619AEC26)
@@ -352,9 +362,13 @@ I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_uart.h)(0x619AEC26)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_uart_ex.h)(0x619AEC26)
 I (..\Core\Inc\modbus.h_:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x00000000)
 I (..\Core\Inc\parameter.hK.\Core\Inc\NTC_Calculate.h)(0x00000000)
-I (..\Core\Inc\tamagawa.hh.\Core\Inc\utils.h)(0x00000000)
+I (..\Core\Inc\tamagawa.hh.\Core\Inc\utils.hl.\all_pid\src\apid.h)(0x00000000)
+I (C:\Keil_v5\ARM\ARMCLANG\include\float.h..\all_pid\src\apid_cfg.h)(0x00000000)
+I (..\all_pid\src\apid_auto_tune_ZNmode.h)(0x6797008F)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
+I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
 F (..\Core\Src\oled.c)(0x67974576)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/oled.o -MD)
-I (RTE\_SERVOD_1V0\Pre_Include_Global.hi.\Core\Inc\oled.h)(0x00000000)
+I (RTE\_SERVOD_1V0\Pre_Include_Global.h)(0x6795B30D)
 I (..\Core\Inc\sys.hr.\Core\Inc\main.h)(0x00000000)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal.h)(0x619AEC26)
 I (..\Core\Inc\stm32g0xx_hal_conf.h)(0x6264B214)
@@ -447,7 +461,11 @@ I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_uart_ex.h)(0x619AEC26)
 I (..\Core\Inc\delay.hx.\Core\Inc\sys.hs.\Core\Inc\mcpwm.h)(0x00000000)
 I (..\Core\Inc\modbus.h.:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x00000000)
 I (..\Core\Inc\parameter.hK.\Core\Inc\NTC_Calculate.h)(0x00000000)
-I (..\Core\Inc\tamagawa.hh.\Core\Inc\utils.h)(0x00000000)
+I (..\Core\Inc\tamagawa.hh.\Core\Inc\utils.hl.\all_pid\src\apid.h)(0x00000000)
+I (C:\Keil_v5\ARM\ARMCLANG\include\float.h..\all_pid\src\apid_cfg.h)(0x00000000)
+I (..\all_pid\src\apid_auto_tune_ZNmode.h)(0x6797008F)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
+I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
 F (..\Core\Src\position_loop.c)(0x67989046)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/position_loop.o -MD)
 I (RTE\_SERVOD_1V0\Pre_Include_Global.h)(0x6795B30D)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal.h)(0x619AEC26)
@@ -494,12 +512,16 @@ I (..\Core\Inc\mcpwm.hx.\Core\Inc\delay.hm.\Core\Inc\sys.h)(0x00000000)
 I (..\Core\Inc\main.hh.\Core\Inc\modbus.h)(0x00000000)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h..\Core\Inc\parameter.h)(0x00000000)
 I (..\Core\Inc\NTC_Calculate.hl.\Core\Inc\tamagawa.hc.\Core\Inc\utils.h)(0x00000000)
+I (..\all_pid\src\apid.hl:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x00000000)
+I (..\all_pid\src\apid_cfg.he.\all_pid\src\apid_auto_tune_ZNmode.h)(0x00000000)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
+I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x6569B012)
 I (C:\Keil_v5\ARM\ARMCLANG\include\math.h..\Core\Inc\adc.h)(0x00000000)
 I (..\Core\Inc\tim.hM.\Core\Inc\spi.h)(0x00000000)
 F (..\Core\Src\sin_table.c)(0x679890A3)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/sin_table.o -MD)
-I (RTE\_SERVOD_1V0\Pre_Include_Global.h.\Core\Inc\mcpwm.h)(0x00000000)
-I (..\Core\Inc\delay.h_.\Core\Inc\sys.h.\Core\Inc\main.h)(0x00000000)
+I (RTE\_SERVOD_1V0\Pre_Include_Global.h..\Core\Inc\mcpwm.h)(0x00000000)
+I (..\Core\Inc\delay.h_.\Core\Inc\sys.h..\Core\Inc\main.h)(0x00000000)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal.h)(0x619AEC26)
 I (..\Core\Inc\stm32g0xx_hal_conf.h)(0x6264B214)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_rcc.h)(0x619AEC26)
@@ -542,9 +564,13 @@ I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_uart.h)(0x619AEC26)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_uart_ex.h)(0x619AEC26)
 I (..\Core\Inc\modbus.h_:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x00000000)
 I (..\Core\Inc\parameter.hK.\Core\Inc\NTC_Calculate.h)(0x00000000)
-I (..\Core\Inc\tamagawa.hh.\Core\Inc\utils.h)(0x00000000)
+I (..\Core\Inc\tamagawa.hh.\Core\Inc\utils.hl.\all_pid\src\apid.h)(0x00000000)
+I (C:\Keil_v5\ARM\ARMCLANG\include\float.h..\all_pid\src\apid_cfg.h)(0x00000000)
+I (..\all_pid\src\apid_auto_tune_ZNmode.h)(0x6797008F)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
+I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
 F (..\Core\Src\sys.c)(0x61AC28A2)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/sys.o -MD)
-I (RTE\_SERVOD_1V0\Pre_Include_Global.hi.\Core\Inc\sys.h)(0x00000000)
+I (RTE\_SERVOD_1V0\Pre_Include_Global.ho.\Core\Inc\sys.h)(0x00000000)
 I (..\Core\Inc\main.he.\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal.h)(0x00000000)
 I (..\Core\Inc\stm32g0xx_hal_conf.h)(0x6264B214)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_rcc.h)(0x619AEC26)
@@ -631,8 +657,12 @@ I (..\Core\Inc\delay.hx.\Core\Inc\modbus.h)(0x00000000)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x6569B012)
 I (..\Core\Inc\usart.hL.\Core\Inc\mcpwm.hh.\Core\Inc\parameter.h)(0x00000000)
 I (..\Core\Inc\NTC_Calculate.hI.\Core\Inc\tamagawa.h\.\Core\Inc\utils.h)(0x00000000)
+I (..\all_pid\src\apid.hl:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x00000000)
+I (..\all_pid\src\apid_cfg.he.\all_pid\src\apid_auto_tune_ZNmode.h)(0x00000000)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
+I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
 F (..\Core\Src\utils.c)(0x5EF89869)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/utils.o -MD)
-I (RTE\_SERVOD_1V0\Pre_Include_Global.hn.\Core\Inc\utils.h)(0x00000000)
+I (RTE\_SERVOD_1V0\Pre_Include_Global.ho.\Core\Inc\utils.h)(0x00000000)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.h)(0x6569B012)
 F (..\Core\Src\velocity_loop.c)(0x679890A3)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/velocity_loop.o -MD)
 I (RTE\_SERVOD_1V0\Pre_Include_Global.h)(0x6795B30D)
@@ -680,10 +710,14 @@ I (..\Core\Inc\mcpwm.hx.\Core\Inc\delay.hm.\Core\Inc\sys.h)(0x00000000)
 I (..\Core\Inc\main.hh.\Core\Inc\modbus.h)(0x00000000)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.h..\Core\Inc\parameter.h)(0x00000000)
 I (..\Core\Inc\NTC_Calculate.hl.\Core\Inc\tamagawa.hc.\Core\Inc\utils.h)(0x00000000)
+I (..\all_pid\src\apid.hl:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x00000000)
+I (..\all_pid\src\apid_cfg.he.\all_pid\src\apid_auto_tune_ZNmode.h)(0x00000000)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
+I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x6569B012)
 I (C:\Keil_v5\ARM\ARMCLANG\include\math.h..\Core\Inc\adc.h)(0x00000000)
 I (..\Core\Inc\tim.hM.\Core\Inc\spi.h)(0x00000000)
-F (../Core/Src/main.c)(0x67988FBA)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/main.o -MD)
+F (../Core/Src/main.c)(0x679890F8)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/main.o -MD)
 I (RTE\_SERVOD_1V0\Pre_Include_Global.h..\Core\Inc\main.h)(0x00000000)
 I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal.h)(0x619AEC26)
 I (..\Core\Inc\stm32g0xx_hal_conf.h)(0x6264B214)
@@ -730,13 +764,13 @@ I (..\Core\Inc\tim.h0.\Core\Inc\usart.h\.\Core\Inc\gpio.h)(0x00000000)
 I (..\Core\Inc\mcpwm.h\.\Core\Inc\delay.h\.\Core\Inc\sys.h)(0x00000000)
 I (..\Core\Inc\modbus.h.:\Keil_v5\ARM\ARMCLANG\include\stdio.h)(0x00000000)
 I (..\Core\Inc\parameter.hK.\Core\Inc\NTC_Calculate.h)(0x00000000)
-I (..\Core\Inc\tamagawa.hh.\Core\Inc\utils.hl.\Core\Inc\oled.h)(0x00000000)
-I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x6569B012)
-I (C:\Keil_v5\ARM\ARMCLANG\include\math.h..\all_pid\src\apid.h)(0x00000000)
+I (..\Core\Inc\tamagawa.hh.\Core\Inc\utils.hl.\all_pid\src\apid.h)(0x00000000)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h..\all_pid\src\apid_cfg.h)(0x00000000)
 I (..\all_pid\src\apid_auto_tune_ZNmode.h)(0x6797008F)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
-I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
+I (..\all_pid\src\apid_ex_fuzzy.he.\Core\Inc\oled.h)(0x00000000)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdlib.h)(0x6569B012)
+I (C:\Keil_v5\ARM\ARMCLANG\include\math.h)(0x6569B012)
 I (C:\Users\33368\AppData\Local\Arm\Packs\GorgonMeducer\perf_counter\2.3.1\perf_counter.h)(0x663E28E2)
 I (C:\Users\33368\AppData\Local\Arm\Packs\GorgonMeducer\perf_counter\2.3.1\perfc_port_default.h)(0x663E28E2)
 I (..\Drivers\CMSIS\Include\cmsis_compiler.h)(0x619AEC26)
@@ -1038,6 +1072,10 @@ I (..\Core\Inc\stm32g0xx_it.hr.\Core\Inc\mcpwm.h_.\Core\Inc\delay.h)(0x00000000)
 I (..\Core\Inc\sys.hg.\Core\Inc\modbus.h)(0x00000000)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdio.hc\Core\Inc\parameter.h)(0x00000000)
 I (..\Core\Inc\NTC_Calculate.hl.\Core\Inc\tamagawa.hc.\Core\Inc\utils.h)(0x00000000)
+I (..\all_pid\src\apid.hl:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x00000000)
+I (..\all_pid\src\apid_cfg.he.\all_pid\src\apid_auto_tune_ZNmode.h)(0x00000000)
+I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
+I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
 I (C:\Keil_v5\ARM\ARMCLANG\include\string.h)(0x6569B012)
 F (../Core/Src/stm32g0xx_hal_msp.c)(0x624C1580)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/stm32g0xx_hal_msp.o -MD)
 I (RTE\_SERVOD_1V0\Pre_Include_Global.hn.\Core\Inc\main.h)(0x00000000)
@@ -1084,7 +1122,7 @@ I (..\Drivers\STM32G0xx_HAL_Driver\Inc\stm32g0xx_hal_uart_ex.h)(0x619AEC26)
 F (..\Core\Src\filter.c)(0x679623FB)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/filter.o -MD)
 I (RTE\_SERVOD_1V0\Pre_Include_Global.hs.\Core\Inc\filter.h)(0x00000000)
 F (..\all_pid\src\apid.c)(0x67970A31)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/apid.o -MD)
-I (RTE\_SERVOD_1V0\Pre_Include_Global.hH.\all_pid\src\apid.h)(0x00000000)
+I (RTE\_SERVOD_1V0\Pre_Include_Global.hX.\all_pid\src\apid.h)(0x00000000)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x6569B012)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.hl\all_pid\src\apid_cfg.h)(0x00000000)
 I (..\all_pid\src\apid_auto_tune_ZNmode.h)(0x6797008F)
@@ -1102,7 +1140,7 @@ I (..\all_pid\src\apid_auto_tune_ZNmode.h)(0x6797008F)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdbool.h)(0x6569B012)
 I (..\all_pid\src\apid_ex_fuzzy.h)(0x6797008F)
 F (..\all_pid\src\apid_exfunc.c)(0x67970329)(-xc -std=gnu99 --target=arm-arm-none-eabi -mcpu=cortex-m0plus -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -Ofast -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc -I ../Drivers/STM32G0xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G0xx/Include -I ../Drivers/CMSIS/Include -I ../all_pid/src -I ../workchain-I./RTE/_SERVOD_1V0-IC:/Users/33368/AppData/Local/Arm/Packs/ARM/CMSIS/6.0.0/CMSIS/Core/Include-IC:/Users/33368/AppData/Local/Arm/Packs/GorgonMeducer/perf_counter/2.3.1-IC:/Users/33368/AppData/Local/Arm/Packs/Keil/STM32G0xx_DFP/1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include-D__UVISION_VERSION="539" -D_RTE_ -DSTM32G070xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G070xx  -include "Pre_Include_Global.h"-o ./servod_1v0/apid_exfunc.o -MD)
-I (RTE\_SERVOD_1V0\Pre_Include_Global.hH.\all_pid\src\apid.h)(0x00000000)
+I (RTE\_SERVOD_1V0\Pre_Include_Global.hX.\all_pid\src\apid.h)(0x00000000)
 I (C:\Keil_v5\ARM\ARMCLANG\include\float.h)(0x6569B012)
 I (C:\Keil_v5\ARM\ARMCLANG\include\stdint.hl\all_pid\src\apid_cfg.h)(0x00000000)
 I (..\all_pid\src\apid_auto_tune_ZNmode.h)(0x6797008F)

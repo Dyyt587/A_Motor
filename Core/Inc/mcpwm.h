@@ -10,7 +10,7 @@
 #include "NTC_Calculate.h"
 #include "tamagawa.h"	
 #include "utils.h"	
-
+#include "apid.h"
 #define CURRENT_MEAS_PERIOD ( (float)2*TIM_1_8_PERIOD_CLOCKS*(TIM_1_8_RCR+1) / (float)TIM_1_8_CLOCK_HZ )
 #define CURRENT_MEAS_HZ ( (float)(TIM_1_8_CLOCK_HZ) / (float)(2*TIM_1_8_PERIOD_CLOCKS*(TIM_1_8_RCR+1)) )
 
@@ -80,8 +80,8 @@ typedef struct {
     param_t param;
 
     svpwm_t svpwm;
-//    apid_t apidd;
-//    apid_t apidq;
+    apid_t apidd;
+    apid_t apidq;
 } Motor_t;
 
 typedef enum{

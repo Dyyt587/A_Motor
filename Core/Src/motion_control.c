@@ -547,12 +547,12 @@ void OLED_Process(void)
 			*/
 		}
 		//temp=vbus_voltage/10.0;
-		temp=apidd.parameter.target - apidd.parameter.present;
+		temp=motor.apidd.parameter.target - motor.apidd.parameter.present;
 		sprintf(display_buff2,"%s%.1f%s","e:",temp,"");
 		extern int Vd;
 		extern uint64_t nCycleUsed;
 
-		temp=apidd.parameter.present;
+		temp=motor.apidd.parameter.present;
 		sprintf(display_buff3,"%s%lld%s","p:",perfc_convert_ticks_to_us(nCycleUsed),"us");
 		
 	  OLED_ShowString(0,2,(u8*)display_buff,12);

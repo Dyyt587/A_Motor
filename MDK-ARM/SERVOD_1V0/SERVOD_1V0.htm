@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\SERVOD_1V0\SERVOD_1V0.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\SERVOD_1V0\SERVOD_1V0.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6210000: Last Updated: Tue Jan 28 16:09:11 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6210000: Last Updated: Tue Jan 28 16:12:11 2025
 <BR><P>
 <H3>Maximum Stack Usage =        368 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -279,7 +279,7 @@ Global Symbols
 <P><STRONG><a name="[167]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[58]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 360 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 368 + Unknown Stack Size
 <LI>Call Chain = __rt_entry_main &rArr; main &rArr; MX_TIM1_Init &rArr; HAL_TIM_Base_Init &rArr; HAL_TIM_Base_MspInit &rArr; HAL_GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -885,8 +885,8 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Current_loop
 </UL>
 
-<P><STRONG><a name="[a1]"></a>Current_loop</STRONG> (Thumb, 384 bytes, Stack size 56 bytes, current_loop.o(.text.Current_loop))
-<BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = Current_loop &rArr; queue_modulation_timings &rArr; SVM &rArr; __aeabi_idiv
+<P><STRONG><a name="[a1]"></a>Current_loop</STRONG> (Thumb, 392 bytes, Stack size 48 bytes, current_loop.o(.text.Current_loop))
+<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = Current_loop &rArr; queue_modulation_timings &rArr; SVM &rArr; __aeabi_idiv
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;APID_Hander
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;APID_Set_Present
@@ -1921,7 +1921,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32g070xx.o(RESET)
 </UL>
 <P><STRONG><a name="[12]"></a>TIM1_CC_IRQHandler</STRONG> (Thumb, 84 bytes, Stack size 16 bytes, stm32g0xx_it.o(.text.TIM1_CC_IRQHandler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 168<LI>Call Chain = TIM1_CC_IRQHandler &rArr; motor_driver_handle &rArr; Current_loop &rArr; queue_modulation_timings &rArr; SVM &rArr; __aeabi_idiv
+<BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = TIM1_CC_IRQHandler &rArr; motor_driver_handle &rArr; Current_loop &rArr; queue_modulation_timings &rArr; SVM &rArr; __aeabi_idiv
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Get_NTC_Temperature
 <LI><a href="#[123]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_driver_handle
@@ -2193,8 +2193,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[59]"></a>main</STRONG> (Thumb, 344 bytes, Stack size 80 bytes, main.o(.text.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 360 + Unknown Stack Size
+<P><STRONG><a name="[59]"></a>main</STRONG> (Thumb, 356 bytes, Stack size 88 bytes, main.o(.text.main))
+<BR><BR>[Stack]<UL><LI>Max Depth = 368 + Unknown Stack Size
 <LI>Call Chain = main &rArr; MX_TIM1_Init &rArr; HAL_TIM_Base_Init &rArr; HAL_TIM_Base_MspInit &rArr; HAL_GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[13f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart3_init
@@ -2237,7 +2237,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[123]"></a>motor_driver_handle</STRONG> (Thumb, 208 bytes, Stack size 24 bytes, mcpwm.o(.text.motor_driver_handle))
-<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = motor_driver_handle &rArr; Current_loop &rArr; queue_modulation_timings &rArr; SVM &rArr; __aeabi_idiv
+<BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = motor_driver_handle &rArr; Current_loop &rArr; queue_modulation_timings &rArr; SVM &rArr; __aeabi_idiv
 </UL>
 <BR>[Calls]<UL><LI><a href="#[11f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Position_Loop
 <LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Velocity_loop

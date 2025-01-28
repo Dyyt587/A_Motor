@@ -69,8 +69,8 @@ int i,j,k;
 int chanel1=2000,chanel2=2000,chanel3=2000
 	,chanel4=10;
 /* USER CODE END 0 */
-apid_t apidd = {0};
-apid_t apidq = {0};
+//apid_t apidd = {0};
+//apid_t apidq = {0};
 
 /**
   * @brief  The application entry point.
@@ -113,13 +113,13 @@ int main(void)
 	//delay_init(64);
 	#define kp 600
 	#define ki 30
-  APID_Init(&apidd, PID_INCREMENT, kp,ki, 0);
-  APID_Set_Integral_Limit(&apidd, kci_sum_limit*10);
-  APID_Set_Out_Limit(&apidd, Vd_out_limit*1000);
+  APID_Init(&motor.apidd, PID_INCREMENT, kp,ki, 0);
+  APID_Set_Integral_Limit(&motor.apidd, kci_sum_limit*10);
+  APID_Set_Out_Limit(&motor.apidd, Vd_out_limit*1000);
 
-  APID_Init(&apidq, PID_INCREMENT, kp, ki, 0);
-  APID_Set_Integral_Limit(&apidq, kci_sum_limit*10);
-  APID_Set_Out_Limit(&apidq, Vq_out_limit*1000);
+  APID_Init(&motor.apidq, PID_INCREMENT, kp, ki, 0);
+  APID_Set_Integral_Limit(&motor.apidq, kci_sum_limit*10);
+  APID_Set_Out_Limit(&motor.apidq, Vq_out_limit*1000);
 
 	Init_Modbus_Addr_List();
 

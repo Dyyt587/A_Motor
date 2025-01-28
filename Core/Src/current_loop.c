@@ -32,8 +32,8 @@ short kcp = 20, kci = 0;
 // int Driver_IIt_Real = 0, Driver_IIt_Current, Driver_IIt_Real_DC = 0, Driver_IIt_Current_DC;
 // short Driver_IIt_Filter, Driver_IIt_Filter_DC;
 
-extern apid_t apidd;
-extern apid_t apidq;
+//extern apid_t apidd;
+//extern apid_t apidq;
 void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 {
 
@@ -61,11 +61,11 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 		 __cycleof__("my algorithm", {nCycleUsed = _;})
 		{
 
-			APID_Set_Target(&apidd, Id_des);
-			APID_Set_Target(&apidq, Iq_des);
+			APID_Set_Target(&motors->apidd, Id_des);
+			APID_Set_Target(&motors->apidq, Iq_des);
 
-			APID_Set_Present(&apidd, motors->svpwm.Ds);
-			APID_Set_Present(&apidq, motors->svpwm.Qs);
+			APID_Set_Present(&motors->apidd, motors->svpwm.Ds);
+			APID_Set_Present(&motors->apidq, motors->svpwm.Qs);
 			// Current error
 			// Ierr_d = Id_des - motors->svpwm.Ds;
 			// Ierr_q = Iq_des - motors->svpwm.Qs;
@@ -76,11 +76,11 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 			// Vd = (V_current_control_integral_d / 10 + (Ierr_d * kcp)) / 1000;
 			// Vq = (V_current_control_integral_q / 10 + (Ierr_q * kcp)) / 1000;
 
-			APID_Hander(&apidd, 1);
-			APID_Hander(&apidq, 1);
+			APID_Hander(&motors->apidd, 1);
+			APID_Hander(&motors->apidq, 1);
 
-			int Vd = apidd.parameter.out / 1000;
-			int Vq = apidq.parameter.out / 1000;
+			int Vd = motors->apidd.parameter.out / 1000;
+			int Vq = motors->apidq.parameter.out / 1000;
 			int Vq_filter = Vq;// Low_pass_filter_1(current_out_lpf_a, Vq, Vq_filter);
 			int Vd_filter = Vd;//Low_pass_filter_1(current_out_lpf_a, Vd, Vd_filter);
 
