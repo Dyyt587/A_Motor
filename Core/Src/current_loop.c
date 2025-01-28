@@ -23,21 +23,22 @@ static const int sqrt3_by_2 = 866;
 
 uint64_t nCycleUsed = 0;
 int vfactor = 1;
-int Ialpha, Ibeta, Ierr_d, Ierr_q, Vd, Vd_filter, Vq, Vq_filter, V_current_control_integral_d = 0, V_current_control_integral_q = 0, vfactor, mod_d, mod_q, mod_scalefactor, mod_alpha, mod_beta, mod_alpha_filter, mod_beta_filter;
+
+
 int Vq_out_limit = 700, Vd_out_limit = 700, kci_sum_limit = 100;
 short kcp = 20, kci = 0;
-short current_in_lpf_a = 1000, current_out_lpf_a = 1000;
-int check_current_overshot_p = 0, check_current_overshot_n = 0;
-int Driver_IIt_Real = 0, Driver_IIt_Current, Driver_IIt_Real_DC = 0, Driver_IIt_Current_DC;
-short Driver_IIt_Filter, Driver_IIt_Filter_DC;
+// short current_in_lpf_a = 1000, current_out_lpf_a = 1000;
+// int check_current_overshot_p = 0, check_current_overshot_n = 0;
+// int Driver_IIt_Real = 0, Driver_IIt_Current, Driver_IIt_Real_DC = 0, Driver_IIt_Current_DC;
+// short Driver_IIt_Filter, Driver_IIt_Filter_DC;
 
 extern apid_t apidd;
 extern apid_t apidq;
 void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 {
 
-	Id_des = -Id_des * phase_dir;
-	Iq_des = -Iq_des * phase_dir;
+	Id_des = -Id_des * motors->param.phase_dir;
+	Iq_des = -Iq_des * motors->param.phase_dir;
 
 	motors->PhaseU_current_ma = phase_current_from_adcval(ADCValue[0] - ADC_Offset[0]);
 
@@ -46,13 +47,13 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 	motors->PhaseV_current_ma = -motors->PhaseU_current_ma - motors->PhaseW_current_ma;
 
 	// Clarke transform
-	clarke_calc_3(&svpwm, motors->PhaseU_current_ma, motors->PhaseV_current_ma, motors->PhaseW_current_ma);
+	clarke_calc_3(&motors->svpwm, motors->PhaseU_current_ma, motors->PhaseV_current_ma, motors->PhaseW_current_ma);
 
 	// Park transform
-	park_calc(&svpwm, svpwm.Alpha, svpwm.Beta, motors->phase);
+	park_calc(&motors->svpwm, motors->svpwm.Alpha, motors->svpwm.Beta, motors->phase);
 
-	Iq_real = -svpwm.Qs * phase_dir;
-	Id_real = -svpwm.Ds * phase_dir;
+	Iq_real = -motors->svpwm.Qs * motors->param.phase_dir;
+	Id_real = -motors->svpwm.Ds * motors->param.phase_dir;
 
 	if (motor_on)
 	{
@@ -63,11 +64,11 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 			APID_Set_Target(&apidd, Id_des);
 			APID_Set_Target(&apidq, Iq_des);
 
-			APID_Set_Present(&apidd, svpwm.Ds);
-			APID_Set_Present(&apidq, svpwm.Qs);
+			APID_Set_Present(&apidd, motors->svpwm.Ds);
+			APID_Set_Present(&apidq, motors->svpwm.Qs);
 			// Current error
-			// Ierr_d = Id_des - svpwm.Ds;
-			// Ierr_q = Iq_des - svpwm.Qs;
+			// Ierr_d = Id_des - motors->svpwm.Ds;
+			// Ierr_q = Iq_des - motors->svpwm.Qs;
 
 			//@TODO look into feed forward terms (esp omega, since PI pole maps to RL tau)
 			//@TODO current limit
@@ -78,13 +79,13 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 			APID_Hander(&apidd, 1);
 			APID_Hander(&apidq, 1);
 
-			Vd = apidd.parameter.out / 1000;
-			Vq = apidq.parameter.out / 1000;
-			Vq_filter = Low_pass_filter_1(current_out_lpf_a, Vq, Vq_filter);
-			Vd_filter = Low_pass_filter_1(current_out_lpf_a, Vd, Vd_filter);
+			int Vd = apidd.parameter.out / 1000;
+			int Vq = apidq.parameter.out / 1000;
+			int Vq_filter = Vq;// Low_pass_filter_1(current_out_lpf_a, Vq, Vq_filter);
+			int Vd_filter = Vd;//Low_pass_filter_1(current_out_lpf_a, Vd, Vd_filter);
 
-			mod_d = vfactor * Vd_filter;
-			mod_q = vfactor * Vq_filter;
+			int mod_d = vfactor * Vd_filter;
+			int mod_q = vfactor * Vq_filter;
 
 			// Vector modulation saturation, lock integrator if saturated
 			//@TODO make maximum modulation configurable (currently 90%)
@@ -102,12 +103,12 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 			// *IbusEst = mod_d * Id + mod_q * Iq;
 
 			// Inverse park transform
-			//ipark_calc(&svpwm, mod_d, mod_q, motors->phase);
-			 svpwm.Ds = mod_d;
-			 svpwm.Qs = mod_q;
-			 _ipark_calc(&svpwm);
+			//ipark_calc(&motors->svpwm, mod_d, mod_q, motors->phase);
+			 motors->svpwm.Ds = mod_d;
+			 motors->svpwm.Qs = mod_q;
+			 _ipark_calc(&motors->svpwm);
 			// Apply SVM
-			queue_modulation_timings(motors, svpwm.Alpha, svpwm.Beta);
+			queue_modulation_timings(motors, motors->svpwm.Alpha, motors->svpwm.Beta);
 		}
 	}
 }

@@ -108,9 +108,9 @@ void Velocity_loop(Motor_t* motors, int target_vel)
 				motor.motion.commutation_founded=0;
 				Step_phase+=target_vel;
 			
-				Step_phase = Step_phase%(2*M_PI);
+				Step_phase = Step_phase%(2*PI);
 				if(Step_phase<0)
-					Step_phase+=2*M_PI;
+					Step_phase+=2*PI;
 				motors->phase=Step_phase;
 				break;
 		default:
@@ -128,20 +128,20 @@ void Update_Speed(Motor_t* motors)
 		case 2:
 		case 5:
 		case 7:	
-			real_speed=(motors->encoder_state-encoder_state_b)*1000*4000/feedback_resolution;
+			real_speed=(motors->encoder_state-encoder_state_b)*1000*4000/motor.motion.feedback_resolution;
 			encoder_state_b=motors->encoder_state;
 			real_speed_filter=Low_pass_filter_1(speed_in_lpf_a,real_speed,real_speed_filter);
 			display_speed_loop_count++;
 			if(display_speed_loop_count>399) //100ms
 			{	
 				display_speed_loop_count=0;
-				display_speed=(motors->encoder_state-display_encoder_state_b)*600/feedback_resolution;
+				display_speed=(motors->encoder_state-display_encoder_state_b)*600/motor.motion.feedback_resolution;
 				display_encoder_state_b=motors->encoder_state;
 			}
 			//real_speed_filter=Low_pass_filter(real_speed_buff,real_speed,real_speed_filter_num);
 			break;
 		case 0:	
-			real_speed=speed_demand*637/(poles_num);
+			real_speed=speed_demand*637/(motor.param.poles_num);
 			display_speed=real_speed/20;
 			break;
 		case 14:
@@ -155,7 +155,7 @@ void Update_Speed(Motor_t* motors)
 			{
 				hall_speed_loop_count=0;
 				hall_speed_update=1;
-				real_speed=((hall_position-hall_position_b)*6667)/poles_num;
+				real_speed=((hall_position-hall_position_b)*6667)/motor.param.poles_num;
 				hall_position_b=hall_position;
 				//real_speed_filter=Low_pass_filter(real_speed_buff,real_speed,real_speed_filter_num);
 				real_speed_filter=Low_pass_filter_1(speed_in_lpf_a,real_speed,real_speed_filter);
@@ -163,7 +163,7 @@ void Update_Speed(Motor_t* motors)
 			if(display_speed_loop_count>399) //100ms
 			{	
 				display_speed_loop_count=0;
-				display_speed=((hall_position-display_encoder_state_b)*1000)/poles_num;
+				display_speed=((hall_position-display_encoder_state_b)*1000)/motor.param.poles_num;
 				display_encoder_state_b=hall_position;
 			}
 			break;

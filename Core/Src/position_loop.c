@@ -110,8 +110,8 @@ void Position_Loop(Motor_t* motors, int target_pos)
 		default:
 			break;
 	}
-	Check_DCBus();
-	Check_Temperature();
+//	Check_DCBus();
+//	Check_Temperature();
 	//Check_IIt();
 	//Check_drv8301();
 }
@@ -121,12 +121,12 @@ void ENC_Z_Check(void)
 	if(enc_z.trig)
 	{
 		enc_z.trig=0;
-		enc_z.pos_offset=enc_z.pos%feedback_resolution;
+		enc_z.pos_offset=enc_z.pos%motor.motion.feedback_resolution;
 		enc_z.pos_diff=enc_z.pos-enc_z.pos_back;
 		#if 0
 		if(enc_z.diff>=0)
 		{
-			if(((enc_z.diff % feedback_resolution)>ENC_Z_DIFF_ERROR)&&((enc_z.diff % feedback_resolution)<(feedback_resolution-ENC_Z_DIFF_ERROR)))
+			if(((enc_z.diff % motor.motion.feedback_resolution)>ENC_Z_DIFF_ERROR)&&((enc_z.diff % motor.motion.feedback_resolution)<(motor.motion.feedback_resolution-ENC_Z_DIFF_ERROR)))
 			{
 				enc_z.diff_back=enc_z.diff;
 				enc_z.counting_error++;
@@ -134,7 +134,7 @@ void ENC_Z_Check(void)
 		}
 		else
 		{
-			if(((enc_z.diff % feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((enc_z.diff % feedback_resolution)>(ENC_Z_DIFF_ERROR-feedback_resolution)))
+			if(((enc_z.diff % motor.motion.feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((enc_z.diff % motor.motion.feedback_resolution)>(ENC_Z_DIFF_ERROR-motor.motion.feedback_resolution)))
 			{
 				enc_z.diff_back=enc_z.diff;
 				enc_z.counting_error++;
@@ -143,7 +143,7 @@ void ENC_Z_Check(void)
 		#else
 		if(enc_z.pos_diff>=0)
 		{
-			if(((enc_z.pos_diff % feedback_resolution)>ENC_Z_DIFF_ERROR)&&((enc_z.pos_diff % feedback_resolution)<(feedback_resolution-ENC_Z_DIFF_ERROR)))
+			if(((enc_z.pos_diff % motor.motion.feedback_resolution)>ENC_Z_DIFF_ERROR)&&((enc_z.pos_diff % motor.motion.feedback_resolution)<(motor.motion.feedback_resolution-ENC_Z_DIFF_ERROR)))
 			{
 				enc_z.pos_diff_back=enc_z.pos_diff;
 				enc_z.counting_error++;
@@ -151,7 +151,7 @@ void ENC_Z_Check(void)
 		}
 		else
 		{
-			if(((enc_z.pos_diff % feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((enc_z.pos_diff % feedback_resolution)>(ENC_Z_DIFF_ERROR-feedback_resolution)))
+			if(((enc_z.pos_diff % motor.motion.feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((enc_z.pos_diff % motor.motion.feedback_resolution)>(ENC_Z_DIFF_ERROR-motor.motion.feedback_resolution)))
 			{
 				enc_z.pos_diff_back=enc_z.pos_diff;
 				enc_z.counting_error++;
@@ -167,35 +167,35 @@ void ENC_Z_Check(void)
 	}
 }
 
-void Check_DCBus(void)
-{
-	if(vbus_voltage>over_voltage)
-		motor.motion.Error_State.bits.voltage_high=1;
-	if(vbus_voltage<under_voltage)
-		motor.motion.Error_State.bits.voltage_low=1;
-	
-	//if(vbus_voltage>chop_voltage)
-	//	HAL_GPIO_WritePin(BRAKE_GPIO_Port, BRAKE_Pin, GPIO_PIN_RESET);
-	//if(vbus_voltage<(chop_voltage-10))
-	//	HAL_GPIO_WritePin(BRAKE_GPIO_Port, BRAKE_Pin, GPIO_PIN_SET);
-}
+//void Check_DCBus(void)
+//{
+//	if(vbus_voltage>over_voltage)
+//		motor.motion.Error_State.bits.voltage_high=1;
+//	if(vbus_voltage<under_voltage)
+//		motor.motion.Error_State.bits.voltage_low=1;
+//	
+//	//if(vbus_voltage>chop_voltage)
+//	//	HAL_GPIO_WritePin(BRAKE_GPIO_Port, BRAKE_Pin, GPIO_PIN_RESET);
+//	//if(vbus_voltage<(chop_voltage-10))
+//	//	HAL_GPIO_WritePin(BRAKE_GPIO_Port, BRAKE_Pin, GPIO_PIN_SET);
+//}
 
-void Check_Temperature(void)
-{
-	if(device_temperature>over_temperature)
-		motor.motion.Error_State.bits.over_temperature=1;
-}
+//void Check_Temperature(void)
+//{
+//	if(device_temperature>over_temperature)
+//		motor.motion.Error_State.bits.over_temperature=1;
+//}
 
-void Check_IIt(void)
-{
-	Driver_IIt_Real=IIt_filter(Driver_IIt_Filter,Iq_real,Driver_IIt_Real);
-	if(Driver_IIt_Real>Driver_IIt_Current)
-		motor.motion.Error_State.bits.over_load=1;
-	
-	Driver_IIt_Real_DC=IIt_DC_filter(Driver_IIt_Filter_DC,Iq_real,Driver_IIt_Real_DC);
-	if(Driver_IIt_Real_DC>Driver_IIt_Current_DC)
-		motor.motion.Error_State.bits.over_load=1;
-}
+//void Check_IIt(void)
+//{
+//	Driver_IIt_Real=IIt_filter(Driver_IIt_Filter,Iq_real,Driver_IIt_Real);
+//	if(Driver_IIt_Real>Driver_IIt_Current)
+//		motor.motion.Error_State.bits.over_load=1;
+//	
+//	Driver_IIt_Real_DC=IIt_DC_filter(Driver_IIt_Filter_DC,Iq_real,Driver_IIt_Real_DC);
+//	if(Driver_IIt_Real_DC>Driver_IIt_Current_DC)
+//		motor.motion.Error_State.bits.over_load=1;
+//}
 
 
 void Error_process(void)

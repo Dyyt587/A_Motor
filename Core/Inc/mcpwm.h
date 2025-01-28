@@ -18,9 +18,8 @@
 
 #define ENC_Z_DIFF_ERROR 20
 
-#ifndef M_PI
-#define M_PI 3142
-#endif
+#define PI 3142
+
 
 #define ONE_ADC_VOLTAGE 806  // unit uV
 #define AMP_GAIN        11.0
@@ -39,11 +38,17 @@ typedef struct {
     int v_current_control_integral_q; // [V]
 } Current_control_t;
 typedef struct{
+    uint16_t poles_num;
+    uint8_t phase_dir;
+}param_t;
+typedef struct{
     union error_uint32_t Error_State;
     short commutation_founded , commutation_mode , commutation_time;
+    int feedback_resolution;
 
 }motion_t;
 typedef struct{
+    int target_speed, target_position, target_position_b, target_Iq, target_Id ;
 
 }control_t;
 typedef struct {
@@ -72,6 +77,11 @@ typedef struct {
     uint16_t angle_b;
     control_t control;
     motion_t motion;
+    param_t param;
+
+    svpwm_t svpwm;
+//    apid_t apidd;
+//    apid_t apidq;
 } Motor_t;
 
 typedef enum{
@@ -131,7 +141,7 @@ extern short hall_phase[],ENC_Z_Offset,hall_phase_offset,ENC_Z_Phase,ENC_Z_Phase
 extern int hall_position,hall_position_b;
 extern short encoder_offset_diff,hall_phase_offset_diff;
 extern uint16_t poles_num,motor_code; 
-extern int feedback_resolution;
+//extern int motor.motion.feedback_resolution;
 extern short tamagawa_offset,tamagawa_dir;
 extern short over_voltage,under_voltage,chop_voltage,over_temperature;
 extern int Driver_IIt_Real,Driver_IIt_Real_RE,Driver_IIt_Current,Driver_IIt_Real_DC,Driver_IIt_Real_DC_RE,Driver_IIt_Current_DC;;

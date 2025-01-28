@@ -23,23 +23,22 @@
 short vbus_voltage = 120, device_temperature = 250;
 int ADCValue[6], ADC_Offset[6], ADC_Value[6];
 int Id, Iq, Iq_real, Id_real;
-short phase_dir = 1;
+//short phase_dir = 1;
 // short phase_dir_B = 1, hall_phase_dir = 1,
 short vel_dir = 1;
-int Iq_demand = 0, Id_demand = 0, target_Iq = 0, target_Id = 0;
-int target_speed = 0, speed_demand = 0, target_position = 0, target_position_b = 0, position_demand;
+int Iq_demand = 0, Id_demand = 0;
+int speed_demand = 0, position_demand;
 int commutation_current = 2000, motor_rated_current = 2000, motor_peak_current = 2000, motor_overload_time = 1000;
 
-uint16_t poles_num = 2, motor_code = 0;
+uint16_t  motor_code = 0;
 Encoder_Type_e feedback_type = Default;
-int feedback_resolution = 4000;
 short over_voltage, under_voltage, chop_voltage, over_temperature;
 short tamagawa_offset = 0, tamagawa_dir = 1;
 short Driver_Ready = 0;
 
 ENC_Z enc_z = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 Hall_t hall = {0, 0, 0, 0, 0, 0}; // 霍尔传感器结构体
-svpwm_t svpwm = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//svpwm_t motor.svpwm = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
 
@@ -73,7 +72,16 @@ Motor_t motor = {
 	.pll_pos = 0.0f, // [rad]
 	.pll_vel = 0.0f, // [rad/s]
 	.pll_kp = 0.0f,	 // [rad/s / rad]
-	.pll_ki = 0.0f	 // [(rad/s^2) / rad]
+	.pll_ki = 0.0f,	 // [(rad/s^2) / rad]
+
+	.motion = {
+		.feedback_resolution = 4000,
+		.commutation_time = 1000,
+	},
+	.param	= {
+		.poles_num =2,
+		.phase_dir =1,
+	},
 
 };
 
@@ -86,7 +94,6 @@ static const int sqrt3_by_2 = 866;
 // Initalises the low level motor control and then starts the motor control threads
 void init_motor_control(void)
 {
-	motor.motion.commutation_time = 1000;
 	delay_ms(10);
 	// if(vbus_voltage<140)
 	// motor.motion.Error_State=motor.motion.Error_State|0x0010;
@@ -145,7 +152,7 @@ void start_adc(void)
 }
 
 /**
- * @brief 启动svpwm
+ * @brief 启动motor.svpwm
  *
  * @param htim
  */
@@ -167,7 +174,7 @@ void start_pwm(TIM_HandleTypeDef *htim)
 }
 
 /**
- * @brief 停止svpwm
+ * @brief 停止motor.svpwm
  *
  * @param htim
  */
@@ -249,12 +256,12 @@ void find_commutation(void)
 		case Default:
 		case Tamagawa:
 		case Unknown_8:
-			phase_dir = 1; // must set back to the default value
+			motor.param.phase_dir = 1; // must set back to the default value
 			start_pwm(&htim1);
 			motor_on = 1;
 			motor.phase = 0;
 			my_p0 = get_electric_phase(commutation_current);
-			motor.phase = M_PI / 2;
+			motor.phase = PI / 2;
 			my_p1 = get_electric_phase(commutation_current);
 			motor.phase = 0;
 			my_p0 = get_electric_phase(commutation_current);
@@ -263,29 +270,29 @@ void find_commutation(void)
 
 			if (my_p1 >= my_p0)
 			{
-				phase_dir = 1;
-				if ((feedback_resolution / (5 * poles_num)) < (my_p1 - my_p0) && (my_p1 - my_p0) < (feedback_resolution / (3 * poles_num)))
+				motor.param.phase_dir = 1;
+				if ((motor.motion.feedback_resolution / (5 * motor.param.poles_num)) < (my_p1 - my_p0) && (my_p1 - my_p0) < (motor.motion.feedback_resolution / (3 * motor.param.poles_num)))
 				{
 					motor.motion.commutation_founded = 1;
 					motor.encoder_state = 0;
-					motor.encoder_offset = my_p0 % feedback_resolution;
+					motor.encoder_offset = my_p0 % motor.motion.feedback_resolution;
 				}
 			}
 			else
 			{
-				phase_dir = -1;
-				if ((feedback_resolution / (5 * poles_num)) < (my_p0 - my_p1) && (my_p1 - my_p0) < (feedback_resolution / (3 * poles_num)))
+				motor.param.phase_dir = -1;
+				if ((motor.motion.feedback_resolution / (5 * motor.param.poles_num)) < (my_p0 - my_p1) && (my_p1 - my_p0) < (motor.motion.feedback_resolution / (3 * motor.param.poles_num)))
 				{
 					motor.motion.commutation_founded = 1;
 					motor.encoder_state = 0;
-					motor.encoder_offset = feedback_resolution - my_p0 % feedback_resolution;
+					motor.encoder_offset = motor.motion.feedback_resolution - my_p0 % motor.motion.feedback_resolution;
 				}
 			}
 			if (feedback_type == Tamagawa)
 			{
 				if (motor.motion.commutation_founded == 1)
 				{
-					tamagawa_dir = phase_dir;
+					tamagawa_dir = motor.param.phase_dir;
 					tamagawa_offset = motor.encoder_offset;
 				}
 			}
@@ -311,7 +318,7 @@ void find_commutation(void)
 			motor.motion.commutation_founded = 1;
 			break;
 		case Tamagawa:
-			phase_dir = tamagawa_dir;
+			motor.param.phase_dir = tamagawa_dir;
 			motor.encoder_state = tamagawa_angle;
 			motor.encoder_offset = tamagawa_offset;
 			motor.motion.commutation_founded = 1;
@@ -324,35 +331,35 @@ void find_commutation(void)
 		break;
 	}
 
-	// motors[0].rotor.encoder_offset=get_electric_phase(commutation_current)+feedback_resolution/(4*poles_num);
+	// motors[0].rotor.encoder_offset=get_electric_phase(commutation_current)+motor.motion.feedback_resolution/(4*motor.param.poles_num);
 }
-int rad_of_round = 2 * M_PI * 2;
+int rad_of_round = 2 * PI * 2;
 void update_motor(Motor_t *motors, uint16_t angle)
 {
 	int16_t delta_enc;
 	//@TODO stick parameter into struct
-	rad_of_round = 2 * M_PI * poles_num;
+	rad_of_round = 2 * PI * motor.param.poles_num;
 
 	motors->angle = angle;
 
 	delta_enc = motors->angle - motors->angle_b;
-	if (delta_enc < (-feedback_resolution / 2))
-		delta_enc += feedback_resolution;
-	if (delta_enc > (feedback_resolution / 2))
-		delta_enc -= feedback_resolution;
+	if (delta_enc < (-motor.motion.feedback_resolution / 2))
+		delta_enc += motor.motion.feedback_resolution;
+	if (delta_enc > (motor.motion.feedback_resolution / 2))
+		delta_enc -= motor.motion.feedback_resolution;
 	motors->angle_b = motors->angle;
 	motors->encoder_state += (int32_t)delta_enc;
 
 	int ph;
 	// 计算电角度
-	int32_t enc_state_mod = motors->encoder_state % feedback_resolution;
-	if (phase_dir == 1)
-		ph = M_PI / 2 + (rad_of_round * (enc_state_mod - motors->encoder_offset)) / feedback_resolution;
+	int32_t enc_state_mod = motors->encoder_state % motor.motion.feedback_resolution;
+	if (motor.param.phase_dir == 1)
+		ph = PI / 2 + (rad_of_round * (enc_state_mod - motors->encoder_offset)) / motor.motion.feedback_resolution;
 	else
-		ph = M_PI / 2 + (rad_of_round * ((feedback_resolution - enc_state_mod) - motors->encoder_offset)) / feedback_resolution;
+		ph = PI / 2 + (rad_of_round * ((motor.motion.feedback_resolution - enc_state_mod) - motors->encoder_offset)) / motor.motion.feedback_resolution;
 
-	// ph = fmod(ph, 2 * M_PI);
-	ph = ph % (2 * M_PI);
+	// ph = fmod(ph, 2 * PI);
+	ph = ph % (2 * PI);
 
 	if (motor.motion.commutation_founded)
 		motors->phase = ph;
@@ -365,9 +372,9 @@ void calibrate_tamagawa_encoder(void)
 	{
 		auto_reverse_p_time = 0;
 		auto_reverse_n_time = 0;
-		target_Iq = commutation_current;
-		target_speed = 0;
-		phase_dir = 1;
+		motor.control.target_Iq = commutation_current;
+		motor.control.target_speed = 0;
+		motor.param.phase_dir = 1;
 		operation_mode = 0;
 		control_word.all = 0x0f;
 		calibrate_timechk = HAL_GetTick();
@@ -393,8 +400,8 @@ void calibrate_tamagawa_encoder(void)
 	{
 		if ((HAL_GetTick() - calibrate_timechk) > 500)
 		{
-			target_Iq = 0;
-			target_speed = 0;
+			motor.control.target_Iq = 0;
+			motor.control.target_speed = 0;
 			operation_mode = 2; // const speed
 			Tamagawa_count_temp = 0;
 			control_word.all = 0x86;
@@ -422,21 +429,6 @@ void motor_driver_handle(void)
 		}
 		if (loop_counter_v > 3)
 		{
-			// switch (feedback_type)
-			// {
-			// case Tamagawa:
-			// 	// take about 25us
-			// 	send_to_tamagawa();
-
-			// 	break;
-			// 	//				case 8:
-			// 	//					//spi read take about 15us
-			// 	//				break;
-			// default:
-			// 	break;
-			// }
-			// // take baout 6us
-
 			send_to_tamagawa();
 			Velocity_loop(&motor, speed_demand);
 			loop_counter_v = 0;

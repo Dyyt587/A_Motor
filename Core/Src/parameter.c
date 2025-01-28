@@ -5,7 +5,7 @@
 void Init_Driver_State(void)
 {
 	control_word.all=0x06;
-	target_position=0;
+	motor.control.target_position=0;
 	profile_target_position_b=profile_target_position;
 }
 void Init_System_Parameter(void)
@@ -16,17 +16,17 @@ void Init_System_Parameter(void)
 	RS485_Protocol=1;
 	RS485_Baudrate=38400;
 	
-	over_voltage=500;     //高压报警值：单位0.1V，500表示50V
-	under_voltage=100;		//低压报警值：单位0.1V，100表示10V
-	chop_voltage=400;
-	
-	over_temperature=750;
-	
-	Driver_IIt_Filter=2;
-	Driver_IIt_Current=15000;
-	
-	Driver_IIt_Filter_DC=16;
-	Driver_IIt_Current_DC=25000;
+//	over_voltage=500;     //高压报警值：单位0.1V，500表示50V
+//	under_voltage=100;		//低压报警值：单位0.1V，100表示10V
+//	chop_voltage=400;
+//	
+//	over_temperature=750;
+//	
+//	Driver_IIt_Filter=2;
+//	Driver_IIt_Current=15000;
+//	
+//	Driver_IIt_Filter_DC=16;
+//	Driver_IIt_Current_DC=25000;
 	
 }
 void Init_Motor_Parameter(void)
@@ -34,8 +34,8 @@ void Init_Motor_Parameter(void)
 	commutation_current=2000; //找磁场零位电流，2000表示2A，用于给到Q轴目标电流对齐磁场的。
 	motor.motion.commutation_mode=1;					//找磁场零位模式，0表示抖动找零位，1表示通过单圈绝对值位置找零位
 	motor.motion.commutation_time=1000;			//抖动找零位时的保持时间，1000表示1秒
-	feedback_resolution=16384;    //编码器分辨率
-	poles_num=2;                  //电机极对数
+	motor.motion.feedback_resolution=16384;    //编码器分辨率
+	motor.param.poles_num=2;                  //电机极对数
 	motor_peak_current=4000;      //电机最大电流
 	motor_code=0;
 	hall_phase[1]=2260;         //霍尔相位数据，用于霍尔反馈闭环时的，不同电机需要校正这个数据才能正常运行
@@ -46,7 +46,7 @@ void Init_Motor_Parameter(void)
 	hall_phase[6]=5355;
 	ENC_Z_Offset=2680;
 	hall_phase_offset=708;
-	phase_dir=1;            //矢量控制的相位方向，1或-1，由于调整适应电机方向的。
+	motor.param.phase_dir=1;            //矢量控制的相位方向，1或-1，由于调整适应电机方向的。
 	vel_dir=-1;
 	tamagawa_dir=1;        //通讯编码器方向，1或-1
 	tamagawa_offset=0;      //通讯编码器位置偏移
@@ -61,15 +61,15 @@ void Init_Control_Parameter(void)
 	Iq_demand=0;          	//内部Q轴电流指令，单位是mA，只读
 	speed_demand=0;					//内部速度指令，单位是0.001转每秒，只读
 	position_demand=0;			//内部位置指令，单位是count，只读
-	target_Iq=0;						//Q轴电流指令，单位是mA，读写
-	target_speed=0;					//速度指令，单位是0.001转每秒，读写
-	target_position=0;			//位置指令，单位是count，读写
+	motor.control.target_Iq=0;						//Q轴电流指令，单位是mA，读写
+	motor.control.target_speed=0;					//速度指令，单位是0.001转每秒，读写
+	motor.control.target_position=0;			//位置指令，单位是count，读写
 	
 	kcp=70;      //电流环比例增益kp
 	kci=1;       //电流环积分增益ki
 	kci_sum_limit=10000000;   //电流环积分限制
-	current_in_lpf_a=1000;
-	current_out_lpf_a=600;
+//	current_in_lpf_a=1000;
+//	current_out_lpf_a=600;
 	Ilim=3000;     //输出电流限制，单位是mA
 	
 	kvp=200;      //速度环比例增益kp
@@ -116,7 +116,7 @@ void Exchange_motor_code(void)
 	}
 	if(pp!=0)
 	{
-		poles_num=pp;
+		motor.param.poles_num=pp;
 	}
 	if(cr!=0)
 	{
@@ -126,43 +126,43 @@ void Exchange_motor_code(void)
 	switch(re)
 	{
 		case 1:
-			feedback_resolution=1000;
+			motor.motion.feedback_resolution=1000;
 			break;
 		case 2:
-			feedback_resolution=2000;
+			motor.motion.feedback_resolution=2000;
 			break;
 		case 3:
-			feedback_resolution=2048;
+			motor.motion.feedback_resolution=2048;
 			break;
 		case 4:
-			feedback_resolution=4000;
+			motor.motion.feedback_resolution=4000;
 			break;
 		case 5:
-			feedback_resolution=4096;
+			motor.motion.feedback_resolution=4096;
 			break;
 		case 8:
-			feedback_resolution=8000;
+			motor.motion.feedback_resolution=8000;
 			break;
 		case 9:
-			feedback_resolution=8192;
+			motor.motion.feedback_resolution=8192;
 			break;
 		case 10:
-			feedback_resolution=10000;
+			motor.motion.feedback_resolution=10000;
 			break;
 		case 16:
-			feedback_resolution=16384;
+			motor.motion.feedback_resolution=16384;
 			break;
 		case 32:
-			feedback_resolution=32768;
+			motor.motion.feedback_resolution=32768;
 			break;
 		case 65:
-			feedback_resolution=65536;
+			motor.motion.feedback_resolution=65536;
 			break;
 		case 13:
-			feedback_resolution=131072;
+			motor.motion.feedback_resolution=131072;
 			break;
 		case 26:
-			feedback_resolution=262144;
+			motor.motion.feedback_resolution=262144;
 			break;
 	}
 	

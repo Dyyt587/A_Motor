@@ -71,6 +71,7 @@
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
     "Kconfig": "python",
-    "mcpwm.h": "c"
+    "mcpwm.h": "c",
+    "utils.h": "c"
   }
 }

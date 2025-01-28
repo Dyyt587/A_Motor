@@ -31,8 +31,8 @@ void DS402_process(void)
 				if(motor.motion.Error_State.all==0)
 				{
 					//Scop_Start=1;
-					V_current_control_integral_d=0;
-					V_current_control_integral_q=0;
+//					V_current_control_integral_d=0;
+//					V_current_control_integral_q=0;
 					Iq_demand=0;
 					speed_demand=0;
 					position_demand=0;
@@ -42,7 +42,7 @@ void DS402_process(void)
 						case 12:
 						case 11:
 						case 17:
-							phase_dir=1;
+							motor.param.phase_dir=1;
 							motor.motion.commutation_founded=1;
 							//kci=0;	
 						case 0:

@@ -45,7 +45,7 @@ s32 Acce_distance_cal(int acce,int speed)
 	int64_t v,a,r,d;
 	v=speed;
 	a=acce;
-	r=feedback_resolution;
+	r=motor.motion.feedback_resolution;
 	d=(v*v*r)/(2000*a);
 	return d;
 }
@@ -77,7 +77,7 @@ void Motion_process(void)
 						motion_state=2;
 					}
 					temp64a=target_speed_now;
-					temp64b=feedback_resolution;
+					temp64b=motor.motion.feedback_resolution;
 					step_dst=(temp64a*temp64b)/1000000000;
 					target_pos_now=target_pos_now+direction*step_dst;
 					break;
@@ -91,14 +91,14 @@ void Motion_process(void)
 						motion_state=3;
 					}
 					temp64a=target_speed_now;
-					temp64b=feedback_resolution;
+					temp64b=motor.motion.feedback_resolution;
 					step_dst=(temp64a*temp64b)/1000000000;
 					target_pos_now=target_pos_now+direction*step_dst;
 					break;
 				case 3://decelerating
 					remain_dst=direction*(profile_target_position_b-target_pos_now);
 					//dece_diatance=Acce_distance_cal(profile_dece,(target_speed_now/1000));
-					temp64a=(2*profile_dece*remain_dst*1000)/feedback_resolution;
+					temp64a=(2*profile_dece*remain_dst*1000)/motor.motion.feedback_resolution;
 					temp64b= sqrt(temp64a);
 					target_speed_now=1000*temp64b;
 				
@@ -110,7 +110,7 @@ void Motion_process(void)
 					}
 				
 					temp64a=target_speed_now;
-					temp64b=feedback_resolution;
+					temp64b=motor.motion.feedback_resolution;
 					step_dst=(temp64a*temp64b)/1000000000;
 					target_pos_now=target_pos_now+direction*step_dst;
 					if(direction*target_pos_now>direction*profile_target_position_b)
@@ -123,7 +123,7 @@ void Motion_process(void)
 					break;
 				case 4://searching
 					temp64a=target_speed_now;
-					temp64b=feedback_resolution;
+					temp64b=motor.motion.feedback_resolution;
 					step_dst=(temp64a*temp64b)/1000000000;
 					target_pos_now=target_pos_now+direction*step_dst;
 					if(direction*target_pos_now>=direction*profile_target_position_b)
@@ -141,11 +141,11 @@ void Motion_process(void)
 			//position_demand=Low_pass_filter_1(motion_out_lpf_a,target_pos_now,position_demand);
 			position_demand=target_pos_now;
 			
-			if((target_position!=profile_target_position_b)&&(motion_state==0))
+			if((motor.control.target_position!=profile_target_position_b)&&(motion_state==0))
 			{
-				profile_target_position_b=target_position;
+				profile_target_position_b=motor.control.target_position;
 				positionning=1;
-				distance_diff=target_position-pos_actual;
+				distance_diff=motor.control.target_position-pos_actual;
 				//target_speed_now=real_speed_filter*1000;
 				//target_pos_now=pos_actual;
 				if(distance_diff>=0)
@@ -171,9 +171,9 @@ void Motion_process(void)
 			break;
 		case 3:
 		case 13:
-			if(target_speed!=profile_speed_b)
+			if(motor.control.target_speed!=profile_speed_b)
 			{
-				profile_speed_b=target_speed;
+				profile_speed_b=motor.control.target_speed;
 				//target_speed_now=real_speed_filter*1000;
 				//target_pos_now=pos_actual;		
 			}
@@ -209,7 +209,7 @@ void Motion_process(void)
 			}
 			
 			temp64a=target_speed_now;
-			temp64b=feedback_resolution;
+			temp64b=motor.motion.feedback_resolution;
 			step_dst=(temp64a*temp64b)/1000000000;
 			target_pos_now=target_pos_now+step_dst;
 			
@@ -217,19 +217,19 @@ void Motion_process(void)
 			break;
 		case 7:
 		case 17:
-			position_demand=target_position;
+			position_demand=motor.control.target_position;
 			break;
 		case 2:
 		case 12:
-			speed_demand=target_speed;
+			speed_demand=motor.control.target_speed;
 			break;
 		case 0:
-			speed_demand=target_speed;
-			Iq_demand=target_Iq;
+			speed_demand=motor.control.target_speed;
+			Iq_demand=motor.control.target_Iq;
 			break;
 		case 4:
 		case 14:
-			Iq_demand=target_Iq;
+			Iq_demand=motor.control.target_Iq;
 			break;
 		case 5:	
 			if(motor.motion.commutation_founded)
@@ -296,18 +296,18 @@ void Motion_process(void)
 //						case 3:
 //						case 12:
 //						case 13:
-//							target_speed=auto_p_pos;
+//							motor.control.target_speed=auto_p_pos;
 //						break;
 //						case 1:
 //						case 7:
 //						case 11:
 //						case 17:
-//							target_position=auto_p_pos;
+//							motor.control.target_position=auto_p_pos;
 //						break;
 //						case 4:
 //						case 14:
 //						//case 0:
-//							target_Iq=auto_p_pos;
+//							motor.control.target_Iq=auto_p_pos;
 //						break;
 //					}	
 //					auto_reverse_status=2;
@@ -323,18 +323,18 @@ void Motion_process(void)
 //						case 3:
 //						case 12:
 //						case 13:
-//							target_speed=auto_n_pos;
+//							motor.control.target_speed=auto_n_pos;
 //						break;
 //						case 1:
 //						case 7:
 //						case 11:
 //						case 17:
-//							target_position=auto_n_pos;
+//							motor.control.target_position=auto_n_pos;
 //						break;
 //						case 4:
 //						case 14:
 //						//case 0:
-//							target_Iq=auto_n_pos;
+//							motor.control.target_Iq=auto_n_pos;
 //						break;
 //					}
 //					auto_reverse_status=1;
@@ -578,37 +578,37 @@ void KEY_Process(void)
 	switch(operation_mode)
 	{
 		case 0:
-			//target_Iq=Ilim/2;
+			//motor.control.target_Iq=Ilim/2;
 			if(key1_state<key1_state_b)
-				target_speed+=2;
+				motor.control.target_speed+=2;
 			if(key2_state<key2_state_b)
-				target_speed-=2;
-			if(target_speed>100)
-				target_speed=100;
-			if(target_speed<-100)
-				target_speed=-100;
+				motor.control.target_speed-=2;
+			if(motor.control.target_speed>100)
+				motor.control.target_speed=100;
+			if(motor.control.target_speed<-100)
+				motor.control.target_speed=-100;
 			break;
 		case 2:
 			if(key1_state<key1_state_b)
-				target_speed+=1000;
+				motor.control.target_speed+=1000;
 			if(key2_state<key2_state_b)
-				target_speed-=1000;
-			if(target_speed>100000)
-				target_speed=100000;
-			if(target_speed<-100000)
-				target_speed=-100000;
+				motor.control.target_speed-=1000;
+			if(motor.control.target_speed>100000)
+				motor.control.target_speed=100000;
+			if(motor.control.target_speed<-100000)
+				motor.control.target_speed=-100000;
 			break;
 		case 1:
 			if(key1_state<key1_state_b)
-				target_position+=16384;
+				motor.control.target_position+=16384;
 			if(key2_state<key2_state_b)
-				target_position-=16384;
+				motor.control.target_position-=16384;
 			break;	
 		case 4:
 			if(key1_state<key1_state_b)
-				target_Iq+=200;
+				motor.control.target_Iq+=200;
 			if(key2_state<key2_state_b)
-				target_Iq-=200;
+				motor.control.target_Iq-=200;
 			break;	
 	}
 	

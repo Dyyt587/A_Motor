@@ -98,7 +98,7 @@ const short Sin_Table[2048] =
 short num;
 int arm_cos_f32(int pahse)
 {
-	num=1024*pahse/M_PI+512;
+	num=1024*pahse/PI+512;
 	num=num%2048;
 	if(num<0)
 		num+=2048;
@@ -106,7 +106,7 @@ int arm_cos_f32(int pahse)
 }
 int arm_sin_f32(int pahse)
 {
-	num=1024*pahse/M_PI;
+	num=1024*pahse/PI;
 	num=num%2048;
 	if(num<0)
 		num+=2048;

@@ -266,7 +266,7 @@ Section Cross References
     modbus.o(.data) refers (Special) to use_no_semi_2.o(.text) for __use_no_semihosting
     motion_control.o(i.Acce_distance_cal) refers to llmul.o(.text) for __aeabi_lmul
     motion_control.o(i.Acce_distance_cal) refers to llsdiv.o(.text) for __aeabi_ldivmod
-    motion_control.o(i.Acce_distance_cal) refers to mcpwm.o(.data) for feedback_resolution
+    motion_control.o(i.Acce_distance_cal) refers to mcpwm.o(.data) for motor.motion.feedback_resolution
     motion_control.o(i.Auto_reserve_process) refers to stm32g0xx_hal.o(i.HAL_GetTick) for HAL_GetTick
     motion_control.o(i.Auto_reserve_process) refers to mcpwm.o(i.__ARM_common_switch8) for __ARM_common_switch8
     motion_control.o(i.Auto_reserve_process) refers to motion_control.o(.data) for .data
@@ -444,7 +444,7 @@ Section Cross References
     position_loop.o(i.Check_IIt) refers to current_loop.o(.data) for Driver_IIt_Current_DC
     position_loop.o(i.ENC_Z_Check) refers to aeabi_sdiv.o(.text) for __aeabi_idivmod
     position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for enc_z.trig
-    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for feedback_resolution
+    position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for motor.motion.feedback_resolution
     position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for enc_z.pos
     position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for enc_z.pos_offset
     position_loop.o(i.ENC_Z_Check) refers to mcpwm.o(.data) for enc_z.pos_back
@@ -3230,7 +3230,7 @@ Image Symbol Table
     target_speed                             0x2000004c   Data           4  mcpwm.o(.data)
     speed_demand                             0x20000050   Data           4  mcpwm.o(.data)
     commutation_current                      0x20000054   Data           4  mcpwm.o(.data)
-    feedback_resolution                      0x20000058   Data           4  mcpwm.o(.data)
+    motor.motion.feedback_resolution                      0x20000058   Data           4  mcpwm.o(.data)
     encoder_direction_temp                   0x2000005c   Data           4  mcpwm.o(.data)
     encoder_direction_temp_b                 0x20000060   Data           4  mcpwm.o(.data)
     hall_position                            0x20000064   Data           4  mcpwm.o(.data)
