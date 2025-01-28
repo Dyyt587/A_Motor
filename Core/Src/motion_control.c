@@ -518,7 +518,7 @@ void OLED_Process(void)
 				case 12:
 				case 13:
 				case 0:	
-					temp=Iq_real/1000.0;
+					temp=(-motor.svpwm.Qs * motor.param.phase_dir)/1000.0;
 					sprintf(display_buff,"%s%.4f%s","Current:",temp,"      ");
 					sprintf(display_buff1,"%s%d%s","Speed:",(display_speed),"       ");
 				break;
@@ -530,7 +530,7 @@ void OLED_Process(void)
 				break;
 				case 4:
 				case 14:
-					temp=Iq_real/1000.0;
+					temp=(-motor.svpwm.Qs * motor.param.phase_dir)/1000.0;
 					sprintf(display_buff1,"%s%.1f%s","Current:",temp,"      ");
 				break;
 				case 5:

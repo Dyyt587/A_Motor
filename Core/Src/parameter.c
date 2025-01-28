@@ -37,7 +37,7 @@ void Init_Motor_Parameter(void)
 	motor.motion.feedback_resolution=16384;    //编码器分辨率
 	motor.param.poles_num=2;                  //电机极对数
 	motor_peak_current=4000;      //电机最大电流
-	motor_code=0;
+	motor.param.motor_code=0;
 	hall_phase[1]=2260;         //霍尔相位数据，用于霍尔反馈闭环时的，不同电机需要校正这个数据才能正常运行
 	hall_phase[2]=64;
 	hall_phase[3]=1138;
@@ -65,8 +65,8 @@ void Init_Control_Parameter(void)
 	motor.control.target_speed=0;					//速度指令，单位是0.001转每秒，读写
 	motor.control.target_position=0;			//位置指令，单位是count，读写
 	
-	kcp=70;      //电流环比例增益kp
-	kci=1;       //电流环积分增益ki
+//	kcp=70;      //电流环比例增益kp
+//	kci=1;       //电流环积分增益ki
 	kci_sum_limit=10000000;   //电流环积分限制
 //	current_in_lpf_a=1000;
 //	current_out_lpf_a=600;
@@ -106,10 +106,10 @@ void Init_Control_Parameter(void)
 void Exchange_motor_code(void)
 {
 	char fb,pp,re,cr;
-	fb = motor_code/10000;
-	pp = (motor_code%10000)/1000;
-	re = (motor_code%1000)/10;
-	cr = motor_code%10;
+	fb = motor.param.motor_code/10000;
+	pp = (motor.param.motor_code%10000)/1000;
+	re = (motor.param.motor_code%1000)/10;
+	cr = motor.param.motor_code%10;
 	if(fb!=0)
 	{
 		feedback_type=fb;

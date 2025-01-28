@@ -90,7 +90,7 @@ void DS402_process(void)
 				motor_on=0;
 				//drv8301_error=0;
 				motor.motion.Error_State.all=0;
-				enc_z.counting_error=0;
+				//enc_z.counting_error=0;
 				break;
 			default:
 				break;

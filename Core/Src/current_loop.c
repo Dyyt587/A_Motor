@@ -52,8 +52,8 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 	// Park transform
 	park_calc(&motors->svpwm, motors->svpwm.Alpha, motors->svpwm.Beta, motors->phase);
 
-	Iq_real = -motors->svpwm.Qs * motors->param.phase_dir;
-	Id_real = -motors->svpwm.Ds * motors->param.phase_dir;
+//	Iq_real = -motors->svpwm.Qs * motors->param.phase_dir;
+//	Id_real = -motors->svpwm.Ds * motors->param.phase_dir;
 
 	if (motor_on)
 	{

@@ -41,6 +41,7 @@ typedef struct {
 typedef struct{
     uint16_t poles_num;
     uint8_t phase_dir;
+    uint16_t motor_code;
 }param_t;
 typedef struct{
     union error_uint32_t Error_State;
@@ -118,7 +119,7 @@ extern short vbus_voltage,device_temperature;
 extern Motor_t motor;
 extern const int num_motors;
 extern int ADCValue[6],ADC_Offset[6],ADC_Value[6];
-extern int Id,Iq,Iq_real,Id_real;
+//extern int Id,Iq,Iq_real,Id_real;
 extern short commutation_founded,commutation_mode,commutation_time;
 extern int commutation_current,motor_rated_current,motor_peak_current,motor_overload_time;
 extern short phase_dir,hall_phase_dir,vel_dir;
@@ -127,40 +128,40 @@ extern int Iq_demand,Id_demand,target_Iq,target_Id,target_speed,speed_demand,tar
 extern short operation_mode,operation_mode_buff;
 extern union Control_uint16_t  control_word,control_word_b;
 extern u16 motor_on;
-extern short Driver_Ready;
-extern int drv8301_error;
+// extern short Driver_Ready;
+// extern int drv8301_error;
 // extern unsigned short enc_z.count,enc_z.count_back,enc_z.count_c,enc_z.first,enc_z.trig,enc_z.counting_error;
 // extern short enc_z.diff,enc_z.diff_back;
 // extern int enc_z.pos,enc_z.pos_back,enc_z.pos_offset,enc_z.pos_diff,enc_z.pos_diff_back;
 // extern short hall_u,hall.v,hall.w,hall.state,hall.state_back;
-extern ENC_Z enc_z;
-extern Hall_t hall;
+// extern ENC_Z enc_z;
+// extern Hall_t hall;
 extern Encoder_Type_e feedback_type;
-extern svpwm_t svpwm;
+// extern svpwm_t svpwm;
 
-
-extern short hall_phase[],ENC_Z_Offset,hall_phase_offset,ENC_Z_Phase,ENC_Z_Phase_B,ENC_Z_Phase_Err,start_calibrate_hall_phase;
-extern int hall_position,hall_position_b;
+extern short hall_phase[],hall_phase_offset,ENC_Z_Offset;
+// extern short hall_phase[],ENC_Z_Offset,hall_phase_offset,ENC_Z_Phase,ENC_Z_Phase_B,ENC_Z_Phase_Err,start_calibrate_hall_phase;
+ extern int hall_position,hall_position_b;
 extern short encoder_offset_diff,hall_phase_offset_diff;
-extern uint16_t poles_num,motor_code; 
+// extern uint16_t poles_num,motor_code; 
 //extern int motor.motion.feedback_resolution;
 extern short tamagawa_offset,tamagawa_dir;
 extern short over_voltage,under_voltage,chop_voltage,over_temperature;
-extern int Driver_IIt_Real,Driver_IIt_Real_RE,Driver_IIt_Current,Driver_IIt_Real_DC,Driver_IIt_Real_DC_RE,Driver_IIt_Current_DC;;
-extern short Driver_IIt_Filter,Driver_IIt_Filter_DC;
+// extern int Driver_IIt_Real,Driver_IIt_Real_RE,Driver_IIt_Current,Driver_IIt_Real_DC,Driver_IIt_Real_DC_RE,Driver_IIt_Current_DC;;
+// extern short Driver_IIt_Filter,Driver_IIt_Filter_DC;
 extern union error_uint32_t  Error_State;
 extern union Status_uint16_t status_word;
 
-extern int V_current_control_integral_d,V_current_control_integral_q,mod_q;
-extern int Vq_out_limit,Vd_out_limit,kci_sum_limit;
-extern short kcp,kci;
-extern short current_in_lpf_a,current_out_lpf_a;
-extern int real_speed,real_speed_filter,speed_err,kvi_sum,kvi_sum_limit,Ilim;
-extern short real_speed_filter_num,low_pass_filter_on;
-extern short kvp,kvi;
-extern short speed_in_lpf_a,speed_out_lpf_a;
-extern short kpp,kpi;
-extern int vel_lim,kpi_sum_limit;
+// extern int V_current_control_integral_d,V_current_control_integral_q,mod_q;
+ extern int Vq_out_limit,Vd_out_limit,kci_sum_limit;
+// extern short kcp,kci;
+// extern short current_in_lpf_a,current_out_lpf_a;
+ extern int real_speed,real_speed_filter,speed_err,kvi_sum,kvi_sum_limit,Ilim;
+ extern short real_speed_filter_num,low_pass_filter_on;
+ extern short kvp,kvi;
+ extern short speed_in_lpf_a,speed_out_lpf_a;
+ extern short kpp,kpi;
+ extern int vel_lim,kpi_sum_limit;
 
 extern short position_in_lpf_a,position_out_lpf_a;
 

@@ -23,7 +23,7 @@
 /* Global variables ----------------------------------------------------------*/
 short vbus_voltage = 120, device_temperature = 250;
 int ADCValue[6], ADC_Offset[6], ADC_Value[6];
-int Id, Iq, Iq_real, Id_real;
+//int Id, Iq, Iq_real, Id_real;
 // short phase_dir = 1;
 //  short phase_dir_B = 1, hall_phase_dir = 1,
 short vel_dir = 1;
@@ -31,14 +31,12 @@ int Iq_demand = 0, Id_demand = 0;
 int speed_demand = 0, position_demand;
 int commutation_current = 2000, motor_rated_current = 2000, motor_peak_current = 2000, motor_overload_time = 1000;
 
-uint16_t motor_code = 0;
 Encoder_Type_e feedback_type = Default;
 short over_voltage, under_voltage, chop_voltage, over_temperature;
 short tamagawa_offset = 0, tamagawa_dir = 1;
-short Driver_Ready = 0;
 
-ENC_Z enc_z = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-Hall_t hall = {0, 0, 0, 0, 0, 0}; // 霍尔传感器结构体
+//ENC_Z enc_z = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//Hall_t hall = {0, 0, 0, 0, 0, 0}; // 霍尔传感器结构体
 // svpwm_t motor.svpwm = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 int encoder_direction_temp = 0, encoder_direction_temp_b = 0;
@@ -196,7 +194,6 @@ void init_motor_control(void)
 	// Start Encoders
 	HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
 
-	Driver_Ready = 1;
 	motor.wkc.lic_aprove.bits.drv_init = 1;
 	motor.wkc.lic_aprove.bits.drv_ready = 1;
 
@@ -402,9 +399,9 @@ void find_commutation(void)
 		{
 		case Default:
 			motor.encoder_state = 0;
-			enc_z.count = 0;
-			enc_z.count_back = 0;
-			enc_z.first = 0;
+//			enc_z.count = 0;
+//			enc_z.count_back = 0;
+//			enc_z.first = 0;
 			motor.motion.commutation_founded = 1;
 			break;
 		case Tamagawa:

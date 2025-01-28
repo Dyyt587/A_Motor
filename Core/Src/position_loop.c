@@ -42,7 +42,7 @@ void Position_Loop(Motor_t* motors, int target_pos)
 	else if(operation_mode>10)
 		pos_actual=hall_position;
 	
-	ENC_Z_Check();
+	//ENC_Z_Check();
 	switch(operation_mode)
 	{
 		case 1:
@@ -116,56 +116,56 @@ void Position_Loop(Motor_t* motors, int target_pos)
 	//Check_drv8301();
 }
 
-void ENC_Z_Check(void)
-{
-	if(enc_z.trig)
-	{
-		enc_z.trig=0;
-		enc_z.pos_offset=enc_z.pos%motor.motion.feedback_resolution;
-		enc_z.pos_diff=enc_z.pos-enc_z.pos_back;
-		#if 0
-		if(enc_z.diff>=0)
-		{
-			if(((enc_z.diff % motor.motion.feedback_resolution)>ENC_Z_DIFF_ERROR)&&((enc_z.diff % motor.motion.feedback_resolution)<(motor.motion.feedback_resolution-ENC_Z_DIFF_ERROR)))
-			{
-				enc_z.diff_back=enc_z.diff;
-				enc_z.counting_error++;
-			}
-		}
-		else
-		{
-			if(((enc_z.diff % motor.motion.feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((enc_z.diff % motor.motion.feedback_resolution)>(ENC_Z_DIFF_ERROR-motor.motion.feedback_resolution)))
-			{
-				enc_z.diff_back=enc_z.diff;
-				enc_z.counting_error++;
-			}
-		}
-		#else
-		if(enc_z.pos_diff>=0)
-		{
-			if(((enc_z.pos_diff % motor.motion.feedback_resolution)>ENC_Z_DIFF_ERROR)&&((enc_z.pos_diff % motor.motion.feedback_resolution)<(motor.motion.feedback_resolution-ENC_Z_DIFF_ERROR)))
-			{
-				enc_z.pos_diff_back=enc_z.pos_diff;
-				enc_z.counting_error++;
-			}
-		}
-		else
-		{
-			if(((enc_z.pos_diff % motor.motion.feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((enc_z.pos_diff % motor.motion.feedback_resolution)>(ENC_Z_DIFF_ERROR-motor.motion.feedback_resolution)))
-			{
-				enc_z.pos_diff_back=enc_z.pos_diff;
-				enc_z.counting_error++;
-			}
-		}
-		#endif
-		if((motor.motion.commutation_founded==1)&&(motor.motion.commutation_mode==1))
-			if(enc_z.first==0)
-			{
-				motor.encoder_offset-=encoder_offset_diff;
-				enc_z.first=1;
-			}
-	}
-}
+//void ENC_Z_Check(void)
+//{
+//	if(enc_z.trig)
+//	{
+//		enc_z.trig=0;
+//		enc_z.pos_offset=enc_z.pos%motor.motion.feedback_resolution;
+//		enc_z.pos_diff=enc_z.pos-enc_z.pos_back;
+//		#if 0
+//		if(enc_z.diff>=0)
+//		{
+//			if(((enc_z.diff % motor.motion.feedback_resolution)>ENC_Z_DIFF_ERROR)&&((enc_z.diff % motor.motion.feedback_resolution)<(motor.motion.feedback_resolution-ENC_Z_DIFF_ERROR)))
+//			{
+//				enc_z.diff_back=enc_z.diff;
+//				enc_z.counting_error++;
+//			}
+//		}
+//		else
+//		{
+//			if(((enc_z.diff % motor.motion.feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((enc_z.diff % motor.motion.feedback_resolution)>(ENC_Z_DIFF_ERROR-motor.motion.feedback_resolution)))
+//			{
+//				enc_z.diff_back=enc_z.diff;
+//				enc_z.counting_error++;
+//			}
+//		}
+//		#else
+//		if(enc_z.pos_diff>=0)
+//		{
+//			if(((enc_z.pos_diff % motor.motion.feedback_resolution)>ENC_Z_DIFF_ERROR)&&((enc_z.pos_diff % motor.motion.feedback_resolution)<(motor.motion.feedback_resolution-ENC_Z_DIFF_ERROR)))
+//			{
+//				enc_z.pos_diff_back=enc_z.pos_diff;
+//				enc_z.counting_error++;
+//			}
+//		}
+//		else
+//		{
+//			if(((enc_z.pos_diff % motor.motion.feedback_resolution)<-ENC_Z_DIFF_ERROR)&&((enc_z.pos_diff % motor.motion.feedback_resolution)>(ENC_Z_DIFF_ERROR-motor.motion.feedback_resolution)))
+//			{
+//				enc_z.pos_diff_back=enc_z.pos_diff;
+//				enc_z.counting_error++;
+//			}
+//		}
+//		#endif
+//		if((motor.motion.commutation_founded==1)&&(motor.motion.commutation_mode==1))
+//			if(enc_z.first==0)
+//			{
+//				motor.encoder_offset-=encoder_offset_diff;
+//				enc_z.first=1;
+//			}
+//	}
+//}
 
 //void Check_DCBus(void)
 //{
