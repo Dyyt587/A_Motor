@@ -12,46 +12,75 @@ typedef union LicenseDomain
 	uint32_t all;
 	struct
 	{
-		uint8_t drv_fault:1;						//0
-		uint8_t ADC_error:1;						//1
+		uint8_t drv_init:1;						//0
+		uint8_t :1;						//1
 		uint8_t :1;											//2
-		uint8_t ENC_error:1;						//3
-		uint8_t hall_state_error:1;			//4
-		uint8_t commutation_error:1;		//5
-		uint8_t following_error:1;			//6
+		uint8_t enc_touched:1;						//3
+		uint8_t :1;			//4
+		uint8_t :1;		//5
+		uint8_t time_triged:1;			//6
 		uint8_t :1;											//7
-		uint8_t voltage_low:1;					//8
+		uint8_t is_voltage_ok:1;					//8
 		uint8_t voltage_high:1;					//9
-		uint8_t over_temperature:1;			//10
-		uint8_t over_current:1;					//11
-		uint8_t over_load:1;						//12
+		uint8_t is_temperature_ok:1;			//10
+		uint8_t is_current_ok:1;					//11
+		uint8_t is_load_ok:1;						//12
 		uint8_t :1;											//13
 		uint8_t :1;											//14
 		uint8_t :1;											//15
+		uint8_t :1;											//11
+		uint8_t :1;											//12
+		uint8_t :1;											//13
+		uint8_t :1;											//14
+		uint8_t :1;											//15
+		uint8_t torque_mode:1;											//16
+		uint8_t :1;											//17
+		uint8_t :1;											//18
+		uint8_t velocity_mode:1;											//19
+		uint8_t :1;											//20
+		uint8_t :1;											//21
+		uint8_t position_mode:1;											//22
+		uint8_t :1;											//23
+		uint8_t :1;											//24
+		uint8_t :1;											//25
+		uint8_t :1;											//26
+		uint8_t :1;											//27
+		uint8_t :1;											//28
+		uint8_t :1;											//29
+		uint8_t :1;											//30
+		uint8_t :1;											//31
 	}bits;
 }LicenseDomain;
+typedef struct wkc_work wkc_work_t;
+typedef struct wkc wkc_t;
 
-typedef int(*work_handle)(void* argv,int argc);//一定会传入wc_t 主要是修改许可
-typedef struct work work_t;
-struct work{
+typedef int(*work_handle)(wkc_t* wkc);//一定会传入wc_t 主要是修改许可
+struct wkc_work{
+	
+	char* name;
 	work_handle handle;
 	LicenseDomain licence;
 
 	int trig_level;
 	int trig_cnt;
 	
-	work_t *next; 
+	wkc_work_t *next; 
+	
+	void* user_date;//用于任务块自定义数据
 };
 
-typedef struct wc wc_t;
 
-struct wc{
+struct wkc{
 	LicenseDomain lic_aprove;
-	work_t works;//工作的链表头
+	wkc_work_t* works;//工作的链表头
+	void* user_date;//用于标记电机
+
 };
 
-bool check_licence(wc_t*wc,LicenseDomain licence);
-
+bool check_licence(wkc_t*wc,LicenseDomain licence);
+void wkc_init(wkc_t *wkc);
+int wkc_handle(wkc_t *wkc);
+void wkc_work_add(wkc_t *wkc,wkc_work_t* work);
 #ifdef __cplusplus
 }
 #endif

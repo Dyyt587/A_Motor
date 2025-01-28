@@ -11,6 +11,7 @@
 #include "tamagawa.h"	
 #include "utils.h"	
 #include "apid.h"
+#include "workchain.h"
 #define CURRENT_MEAS_PERIOD ( (float)2*TIM_1_8_PERIOD_CLOCKS*(TIM_1_8_RCR+1) / (float)TIM_1_8_CLOCK_HZ )
 #define CURRENT_MEAS_HZ ( (float)(TIM_1_8_CLOCK_HZ) / (float)(2*TIM_1_8_PERIOD_CLOCKS*(TIM_1_8_RCR+1)) )
 
@@ -82,6 +83,8 @@ typedef struct {
     svpwm_t svpwm;
     apid_t apidd;
     apid_t apidq;
+		
+	wkc_t wkc;
 } Motor_t;
 
 typedef enum{
@@ -119,7 +122,6 @@ extern int Id,Iq,Iq_real,Id_real;
 extern short commutation_founded,commutation_mode,commutation_time;
 extern int commutation_current,motor_rated_current,motor_peak_current,motor_overload_time;
 extern short phase_dir,hall_phase_dir,vel_dir;
-extern int loop_counter_c,loop_counter_v,loop_counter_p,current_loop_ready,velocity_loop_ready,position_loop_ready;
 extern s32 pos_actual,pos_offest;
 extern int Iq_demand,Id_demand,target_Iq,target_Id,target_speed,speed_demand,target_position,target_position_b,position_demand;
 extern short operation_mode,operation_mode_buff;

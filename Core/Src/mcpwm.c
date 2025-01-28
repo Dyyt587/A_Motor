@@ -13,6 +13,7 @@
 #include <utils.h>
 #include "delay.h"
 #include "perf_counter.h"
+#include "workchain.h"
 
 /* Private defines -----------------------------------------------------------*/
 
@@ -23,14 +24,14 @@
 short vbus_voltage = 120, device_temperature = 250;
 int ADCValue[6], ADC_Offset[6], ADC_Value[6];
 int Id, Iq, Iq_real, Id_real;
-//short phase_dir = 1;
-// short phase_dir_B = 1, hall_phase_dir = 1,
+// short phase_dir = 1;
+//  short phase_dir_B = 1, hall_phase_dir = 1,
 short vel_dir = 1;
 int Iq_demand = 0, Id_demand = 0;
 int speed_demand = 0, position_demand;
 int commutation_current = 2000, motor_rated_current = 2000, motor_peak_current = 2000, motor_overload_time = 1000;
 
-uint16_t  motor_code = 0;
+uint16_t motor_code = 0;
 Encoder_Type_e feedback_type = Default;
 short over_voltage, under_voltage, chop_voltage, over_temperature;
 short tamagawa_offset = 0, tamagawa_dir = 1;
@@ -38,15 +39,12 @@ short Driver_Ready = 0;
 
 ENC_Z enc_z = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 Hall_t hall = {0, 0, 0, 0, 0, 0}; // 霍尔传感器结构体
-//svpwm_t motor.svpwm = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-
+// svpwm_t motor.svpwm = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 int encoder_direction_temp = 0, encoder_direction_temp_b = 0;
 short hall_phase[8], ENC_Z_Offset = 2680, hall_phase_offset = 0, ENC_Z_Phase = 0, ENC_Z_Phase_B = 0, ENC_Z_Phase_Err = 0;
 int hall_position = 0, hall_position_b = 0;
 short encoder_offset_diff = 0, hall_phase_offset_diff = 0;
-
 
 int led_blink_counter = 0, led_blink_period = 1000;
 
@@ -78,22 +76,83 @@ Motor_t motor = {
 		.feedback_resolution = 4000,
 		.commutation_time = 1000,
 	},
-	.param	= {
-		.poles_num =2,
-		.phase_dir =1,
+	.param = {
+		.poles_num = 2,
+		.phase_dir = 1,
 	},
 
 };
+int update_motor_work_handle(wkc_t *wkc)
+{
+	update_motor(&motor, tamagawa_angle); // 更新电角度
+	return 0;
+}
+int Current_loop_work_handle(wkc_t *wkc)
+{
+	Current_loop(&motor, Id_demand, Iq_demand);
+	return 0;
+}
 
+int Velocity_loop_work_handle(wkc_t *wkc) // 电流环控制
+{
+	send_to_tamagawa();
+	Velocity_loop(&motor, speed_demand);
+	return 0;
+}
+int Position_loop_work_handle(wkc_t *wkc)
+{
+	Position_Loop(&motor, position_demand);
+	return 0;
+}
 /* Private constant data -----------------------------------------------------*/
 static const int one_by_sqrt3 = 577;
 static const int sqrt3_by_2 = 866;
 
 /* Function implementations --------------------------------------------------*/
-
+wkc_work_t update_motor_work = {
+	.name = "update_motor",
+	.handle = update_motor_work_handle,
+	.licence = {0},
+	.trig_level = 0, // 触发等级，每次触发
+	.trig_cnt = 0,
+	.next = 0,
+	.user_date = &motor,
+};
+wkc_work_t Current_loop_work = {
+	.name = "Current_loop",
+	.handle = Current_loop_work_handle,
+	.licence = {0},
+	.trig_level = 0, // 触发等级，每次触发
+	.trig_cnt = 0,
+	.next = 0,
+	.user_date = &motor,
+};
+wkc_work_t Velocity_loop_work = {
+	.name = "Velocity_loop",
+	.handle = Velocity_loop_work_handle,
+	.licence = {0},
+	.trig_level = 3, // 触发等级，每4次触发
+	.trig_cnt = 1,//防止第一次超时
+	.next = 0,
+	.user_date = &motor,
+};
+wkc_work_t Position_loop_work = {
+	.name = "Position_loop",
+	.handle = Position_loop_work_handle,
+	.licence = {0},
+	.trig_level = 7, // 触发等级，每8次触发
+	.trig_cnt = 2,
+	.next = 0,
+	.user_date = &motor,
+};
 // Initalises the low level motor control and then starts the motor control threads
 void init_motor_control(void)
 {
+	wkc_init(&motor.wkc);
+	wkc_work_add(&motor.wkc, &update_motor_work);
+	wkc_work_add(&motor.wkc, &Current_loop_work);
+	wkc_work_add(&motor.wkc, &Velocity_loop_work);
+	wkc_work_add(&motor.wkc, &Position_loop_work);
 	delay_ms(10);
 	// if(vbus_voltage<140)
 	// motor.motion.Error_State=motor.motion.Error_State|0x0010;
@@ -123,8 +182,6 @@ void init_motor_control(void)
 		}
 	}
 	delay_ms(10);
-
-
 }
 
 //@TODO make available from anywhere
@@ -416,29 +473,6 @@ void motor_driver_handle(void)
 
 	if (Driver_Ready)
 	{
-		loop_counter_c++;
-		loop_counter_v++;
-		loop_counter_p++;
-
-		update_motor(&motor, tamagawa_angle); // 更新电角度
-		// if(motor_on)
-		// if(loop_counter_c>1)
-		{
-			Current_loop(&motor, Id_demand, Iq_demand);
-			loop_counter_c = 0;
-		}
-		if (loop_counter_v > 3)
-		{
-			send_to_tamagawa();
-			Velocity_loop(&motor, speed_demand);
-			loop_counter_v = 0;
-		}
-
-		if (loop_counter_p > 7)
-		{
-			position_loop_ready = 1;
-			Position_Loop(&motor, position_demand);
-			loop_counter_p = 0;
-		}
+		wkc_handle(&motor.wkc);
 	}
 }
