@@ -148,8 +148,8 @@ int main(void)
 		KEY_Process();
 		//RS232_Process();
 		//RS232_Solve_Service();
-		RS485_Process();
-		Modbus_Solve_Service();
+		//RS485_Process();
+		//Modbus_Solve_Service();
 		
 		//Auto_reserve_process();
 		

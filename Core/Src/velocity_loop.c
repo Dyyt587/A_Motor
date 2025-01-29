@@ -30,23 +30,15 @@ int hall_speed_loop_count = 0, hall_speed_update = 0;
 int display_speed_loop_count = 0, display_speed_update = 0, display_speed = 0, display_encoder_state_b = 0;
 void Velocity_loop(Motor_t *motors, int target_vel)
 {
-	//Update_Speed(motors);
 
-	if (operation_mode != 4)
-	{
-		// if (motor.wkc.lic_aprove.bits.commutation_founded )
-		// {
+	APID_Set_Target(&motors->apidv, target_vel);
 
-			APID_Set_Target(&motors->apidv, target_vel);
- 
-			APID_Set_Present(&motors->apidv, real_speed);
-			//APID_Set_Present(&motors->apidv, real_speed_filter);
- 			APID_Hander(&motors->apidv, 1);
+	APID_Set_Present(&motors->apidv, real_speed);
+	// APID_Set_Present(&motors->apidv, real_speed_filter);
+	APID_Hander(&motors->apidv, 1);
 
-			Iq_demand = Low_pass_filter_1(speed_out_lpf_a, -motors->apidv.parameter.out/1000, Iq_demand);
-			// Iq_demand=Iq_temp;
-		// }
-	}
+	Iq_demand = Low_pass_filter_1(speed_out_lpf_a, -motors->apidv.parameter.out / 1000, Iq_demand);
+	// Iq_demand=Iq_temp;
 }
 void Update_Speed(Motor_t *motors)
 {

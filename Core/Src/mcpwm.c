@@ -85,6 +85,8 @@ int update_motor_work_handle(wkc_t *wkc)
 	send_to_tamagawa();
 	update_motor((Motor_t *)wkc->user_date, tamagawa_angle); // 更新电角度
 	Update_Speed((Motor_t *)wkc->user_date);
+	pos_actual = ((Motor_t *)wkc->user_date)->encoder_state - pos_offest;
+
 	return 0;
 }
 int Current_loop_work_handle(wkc_t *wkc)
@@ -133,6 +135,8 @@ wkc_work_t Current_loop_work = {
 	.licence = {
 		.bits.drv_ready = 1,
 		.bits.drv_init = 1,
+		.bits.torque_mode = 1,
+
 	},
 	.trig_level = 0, // 触发等级，每次触发
 	.trig_cnt = 0,
@@ -147,6 +151,7 @@ wkc_work_t Velocity_loop_work = {
 		.bits.drv_init = 1,
 		.bits.commutation_founded = 1,
 		.bits.motor_on = 1,
+		.bits.velocity_mode = 1,
 	},
 	.trig_level = 3, // 触发等级，每4次触发
 	.trig_cnt = 1,	 // 防止第一次超时
@@ -161,6 +166,7 @@ wkc_work_t Position_loop_work = {
 		.bits.drv_init = 1,
 		.bits.commutation_founded = 1,
 		.bits.motor_on = 1,
+		.bits.position_mode = 1,
 	},
 	.trig_level = 7, // 触发等级，每8次触发
 	.trig_cnt = 2,
@@ -223,6 +229,10 @@ void init_motor_control(void)
 
 	motor.wkc.lic_aprove.bits.drv_init = 1;
 	motor.wkc.lic_aprove.bits.drv_ready = 1;
+	
+	motor.wkc.lic_aprove.bits.torque_mode = 1;
+	motor.wkc.lic_aprove.bits.velocity_mode = 1;
+	motor.wkc.lic_aprove.bits.position_mode = 1;
 
 	delay_ms(20);
 	if (motor.feedback_type == Tamagawa)
