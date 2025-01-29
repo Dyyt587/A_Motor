@@ -232,7 +232,7 @@ void Motion_process(void)
 			Iq_demand=motor.control.target_Iq;
 			break;
 		case 5:	
-			if(motor.motion.commutation_founded)
+			if(motor.wkc.lic_aprove.bits.commutation_founded )
 			{
 				//pul_dir=HAL_GPIO_ReadPin(DIR_GPIO_Port,DIR_Pin);
 				//pluse_temp=__HAL_TIM_GET_COUNTER(&htim2);
@@ -377,7 +377,7 @@ void LED_Process(void)
 		led_blink_counter++;
 		if(motor.motion.Error_State.all==0)
 		{
-			if(motor_on)
+			if(motor.wkc.lic_aprove.bits.motor_on)
 			{
 				HAL_GPIO_WritePin(LED_2_GPIO_Port, LED_2_Pin, GPIO_PIN_RESET);
 				led_blink_period=500-abs(real_speed_filter)/50;
@@ -503,7 +503,7 @@ void OLED_Process(void)
 		}
 		else
 		{
-			if(motor_on)
+			if(motor.wkc.lic_aprove.bits.motor_on)
 			{
 				sprintf(display_buff4," ON  ");
 			}
@@ -547,13 +547,16 @@ void OLED_Process(void)
 			*/
 		}
 		//temp=vbus_voltage/10.0;
+		extern int32_t dd;
+
 		temp=motor.apidd.parameter.target - motor.apidd.parameter.present;
 		sprintf(display_buff2,"%s%.1f%s","e:",temp,"");
 		extern int Vd;
 		extern uint64_t nCycleUsed;
 
 		temp=motor.apidd.parameter.present;
-		sprintf(display_buff3,"%s%lld%s","p:",perfc_convert_ticks_to_us(nCycleUsed),"us");
+		//sprintf(display_buff3,"%s%lld%s","p:",perfc_convert_ticks_to_us(nCycleUsed),"us");
+		sprintf(display_buff3,"%s%lld%s","p:",perfc_convert_ticks_to_us(dd),"us");
 		
 	  OLED_ShowString(0,2,(u8*)display_buff,12);
 	  OLED_ShowString(0,3,(u8*)display_buff1,12);

@@ -72,6 +72,7 @@
   "files.associations": {
     "Kconfig": "python",
     "mcpwm.h": "c",
-    "utils.h": "c"
+    "utils.h": "c",
+    "workchain.h": "c"
   }
 }

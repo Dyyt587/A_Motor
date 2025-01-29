@@ -30,27 +30,13 @@ int hall_speed_loop_count = 0, hall_speed_update = 0;
 int display_speed_loop_count = 0, display_speed_update = 0, display_speed = 0, display_encoder_state_b = 0;
 void Velocity_loop(Motor_t *motors, int target_vel)
 {
-	Update_Speed(motors);
+	//Update_Speed(motors);
 
-	if (motor_on && operation_mode != 4)
+	if (operation_mode != 4)
 	{
-		if (motor.motion.commutation_founded)
-		{
-			// if (low_pass_filter_on)
-			// 	speed_err = target_vel - real_speed_filter;
-			// else
-			// 	speed_err = target_vel - real_speed;
-			// Iq_temp = vel_dir * (kvp * speed_err + kvi_sum);
-			// kvi_sum = kvi_sum + kvi * speed_err;
-			// if (kvi_sum > kvi_sum_limit * 1000)
-			// 	kvi_sum = kvi_sum_limit * 1000;
-			// if (kvi_sum < -kvi_sum_limit * 1000)
-			// 	kvi_sum = -kvi_sum_limit * 1000;
-			// Iq_temp = Iq_temp / 1000;
-			// if (Iq_temp > Ilim)
-			// 	Iq_temp = Ilim;
-			// if (Iq_temp < -Ilim)
-			// 	Iq_temp = -Ilim;
+		// if (motor.wkc.lic_aprove.bits.commutation_founded )
+		// {
+
 			APID_Set_Target(&motors->apidv, target_vel);
  
 			APID_Set_Present(&motors->apidv, real_speed);
@@ -59,7 +45,7 @@ void Velocity_loop(Motor_t *motors, int target_vel)
 
 			Iq_demand = Low_pass_filter_1(speed_out_lpf_a, -motors->apidv.parameter.out/1000, Iq_demand);
 			// Iq_demand=Iq_temp;
-		}
+		// }
 	}
 }
 void Update_Speed(Motor_t *motors)

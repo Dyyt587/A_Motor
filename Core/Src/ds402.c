@@ -19,7 +19,7 @@
 short operation_mode=1,operation_mode_buff=0;
 union Status_uint16_t status_word;
 union Control_uint16_t control_word,control_word_b;
-u16 motor_on=0;
+//u16 motor_on=0;
 
 void DS402_process(void)
 {
@@ -43,13 +43,13 @@ void DS402_process(void)
 						case 11:
 						case 17:
 							motor.param.phase_dir=1;
-							motor.motion.commutation_founded=1;
+					motor.wkc.lic_aprove.bits.commutation_founded = 1;
 							//kci=0;	
 						case 0:
 							if(motor.motion.Error_State.all==0)
 							{
 								start_pwm(&htim1);
-								motor_on=1;
+								motor.wkc.lic_aprove.bits.motor_on=1;
 							}
 							break;
 						case 1:
@@ -62,17 +62,17 @@ void DS402_process(void)
 						case 2:
 						case 5:
 						case 7:	
-							if(motor.motion.commutation_founded==0)
+							if(motor.wkc.lic_aprove.bits.commutation_founded ==0)
 							{
 								find_commutation();
 								delay_ms(1);
 							}
-							if(motor.motion.commutation_founded==1)
+							if(motor.wkc.lic_aprove.bits.commutation_founded ==1)
 							{
 								if(motor.motion.Error_State.all==0)
 								{
 									start_pwm(&htim1);
-									motor_on=1;
+									motor.wkc.lic_aprove.bits.motor_on=1;
 								}
 							}
 							break;
@@ -83,11 +83,11 @@ void DS402_process(void)
 				break;
 			case 0x06:
 				stop_pwm(&htim1);
-				motor_on=0;
+				motor.wkc.lic_aprove.bits.motor_on=0;
 				break;
 			case 0x86:
 				stop_pwm(&htim1);
-				motor_on=0;
+				motor.wkc.lic_aprove.bits.motor_on=0;
 				//drv8301_error=0;
 				motor.motion.Error_State.all=0;
 				//enc_z.counting_error=0;
@@ -100,7 +100,7 @@ void DS402_process(void)
 	if(motor.motion.Error_State.all)
 	{
 		stop_pwm(&htim1);
-		motor_on=0;	
+		motor.wkc.lic_aprove.bits.motor_on=0;	
 	}
 
 }

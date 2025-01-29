@@ -26,40 +26,39 @@ int check_pos_overshot_p=0,check_pos_overshot_n=0;
 int Position_loop_first=0;
 void Position_Loop(Motor_t* motors, int target_pos)
 {
-	if(operation_mode<11)
-	{
-		switch(motors->feedback_type)
-		{
-			case Default:
-			case Tamagawa:
-				pos_actual=motors->encoder_state-pos_offest;
-			break;
-			default:
-			break;
+	// if(operation_mode<11)
+	// {
+	// 	switch(motors->feedback_type)
+	// 	{
+	// 		case Default:
+	// 		case Tamagawa:
+	// 			pos_actual=motors->encoder_state-pos_offest;
+	// 		break;
+	// 		default:
+	// 		break;
 				
-		}
-	}
-	else if(operation_mode>10)
-		pos_actual=hall_position;
-	
+	// 	}
+	// }
+	// else if(operation_mode>10)
+	// 	pos_actual=hall_position;
+	pos_actual=motors->encoder_state-pos_offest;
+
 	//ENC_Z_Check();
 	switch(operation_mode)
 	{
 		case 1:
 		case 3:
 		case 7:	
-			if(motor.motion.commutation_founded&&motor_on)
+			//if(motor.wkc.lic_aprove.bits.commutation_founded &&motor_on)
+			if(motor.wkc.lic_aprove.bits.motor_on)
 			{
-				pos_err = target_pos - pos_actual;
-				vel_des = kpp * pos_err+kpi_sum;
-				kpi_sum=kpi_sum+kpi*pos_err;
-				
-				if(kpi_sum > kpi_sum_limit)kpi_sum = kpi_sum_limit;
-				if(kpi_sum < -kpi_sum_limit)kpi_sum = -kpi_sum_limit;
-				if (vel_des >  vel_lim) vel_des =  vel_lim;
-				if (vel_des < -vel_lim) vel_des = -vel_lim;
-				
-				speed_demand=Low_pass_filter_1(position_out_lpf_a,vel_des,speed_demand);
+
+			APID_Set_Target(&motors->apidp, target_pos);
+ 
+			APID_Set_Present(&motors->apidp, pos_actual);
+ 			APID_Hander(&motors->apidp, 1);
+
+			speed_demand=Low_pass_filter_1(position_out_lpf_a,motors->apidp.parameter.out,speed_demand);
 				//speed_demand=vel_des;
 			}
 			if(target_pos>0)
@@ -76,7 +75,7 @@ void Position_Loop(Motor_t* motors, int target_pos)
 		case 11:
 		case 13:
 		case 17:	
-			if(motor.motion.commutation_founded&&motor_on)
+			if(motor.wkc.lic_aprove.bits.commutation_founded &&motor.wkc.lic_aprove.bits.motor_on)
 			{
 				pos_err = target_pos - pos_actual;
 				/*

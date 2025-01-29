@@ -137,7 +137,7 @@ extern s32 pos_actual,pos_offest;
 extern int Iq_demand,Id_demand,target_Iq,target_Id,target_speed,speed_demand,target_position,target_position_b,position_demand;
 extern short operation_mode,operation_mode_buff;
 extern union Control_uint16_t  control_word,control_word_b;
-extern u16 motor_on;
+//extern u16 motor_on;
 // extern short Driver_Ready;
 // extern int drv8301_error;
 // extern unsigned short enc_z.count,enc_z.count_back,enc_z.count_c,enc_z.first,enc_z.trig,enc_z.counting_error;

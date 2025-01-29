@@ -14,7 +14,7 @@ typedef union LicenseDomain
 	{
 		uint8_t drv_init:1;						//0
 		uint8_t drv_ready:1;						//1
-		uint8_t :1;											//2
+		uint8_t motor_on:1;											//2
 		uint8_t enc_touched:1;						//3
 		uint8_t :1;			//4
 		uint8_t :1;		//5
@@ -43,7 +43,7 @@ typedef union LicenseDomain
 		uint8_t :1;											//23
 		uint8_t :1;											//24
 		uint8_t :1;											//25
-		uint8_t :1;											//26
+		uint8_t commutation_founded:1;											//26
 		uint8_t :1;											//27
 		uint8_t :1;											//28
 		uint8_t :1;											//29

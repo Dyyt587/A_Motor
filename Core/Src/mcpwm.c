@@ -82,7 +82,9 @@ Motor_t motor = {
 };
 int update_motor_work_handle(wkc_t *wkc)
 {
+	send_to_tamagawa();
 	update_motor((Motor_t *)wkc->user_date, tamagawa_angle); // 更新电角度
+	Update_Speed((Motor_t *)wkc->user_date);
 	return 0;
 }
 int Current_loop_work_handle(wkc_t *wkc)
@@ -93,7 +95,6 @@ int Current_loop_work_handle(wkc_t *wkc)
 
 int Velocity_loop_work_handle(wkc_t *wkc) // 电流环控制
 {
-	send_to_tamagawa();
 	Velocity_loop((Motor_t *)wkc->user_date, speed_demand);
 	return 0;
 }
@@ -144,6 +145,8 @@ wkc_work_t Velocity_loop_work = {
 	.licence = {
 		.bits.drv_ready = 1,
 		.bits.drv_init = 1,
+		.bits.commutation_founded = 1,
+		.bits.motor_on = 1,
 	},
 	.trig_level = 3, // 触发等级，每4次触发
 	.trig_cnt = 1,	 // 防止第一次超时
@@ -156,6 +159,8 @@ wkc_work_t Position_loop_work = {
 	.licence = {
 		.bits.drv_ready = 1,
 		.bits.drv_init = 1,
+		.bits.commutation_founded = 1,
+		.bits.motor_on = 1,
 	},
 	.trig_level = 7, // 触发等级，每8次触发
 	.trig_cnt = 2,
@@ -192,9 +197,9 @@ void init_motor_control(void)
 	//APID_Set_Integral_Limit(&motor.apidv, kvi_sum_limit * 10);
 	APID_Set_Out_Limit(&motor.apidv, Ilim * 1000);
 
-	APID_Init(&motor.apidp, PID_POSITION, kp, ki, 0);
-	APID_Set_Integral_Limit(&motor.apidp, kci_sum_limit * 10);
-	APID_Set_Out_Limit(&motor.apidp, Vq_out_limit * 1000);
+	APID_Init(&motor.apidp, PID_POSITION, kpp, kpi, 0);
+	APID_Set_Integral_Limit(&motor.apidp, kpi_sum_limit);
+	APID_Set_Out_Limit(&motor.apidp, vel_lim );
 
 
 	wkc_init(&motor.wkc);
@@ -367,7 +372,7 @@ void find_commutation(void)
 		case Unknown_8:
 			motor.param.phase_dir = 1; // must set back to the default value
 			start_pwm(&htim1);
-			motor_on = 1;
+			motor.wkc.lic_aprove.bits.motor_on = 1;
 			motor.phase = 0;
 			my_p0 = get_electric_phase(commutation_current);
 			motor.phase = PI / 2;
@@ -382,7 +387,8 @@ void find_commutation(void)
 				motor.param.phase_dir = 1;
 				if ((motor.motion.feedback_resolution / (5 * motor.param.poles_num)) < (my_p1 - my_p0) && (my_p1 - my_p0) < (motor.motion.feedback_resolution / (3 * motor.param.poles_num)))
 				{
-					motor.motion.commutation_founded = 1;
+					//motor.motion.commutation_founded = 1;
+					motor.wkc.lic_aprove.bits.commutation_founded = 1;
 					motor.encoder_state = 0;
 					motor.encoder_offset = my_p0 % motor.motion.feedback_resolution;
 				}
@@ -392,23 +398,23 @@ void find_commutation(void)
 				motor.param.phase_dir = -1;
 				if ((motor.motion.feedback_resolution / (5 * motor.param.poles_num)) < (my_p0 - my_p1) && (my_p1 - my_p0) < (motor.motion.feedback_resolution / (3 * motor.param.poles_num)))
 				{
-					motor.motion.commutation_founded = 1;
+					motor.wkc.lic_aprove.bits.commutation_founded = 1;
 					motor.encoder_state = 0;
 					motor.encoder_offset = motor.motion.feedback_resolution - my_p0 % motor.motion.feedback_resolution;
 				}
 			}
 			if (motor.feedback_type == Tamagawa)
 			{
-				if (motor.motion.commutation_founded == 1)
+				if (motor.wkc.lic_aprove.bits.commutation_founded  == 1)
 				{
 					tamagawa_dir = motor.param.phase_dir;
 					tamagawa_offset = motor.encoder_offset;
 				}
 			}
-			if (motor.motion.commutation_founded == 0)
+			if (motor.wkc.lic_aprove.bits.commutation_founded  == 0)
 			{
 				stop_pwm(&htim1);
-				motor_on = 0;
+				motor.wkc.lic_aprove.bits.motor_on = 0;
 			}
 			break;
 		default:
@@ -424,13 +430,13 @@ void find_commutation(void)
 			//			enc_z.count = 0;
 			//			enc_z.count_back = 0;
 			//			enc_z.first = 0;
-			motor.motion.commutation_founded = 1;
+					motor.wkc.lic_aprove.bits.commutation_founded = 1;
 			break;
 		case Tamagawa:
 			motor.param.phase_dir = tamagawa_dir;
 			motor.encoder_state = tamagawa_angle;
 			motor.encoder_offset = tamagawa_offset;
-			motor.motion.commutation_founded = 1;
+					motor.wkc.lic_aprove.bits.commutation_founded = 1;
 			break;
 		default:
 			break;
@@ -470,7 +476,7 @@ void update_motor(Motor_t *motors, uint16_t angle)
 	// ph = fmod(ph, 2 * PI);
 	ph = ph % (2 * PI);
 
-	if (motors->motion.commutation_founded)
+	if (motor.wkc.lic_aprove.bits.commutation_founded)
 		motors->phase = ph;
 }
 

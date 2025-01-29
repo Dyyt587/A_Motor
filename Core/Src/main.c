@@ -111,7 +111,7 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 	//delay_init(64);
-
+	start_cycle_counter();
 	Init_Modbus_Addr_List();
 
 	Init_System_Parameter();

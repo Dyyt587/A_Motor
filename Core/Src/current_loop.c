@@ -55,7 +55,7 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 //	Iq_real = -motors->svpwm.Qs * motors->param.phase_dir;
 //	Id_real = -motors->svpwm.Ds * motors->param.phase_dir;
 
-	if (motor_on)
+	if (motor.wkc.lic_aprove.bits.motor_on)
 	{
 
 		 __cycleof__("my algorithm", {nCycleUsed = _;})

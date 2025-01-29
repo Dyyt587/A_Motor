@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "mcpwm.h"
 #include "string.h"
+#include "perf_counter.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -212,6 +213,7 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 
   /* USER CODE END TIM1_BRK_UP_TRG_COM_IRQn 1 */
 }
+int32_t dd = 0;
 
 /**
   * @brief This function handles TIM1 capture compare interrupt.
@@ -235,7 +237,9 @@ void TIM1_CC_IRQHandler(void)
 	// if(Scop_Start)
 	// 	Process_Scop_Data();
 	
-
+	static int32_t nCycles = 0;
+	dd  = stop_cycle_counter()-nCycles;
+	nCycles = stop_cycle_counter();  //!< 第一次获取从开始以来的时间
   /* USER CODE END TIM1_CC_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
   /* USER CODE BEGIN TIM1_CC_IRQn 1 */
@@ -259,7 +263,7 @@ void TIM6_IRQHandler(void)
 			
 		// 	//HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, GPIO_PIN_RESET);
 		// }
-					if(motor_on)
+					if(motor.wkc.lic_aprove.bits.motor_on)
 				Motion_process();
   /* USER CODE END TIM6_IRQn 0 */
   HAL_TIM_IRQHandler(&htim6);
