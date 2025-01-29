@@ -28,7 +28,7 @@ void Position_Loop(Motor_t* motors, int target_pos)
 {
 	if(operation_mode<11)
 	{
-		switch(feedback_type)
+		switch(motors->feedback_type)
 		{
 			case Default:
 			case Tamagawa:

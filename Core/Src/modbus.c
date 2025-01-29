@@ -166,7 +166,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   char res;
 	if(huart->Instance==USART3)
 	{
-		switch(feedback_type)
+		switch(motor.feedback_type)
 		{
 			case Tamagawa:
 				Tamagawa_calCRC=Tamagawa_RX_BUFF[0]^Tamagawa_RX_BUFF[1]^Tamagawa_RX_BUFF[2]^Tamagawa_RX_BUFF[3]^Tamagawa_RX_BUFF[4]^Tamagawa_RX_BUFF[5];

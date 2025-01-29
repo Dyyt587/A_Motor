@@ -23,21 +23,20 @@
 /* Global variables ----------------------------------------------------------*/
 short vbus_voltage = 120, device_temperature = 250;
 int ADCValue[6], ADC_Offset[6], ADC_Value[6];
-//int Id, Iq, Iq_real, Id_real;
-// short phase_dir = 1;
-//  short phase_dir_B = 1, hall_phase_dir = 1,
+// int Id, Iq, Iq_real, Id_real;
+//  short phase_dir = 1;
+//   short phase_dir_B = 1, hall_phase_dir = 1,
 short vel_dir = 1;
 int Iq_demand = 0, Id_demand = 0;
 int speed_demand = 0, position_demand;
 int commutation_current = 2000, motor_rated_current = 2000, motor_peak_current = 2000, motor_overload_time = 1000;
 
-Encoder_Type_e feedback_type = Default;
 short over_voltage, under_voltage, chop_voltage, over_temperature;
 short tamagawa_offset = 0, tamagawa_dir = 1;
 
-//ENC_Z enc_z = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-//Hall_t hall = {0, 0, 0, 0, 0, 0}; // 霍尔传感器结构体
-// svpwm_t motor.svpwm = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+// ENC_Z enc_z = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+// Hall_t hall = {0, 0, 0, 0, 0, 0}; // 霍尔传感器结构体
+//  svpwm_t motor.svpwm = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 int encoder_direction_temp = 0, encoder_direction_temp_b = 0;
 short hall_phase[8], ENC_Z_Offset = 2680, hall_phase_offset = 0, ENC_Z_Phase = 0, ENC_Z_Phase_B = 0, ENC_Z_Phase_Err = 0;
@@ -79,33 +78,34 @@ Motor_t motor = {
 		.phase_dir = 1,
 	},
 
+	.feedback_type = Default,
 };
 int update_motor_work_handle(wkc_t *wkc)
 {
-	update_motor(&motor, tamagawa_angle); // 更新电角度
+	update_motor((Motor_t *)wkc->user_date, tamagawa_angle); // 更新电角度
 	return 0;
 }
 int Current_loop_work_handle(wkc_t *wkc)
 {
-	Current_loop(&motor, Id_demand, Iq_demand);
+	Current_loop((Motor_t *)wkc->user_date, Id_demand, Iq_demand);
 	return 0;
 }
 
 int Velocity_loop_work_handle(wkc_t *wkc) // 电流环控制
 {
 	send_to_tamagawa();
-	Velocity_loop(&motor, speed_demand);
+	Velocity_loop((Motor_t *)wkc->user_date, speed_demand);
 	return 0;
 }
 int Position_loop_work_handle(wkc_t *wkc)
 {
-	Position_Loop(&motor, position_demand);
+	Position_Loop((Motor_t *)wkc->user_date, position_demand);
 	return 0;
 }
 int Apply_SVM_PWM_work_handle(wkc_t *wkc)
 {
 	// Apply SVM
-	queue_modulation_timings(&motor);
+	queue_modulation_timings((Motor_t *)wkc->user_date);
 	return 0;
 }
 /* Private constant data -----------------------------------------------------*/
@@ -176,7 +176,19 @@ wkc_work_t Apply_SVM_PWM_work = {
 // Initalises the low level motor control and then starts the motor control threads
 void init_motor_control(void)
 {
+
+#define kp 600
+#define ki 30
+	APID_Init(&motor.apidd, PID_INCREMENT, kp, ki, 0);
+	APID_Set_Integral_Limit(&motor.apidd, kci_sum_limit * 10);
+	APID_Set_Out_Limit(&motor.apidd, Vd_out_limit * 1000);
+
+	APID_Init(&motor.apidq, PID_INCREMENT, kp, ki, 0);
+	APID_Set_Integral_Limit(&motor.apidq, kci_sum_limit * 10);
+	APID_Set_Out_Limit(&motor.apidq, Vq_out_limit * 1000);
+
 	wkc_init(&motor.wkc);
+	motor.wkc.user_date = &motor;
 	wkc_work_add(&motor.wkc, &update_motor_work);
 	wkc_work_add(&motor.wkc, &Current_loop_work);
 	wkc_work_add(&motor.wkc, &Velocity_loop_work);
@@ -198,7 +210,7 @@ void init_motor_control(void)
 	motor.wkc.lic_aprove.bits.drv_ready = 1;
 
 	delay_ms(20);
-	if (feedback_type == Tamagawa)
+	if (motor.feedback_type == Tamagawa)
 	{
 		if (Tamagawa_First < 10)
 		{
@@ -338,7 +350,7 @@ void find_commutation(void)
 	switch (motor.motion.commutation_mode)
 	{
 	case 0:
-		switch (feedback_type)
+		switch (motor.feedback_type)
 		{
 		case Default:
 		case Tamagawa:
@@ -375,7 +387,7 @@ void find_commutation(void)
 					motor.encoder_offset = motor.motion.feedback_resolution - my_p0 % motor.motion.feedback_resolution;
 				}
 			}
-			if (feedback_type == Tamagawa)
+			if (motor.feedback_type == Tamagawa)
 			{
 				if (motor.motion.commutation_founded == 1)
 				{
@@ -395,13 +407,13 @@ void find_commutation(void)
 		break;
 	case 1:
 	case 2:
-		switch (feedback_type)
+		switch (motor.feedback_type)
 		{
 		case Default:
 			motor.encoder_state = 0;
-//			enc_z.count = 0;
-//			enc_z.count_back = 0;
-//			enc_z.first = 0;
+			//			enc_z.count = 0;
+			//			enc_z.count_back = 0;
+			//			enc_z.first = 0;
 			motor.motion.commutation_founded = 1;
 			break;
 		case Tamagawa:
@@ -439,16 +451,16 @@ void update_motor(Motor_t *motors, uint16_t angle)
 
 	int ph;
 	// 计算电角度
-	int32_t enc_state_mod = motors->encoder_state % motor.motion.feedback_resolution;
-	if (motor.param.phase_dir == 1)
-		ph = PI / 2 + (rad_of_round * (enc_state_mod - motors->encoder_offset)) / motor.motion.feedback_resolution;
+	int32_t enc_state_mod = motors->encoder_state % motors->motion.feedback_resolution;
+	if (motors->param.phase_dir == 1)
+		ph = PI / 2 + (rad_of_round * (enc_state_mod - motors->encoder_offset)) / motors->motion.feedback_resolution;
 	else
-		ph = PI / 2 + (rad_of_round * ((motor.motion.feedback_resolution - enc_state_mod) - motors->encoder_offset)) / motor.motion.feedback_resolution;
+		ph = PI / 2 + (rad_of_round * ((motors->motion.feedback_resolution - enc_state_mod) - motors->encoder_offset)) / motors->motion.feedback_resolution;
 
 	// ph = fmod(ph, 2 * PI);
 	ph = ph % (2 * PI);
 
-	if (motor.motion.commutation_founded)
+	if (motors->motion.commutation_founded)
 		motors->phase = ph;
 }
 

@@ -111,15 +111,6 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 	//delay_init(64);
-	#define kp 600
-	#define ki 30
-  APID_Init(&motor.apidd, PID_INCREMENT, kp,ki, 0);
-  APID_Set_Integral_Limit(&motor.apidd, kci_sum_limit*10);
-  APID_Set_Out_Limit(&motor.apidd, Vd_out_limit*1000);
-
-  APID_Init(&motor.apidq, PID_INCREMENT, kp, ki, 0);
-  APID_Set_Integral_Limit(&motor.apidq, kci_sum_limit*10);
-  APID_Set_Out_Limit(&motor.apidq, Vq_out_limit*1000);
 
 	Init_Modbus_Addr_List();
 

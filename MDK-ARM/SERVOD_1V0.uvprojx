@@ -314,7 +314,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>5</Optim>
+            <Optim>3</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -400,19 +400,44 @@
               <FilePath>..\Core\Src\mcpwm.c</FilePath>
             </File>
             <File>
-              <FileName>crc_16.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\crc_16.c</FilePath>
-            </File>
-            <File>
               <FileName>current_loop.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\current_loop.c</FilePath>
             </File>
             <File>
+              <FileName>velocity_loop.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\velocity_loop.c</FilePath>
+            </File>
+            <File>
+              <FileName>position_loop.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\position_loop.c</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Core/Src/main.c</FilePath>
+            </File>
+            <File>
               <FileName>ds402.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\ds402.c</FilePath>
+            </File>
+            <File>
+              <FileName>parameter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\parameter.c</FilePath>
+            </File>
+            <File>
+              <FileName>motion_control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\motion_control.c</FilePath>
+            </File>
+            <File>
+              <FileName>ntc_calculate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ntc_calculate.c</FilePath>
             </File>
             <File>
               <FileName>modbus.c</FileName>
@@ -471,34 +496,9 @@
               </FileOption>
             </File>
             <File>
-              <FileName>motion_control.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\motion_control.c</FilePath>
-            </File>
-            <File>
-              <FileName>ntc_calculate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ntc_calculate.c</FilePath>
-            </File>
-            <File>
               <FileName>oled.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\oled.c</FilePath>
-            </File>
-            <File>
-              <FileName>parameter.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\parameter.c</FilePath>
-            </File>
-            <File>
-              <FileName>position_loop.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\position_loop.c</FilePath>
-            </File>
-            <File>
-              <FileName>sin_table.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\sin_table.c</FilePath>
             </File>
             <File>
               <FileName>sys.c</FileName>
@@ -514,16 +514,6 @@
               <FileName>utils.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\utils.c</FilePath>
-            </File>
-            <File>
-              <FileName>velocity_loop.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\velocity_loop.c</FilePath>
-            </File>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../Core/Src/main.c</FilePath>
             </File>
             <File>
               <FileName>gpio.c</FileName>
@@ -640,6 +630,16 @@
               <FileName>apid_ex_fuzzy.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\all_pid\src\apid_ex_fuzzy.c</FilePath>
+            </File>
+            <File>
+              <FileName>crc_16.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\crc_16.c</FilePath>
+            </File>
+            <File>
+              <FileName>sin_table.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\sin_table.c</FilePath>
             </File>
           </Files>
         </Group>

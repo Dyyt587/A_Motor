@@ -73,7 +73,7 @@ void Tamagawa_Read_Cmd(uint8_t *buf, uint16_t len)
 	// delay_us(2);
 	HAL_GPIO_WritePin(TAMAGAWA_TX_EN_GPIO_Port, TAMAGAWA_TX_EN_Pin, GPIO_PIN_RESET);
 	// delay_us(5);
-	switch (feedback_type)
+	switch (motor.feedback_type)
 	{
 	case Tamagawa:
 		HAL_UART_Receive_DMA(&huart3, Tamagawa_RX_BUFF, 6);

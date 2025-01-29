@@ -26,6 +26,15 @@
 #define AMP_GAIN        11.0
 
 /* Exported types ------------------------------------------------------------*/
+typedef enum{
+    Incremental=0U,
+    Default = 1U,
+    Unknown_2 = 2U,
+    Tamagawa=4U,
+    Tamagawa_1=5U,
+    Unknown_8=8U,
+}Encoder_Type_e;
+
 typedef struct {
     int phB;
     int phC;
@@ -43,16 +52,19 @@ typedef struct{
     uint8_t phase_dir;
     uint16_t motor_code;
 }param_t;
+
 typedef struct{
     union error_uint32_t Error_State;
     short commutation_founded , commutation_mode , commutation_time;
     int feedback_resolution;
 
 }motion_t;
+
 typedef struct{
     int target_speed, target_position, target_position_b, target_Iq, target_Id ;
-
+    
 }control_t;
+
 typedef struct {
     //osThreadId motor_thread;
     TIM_HandleTypeDef* motor_timer; //PWM timer
@@ -86,16 +98,12 @@ typedef struct {
     apid_t apidq;
 		
 	wkc_t wkc;
+
+    Encoder_Type_e feedback_type;
+
 } Motor_t;
 
-typedef enum{
-    Incremental=0U,
-    Default = 1U,
-    Unknown_2 = 2U,
-    Tamagawa=4U,
-    Tamagawa_1=5U,
-    Unknown_8=8U,
-}Encoder_Type_e;
+
 enum Motor_thread_signals {
     M_SIGNAL_PH_CURRENT_MEAS = 1u << 0
 };
@@ -136,7 +144,7 @@ extern u16 motor_on;
 // extern short hall_u,hall.v,hall.w,hall.state,hall.state_back;
 // extern ENC_Z enc_z;
 // extern Hall_t hall;
-extern Encoder_Type_e feedback_type;
+//extern Encoder_Type_e feedback_type;
 // extern svpwm_t svpwm;
 
 extern short hall_phase[],hall_phase_offset,ENC_Z_Offset;
@@ -184,9 +192,9 @@ extern u16 pluse_temp,pluse_temp_b,delta_pulse,delta_pulse_r;
 
 extern short motion_out_lpf_a;
 
-extern union can_int32_t Scop_Buffer[4][512];
-extern short Scop_Period,Scop_Period_counter,Scop_Buffer_point,Scop_Start,Scop_Data_Ready,Scop_Send_point;
-extern short Scop_Point[4];
+//extern union can_int32_t Scop_Buffer[4][512];
+//extern short Scop_Period,Scop_Period_counter,Scop_Buffer_point,Scop_Start,Scop_Data_Ready,Scop_Send_point;
+//extern short Scop_Point[4];
 
 extern int led_blink_counter,led_blink_period;
 extern char display_buff[40];
