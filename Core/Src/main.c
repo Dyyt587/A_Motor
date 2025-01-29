@@ -134,6 +134,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	control_word.all=0x0f;
+  motor.motion.work_mode = Position_Mode;
 	//motor.control.target_Iq  =600;
 	//motor.control.target_speed  =6000;
 	

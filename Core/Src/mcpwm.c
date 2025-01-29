@@ -72,10 +72,14 @@ Motor_t motor = {
 	.motion = {
 		.feedback_resolution = 4000,
 		.commutation_time = 1000,
+		.work_mode = Default_Mode,
 	},
 	.param = {
 		.poles_num = 2,
 		.phase_dir = 1,
+	},
+	.control = {
+		.requested_operation_mode = Default_Mode,
 	},
 
 	.feedback_type = Default,
@@ -102,7 +106,7 @@ int Velocity_loop_work_handle(wkc_t *wkc) // 电流环控制
 }
 int Position_loop_work_handle(wkc_t *wkc)
 {
-	//Position_Loop((Motor_t *)wkc->user_date, 0);
+	// Position_Loop((Motor_t *)wkc->user_date, 0);
 	Position_Loop((Motor_t *)wkc->user_date, position_demand);
 	return 0;
 }
@@ -200,13 +204,12 @@ void init_motor_control(void)
 	APID_Set_Out_Limit(&motor.apidq, Vq_out_limit * 1000);
 
 	APID_Init(&motor.apidv, PID_INCREMENT, 25, 1, 0);
-	//APID_Set_Integral_Limit(&motor.apidv, kvi_sum_limit * 10);
+	// APID_Set_Integral_Limit(&motor.apidv, kvi_sum_limit * 10);
 	APID_Set_Out_Limit(&motor.apidv, Ilim * 1000);
 
 	APID_Init(&motor.apidp, PID_POSITION, kpp, kpi, 0);
 	APID_Set_Integral_Limit(&motor.apidp, kpi_sum_limit);
-	APID_Set_Out_Limit(&motor.apidp, vel_lim );
-
+	APID_Set_Out_Limit(&motor.apidp, vel_lim);
 
 	wkc_init(&motor.wkc);
 	motor.wkc.user_date = &motor;
@@ -229,7 +232,7 @@ void init_motor_control(void)
 
 	motor.wkc.lic_aprove.bits.drv_init = 1;
 	motor.wkc.lic_aprove.bits.drv_ready = 1;
-	
+
 	motor.wkc.lic_aprove.bits.torque_mode = 1;
 	motor.wkc.lic_aprove.bits.velocity_mode = 1;
 	motor.wkc.lic_aprove.bits.position_mode = 1;
@@ -349,9 +352,15 @@ void queue_modulation_timings(Motor_t *motors)
 {
 
 	SVM(motors->svpwm.Alpha, motors->svpwm.Beta, &tA, &tB, &tC);
+
+
 	motors->PWM1_Duty = (tC * TIM_1_8_PERIOD_CLOCKS) / 1000;
 	motors->PWM2_Duty = (tB * TIM_1_8_PERIOD_CLOCKS) / 1000;
 	motors->PWM3_Duty = (tA * TIM_1_8_PERIOD_CLOCKS) / 1000;
+
+	// motors->PWM1_Duty = (0 * TIM_1_8_PERIOD_CLOCKS) / 1000;
+	// motors->PWM2_Duty = (0 * TIM_1_8_PERIOD_CLOCKS) / 1000;
+	// motors->PWM3_Duty = (900 * TIM_1_8_PERIOD_CLOCKS) / 1000;
 
 	motors->motor_timer->Instance->CCR1 = motors->PWM1_Duty;
 	motors->motor_timer->Instance->CCR2 = motors->PWM2_Duty;
@@ -397,7 +406,7 @@ void find_commutation(void)
 				motor.param.phase_dir = 1;
 				if ((motor.motion.feedback_resolution / (5 * motor.param.poles_num)) < (my_p1 - my_p0) && (my_p1 - my_p0) < (motor.motion.feedback_resolution / (3 * motor.param.poles_num)))
 				{
-					//motor.motion.commutation_founded = 1;
+					// motor.motion.commutation_founded = 1;
 					motor.wkc.lic_aprove.bits.commutation_founded = 1;
 					motor.encoder_state = 0;
 					motor.encoder_offset = my_p0 % motor.motion.feedback_resolution;
@@ -415,13 +424,13 @@ void find_commutation(void)
 			}
 			if (motor.feedback_type == Tamagawa)
 			{
-				if (motor.wkc.lic_aprove.bits.commutation_founded  == 1)
+				if (motor.wkc.lic_aprove.bits.commutation_founded == 1)
 				{
 					tamagawa_dir = motor.param.phase_dir;
 					tamagawa_offset = motor.encoder_offset;
 				}
 			}
-			if (motor.wkc.lic_aprove.bits.commutation_founded  == 0)
+			if (motor.wkc.lic_aprove.bits.commutation_founded == 0)
 			{
 				stop_pwm(&htim1);
 				motor.wkc.lic_aprove.bits.motor_on = 0;
@@ -440,13 +449,13 @@ void find_commutation(void)
 			//			enc_z.count = 0;
 			//			enc_z.count_back = 0;
 			//			enc_z.first = 0;
-					motor.wkc.lic_aprove.bits.commutation_founded = 1;
+			motor.wkc.lic_aprove.bits.commutation_founded = 1;
 			break;
 		case Tamagawa:
 			motor.param.phase_dir = tamagawa_dir;
 			motor.encoder_state = tamagawa_angle;
 			motor.encoder_offset = tamagawa_offset;
-					motor.wkc.lic_aprove.bits.commutation_founded = 1;
+			motor.wkc.lic_aprove.bits.commutation_founded = 1;
 			break;
 		default:
 			break;

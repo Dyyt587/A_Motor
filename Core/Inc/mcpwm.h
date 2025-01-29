@@ -35,6 +35,14 @@ typedef enum{
     Unknown_8=8U,
 }Encoder_Type_e;
 
+typedef enum{
+    Default_Mode=0U,
+    Torque_Mode = 1U,
+    Velocity_Mode = 2U,
+    Position_Mode = 3U,
+    Homing_Mode = 4U,
+}Operation_Type_e;
+
 typedef struct {
     int phB;
     int phC;
@@ -57,12 +65,13 @@ typedef struct{
     union error_uint32_t Error_State;
     short commutation_founded , commutation_mode , commutation_time;
     int feedback_resolution;
+    Operation_Type_e work_mode;
 
 }motion_t;
 
 typedef struct{
     int target_speed, target_position, target_position_b, target_Iq, target_Id ;
-    
+    Operation_Type_e requested_operation_mode;
 }control_t;
 
 typedef struct {
