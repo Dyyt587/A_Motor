@@ -32,67 +32,35 @@ void Velocity_loop(Motor_t *motors, int target_vel)
 {
 	Update_Speed(motors);
 
-	if(motor_on && operation_mode!=4)
+	if (motor_on && operation_mode != 4)
 	{
-							if(motor.motion.commutation_founded)
-				{
-					if(low_pass_filter_on)
-						speed_err=target_vel-real_speed_filter;
-					else
-						speed_err=target_vel-real_speed;
-					Iq_temp = vel_dir*(kvp * speed_err+kvi_sum);
-					kvi_sum=kvi_sum+kvi*speed_err;
-					if(kvi_sum > kvi_sum_limit*1000)kvi_sum = kvi_sum_limit*1000;
-					if(kvi_sum < -kvi_sum_limit*1000)kvi_sum = -kvi_sum_limit*1000;
-					Iq_temp=Iq_temp/1000;
-					if (Iq_temp > Ilim) Iq_temp = Ilim;
-					if (Iq_temp < -Ilim) Iq_temp = -Ilim;
-					Iq_demand=Low_pass_filter_1(speed_out_lpf_a,Iq_temp,Iq_demand);
-					//Iq_demand=Iq_temp;
-				}
+		if (motor.motion.commutation_founded)
+		{
+			// if (low_pass_filter_on)
+			// 	speed_err = target_vel - real_speed_filter;
+			// else
+			// 	speed_err = target_vel - real_speed;
+			// Iq_temp = vel_dir * (kvp * speed_err + kvi_sum);
+			// kvi_sum = kvi_sum + kvi * speed_err;
+			// if (kvi_sum > kvi_sum_limit * 1000)
+			// 	kvi_sum = kvi_sum_limit * 1000;
+			// if (kvi_sum < -kvi_sum_limit * 1000)
+			// 	kvi_sum = -kvi_sum_limit * 1000;
+			// Iq_temp = Iq_temp / 1000;
+			// if (Iq_temp > Ilim)
+			// 	Iq_temp = Ilim;
+			// if (Iq_temp < -Ilim)
+			// 	Iq_temp = -Ilim;
+			APID_Set_Target(&motors->apidv, target_vel);
+ 
+			APID_Set_Present(&motors->apidv, real_speed);
+			//APID_Set_Present(&motors->apidv, real_speed_filter);
+ 			APID_Hander(&motors->apidv, 1);
+
+			Iq_demand = Low_pass_filter_1(speed_out_lpf_a, -motors->apidv.parameter.out/1000, Iq_demand);
+			// Iq_demand=Iq_temp;
+		}
 	}
-	// if (motor_on)
-	// 	switch (operation_mode)
-	// 	{
-	// 	case 1:
-	// 	case 3:
-	// 	case 2:
-	// 	case 5:
-	// 	case 7:
-	// 		if (motor.motion.commutation_founded)
-	// 		{
-	// 			if (low_pass_filter_on)
-	// 				speed_err = target_vel - real_speed_filter;
-	// 			else
-	// 				speed_err = target_vel - real_speed;
-	// 			Iq_temp = vel_dir * (kvp * speed_err + kvi_sum);
-	// 			kvi_sum = kvi_sum + kvi * speed_err;
-	// 			if (kvi_sum > kvi_sum_limit * 1000)
-	// 				kvi_sum = kvi_sum_limit * 1000;
-	// 			if (kvi_sum < -kvi_sum_limit * 1000)
-	// 				kvi_sum = -kvi_sum_limit * 1000;
-	// 			Iq_temp = Iq_temp / 1000;
-	// 			if (Iq_temp > Ilim)
-	// 				Iq_temp = Ilim;
-	// 			if (Iq_temp < -Ilim)
-	// 				Iq_temp = -Ilim;
-	// 			Iq_demand = Low_pass_filter_1(speed_out_lpf_a, Iq_temp, Iq_demand);
-	// 			// Iq_demand=Iq_temp;
-	// 		}
-	// 		// if(target_vel>0)
-	// 		// {
-	// 		// 		if(speed_err<check_vel_overshot_p)
-	// 		// 			check_vel_overshot_p=speed_err;
-	// 		// }
-	// 		// if(target_vel<0)
-	// 		// {
-	// 		// 		if(speed_err>check_vel_overshot_n)
-	// 		// 			check_vel_overshot_n=speed_err;
-	// 		// }
-	// 		break;
-	// 	default:
-	// 		break;
-	// 	}
 }
 void Update_Speed(Motor_t *motors)
 {
@@ -106,55 +74,6 @@ void Update_Speed(Motor_t *motors)
 		display_speed = (motors->encoder_state - display_encoder_state_b) * 600 / motor.motion.feedback_resolution;
 		display_encoder_state_b = motors->encoder_state;
 	}
-	// switch(operation_mode)
-	// {
-	// 	case 1:
-	// 	case 3:
-	// 	case 4:
-	// 	case 2:
-	// 	case 5:
-	// 	case 7:
-	// 		real_speed=(motors->encoder_state-encoder_state_b)*1000*4000/motor.motion.feedback_resolution;
-	// 		encoder_state_b=motors->encoder_state;
-	// 		real_speed_filter=Low_pass_filter_1(speed_in_lpf_a,real_speed,real_speed_filter);
-	// 		display_speed_loop_count++;
-	// 		if(display_speed_loop_count>399) //100ms
-	// 		{
-	// 			display_speed_loop_count=0;
-	// 			display_speed=(motors->encoder_state-display_encoder_state_b)*600/motor.motion.feedback_resolution;
-	// 			display_encoder_state_b=motors->encoder_state;
-	// 		}
-	// 		//real_speed_filter=Low_pass_filter(real_speed_buff,real_speed,real_speed_filter_num);
-	// 		break;
-	// 	case 0:
-	// 		real_speed=speed_demand*637/(motor.param.poles_num);
-	// 		display_speed=real_speed/20;
-	// 		break;
-	// 	case 14:
-	// 	case 12:
-	// 	case 13:
-	// 	case 11:
-	// 	case 17:
-	// 		hall_speed_loop_count++;
-	// 		display_speed_loop_count++;
-	// 		if(hall_speed_loop_count>99)
-	// 		{
-	// 			hall_speed_loop_count=0;
-	// 			hall_speed_update=1;
-	// 			real_speed=((hall_position-hall_position_b)*6667)/motor.param.poles_num;
-	// 			hall_position_b=hall_position;
-	// 			//real_speed_filter=Low_pass_filter(real_speed_buff,real_speed,real_speed_filter_num);
-	// 			real_speed_filter=Low_pass_filter_1(speed_in_lpf_a,real_speed,real_speed_filter);
-	// 		}
-	// 		if(display_speed_loop_count>399) //100ms
-	// 		{
-	// 			display_speed_loop_count=0;
-	// 			display_speed=((hall_position-display_encoder_state_b)*1000)/motor.param.poles_num;
-	// 			display_encoder_state_b=hall_position;
-	// 		}
-	// 		break;
-
-	// }
 }
 
 int Low_pass_filter(int *Buffer, int X, int n)

@@ -99,6 +99,7 @@ int Velocity_loop_work_handle(wkc_t *wkc) // 电流环控制
 }
 int Position_loop_work_handle(wkc_t *wkc)
 {
+	//Position_Loop((Motor_t *)wkc->user_date, 0);
 	Position_Loop((Motor_t *)wkc->user_date, position_demand);
 	return 0;
 }
@@ -186,6 +187,15 @@ void init_motor_control(void)
 	APID_Init(&motor.apidq, PID_INCREMENT, kp, ki, 0);
 	APID_Set_Integral_Limit(&motor.apidq, kci_sum_limit * 10);
 	APID_Set_Out_Limit(&motor.apidq, Vq_out_limit * 1000);
+
+	APID_Init(&motor.apidv, PID_INCREMENT, 25, 1, 0);
+	//APID_Set_Integral_Limit(&motor.apidv, kvi_sum_limit * 10);
+	APID_Set_Out_Limit(&motor.apidv, Ilim * 1000);
+
+	APID_Init(&motor.apidp, PID_POSITION, kp, ki, 0);
+	APID_Set_Integral_Limit(&motor.apidp, kci_sum_limit * 10);
+	APID_Set_Out_Limit(&motor.apidp, Vq_out_limit * 1000);
+
 
 	wkc_init(&motor.wkc);
 	motor.wkc.user_date = &motor;

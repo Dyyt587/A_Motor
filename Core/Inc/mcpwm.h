@@ -94,8 +94,10 @@ typedef struct {
     param_t param;
 
     svpwm_t svpwm;
-    apid_t apidd;
-    apid_t apidq;
+    apid_t apidd;//id
+    apid_t apidq;//iq
+    apid_t apidv;//vel
+    apid_t apidp;//pos
 		
 	wkc_t wkc;
 
@@ -107,20 +109,20 @@ typedef struct {
 enum Motor_thread_signals {
     M_SIGNAL_PH_CURRENT_MEAS = 1u << 0
 };
-typedef struct
-{
-	unsigned short  count,  count_back,  count_c,  first,  trig,  counting_error;
-	short  diff,  diff_back;
-	int  pos,  pos_back,  pos_offset,  pos_diff,  pos_diff_back;
-} ENC_Z;
-typedef struct{
-    short u;
-    short v;
-    short w;
-    short state;
-    short state_back;
-    short error; 
-}Hall_t;
+// typedef struct
+// {
+// 	unsigned short  count,  count_back,  count_c,  first,  trig,  counting_error;
+// 	short  diff,  diff_back;
+// 	int  pos,  pos_back,  pos_offset,  pos_diff,  pos_diff_back;
+// } ENC_Z;
+// typedef struct{
+//     short u;
+//     short v;
+//     short w;
+//     short state;
+//     short state_back;
+//     short error; 
+// }Hall_t;
 
 /* Exported constants --------------------------------------------------------*/
 extern short vbus_voltage,device_temperature;
