@@ -130,3 +130,11 @@ int SVM(int alpha, int beta, int* tA, int* tB, int* tC) {
     ) retval = -1;
     return retval;
 }
+
+int64_t get_time_us(void) {
+    return get_system_us();
+}
+
+int64_t get_time_ms(void) {
+    return get_system_ms();
+}

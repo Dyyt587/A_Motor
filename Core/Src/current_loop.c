@@ -24,41 +24,34 @@ static const int sqrt3_by_2 = 866;
 uint64_t nCycleUsed = 0;
 int vfactor = 1;
 
-
- int Vq_out_limit = 700, Vd_out_limit = 700, kci_sum_limit = 100;
+int Vq_out_limit = 700, Vd_out_limit = 700, kci_sum_limit = 100;
 // short kcp = 20, kci = 0;
 // short current_in_lpf_a = 1000, current_out_lpf_a = 1000;
 // int check_current_overshot_p = 0, check_current_overshot_n = 0;
 // int Driver_IIt_Real = 0, Driver_IIt_Current, Driver_IIt_Real_DC = 0, Driver_IIt_Current_DC;
 // short Driver_IIt_Filter, Driver_IIt_Filter_DC;
 
-//extern apid_t apidd;
-//extern apid_t apidq;
+// extern apid_t apidd;
+// extern apid_t apidq;
 void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 {
 
 	Id_des = -Id_des * motors->param.phase_dir;
 	Iq_des = -Iq_des * motors->param.phase_dir;
 
-	motors->PhaseU_current_ma = phase_current_from_adcval(ADCValue[0] - ADC_Offset[0]);
-
-	motors->PhaseW_current_ma = phase_current_from_adcval(ADCValue[1] - ADC_Offset[1]);
-
-	motors->PhaseV_current_ma = -motors->PhaseU_current_ma - motors->PhaseW_current_ma;
-
 	// Clarke transform
-	clarke_calc_3(&motors->svpwm, motors->PhaseU_current_ma, motors->PhaseV_current_ma, motors->PhaseW_current_ma);
+	clarke_calc_2(&motors->svpwm, motors->PhaseU_current_ma, motors->PhaseW_current_ma);
 
 	// Park transform
 	park_calc(&motors->svpwm, motors->svpwm.Alpha, motors->svpwm.Beta, motors->phase);
 
-//	Iq_real = -motors->svpwm.Qs * motors->param.phase_dir;
-//	Id_real = -motors->svpwm.Ds * motors->param.phase_dir;
+	//	Iq_real = -motors->svpwm.Qs * motors->param.phase_dir;
+	//	Id_real = -motors->svpwm.Ds * motors->param.phase_dir;
 
 	if (motor.wkc.lic_aprove.bits.motor_on)
 	{
 
-		 __cycleof__("my algorithm", {nCycleUsed = _;})
+		__cycleof__("my algorithm", { nCycleUsed = _; })
 		{
 
 			APID_Set_Target(&motors->apidd, Id_des);
@@ -81,8 +74,8 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 
 			int Vd = motors->apidd.parameter.out / 1000;
 			int Vq = motors->apidq.parameter.out / 1000;
-			int Vq_filter = Vq;// Low_pass_filter_1(current_out_lpf_a, Vq, Vq_filter);
-			int Vd_filter = Vd;//Low_pass_filter_1(current_out_lpf_a, Vd, Vd_filter);
+			int Vq_filter = Vq; // Low_pass_filter_1(current_out_lpf_a, Vq, Vq_filter);
+			int Vd_filter = Vd; // Low_pass_filter_1(current_out_lpf_a, Vd, Vd_filter);
 
 			int mod_d = vfactor * Vd_filter;
 			int mod_q = vfactor * Vq_filter;
@@ -103,11 +96,10 @@ void Current_loop(Motor_t *motors, int Id_des, int Iq_des)
 			// *IbusEst = mod_d * Id + mod_q * Iq;
 
 			// Inverse park transform
-			//ipark_calc(&motors->svpwm, mod_d, mod_q, motors->phase);
-			 motors->svpwm.Ds = mod_d;
-			 motors->svpwm.Qs = mod_q;
-			 _ipark_calc(&motors->svpwm);
-
+			// ipark_calc(&motors->svpwm, mod_d, mod_q, motors->phase);
+			motors->svpwm.Ds = mod_d;
+			motors->svpwm.Qs = mod_q;
+			_ipark_calc(&motors->svpwm);
 		}
 	}
 }

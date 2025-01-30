@@ -28,6 +28,7 @@
 ".\servod_1v0\apid_ex_fuzzy.o"
 ".\servod_1v0\crc_16.o"
 ".\servod_1v0\sin_table.o"
+".\servod_1v0\works.o"
 ".\servod_1v0\stm32g0xx_hal_adc.o"
 ".\servod_1v0\stm32g0xx_hal_adc_ex.o"
 ".\servod_1v0\stm32g0xx_ll_adc.o"

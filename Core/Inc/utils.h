@@ -6,6 +6,7 @@ extern "C" {
 #endif
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
+#include "perf_counter.h"
 
 int arm_cos_f32(int pahse);
 int arm_sin_f32(int pahse);
@@ -229,6 +230,9 @@ static inline void ipark_calc(svpwm_t* v, DateType _Ds, DateType _Qs, DateType _
 // Returns 0 on success, and -1 if the input was out of range
 int SVM(int alpha, int beta, int* tA, int* tB, int* tC);
 
+//获取全局系统时间
+int64_t get_time_us(void);
+int64_t get_time_ms(void);
 #ifdef __cplusplus
 }
 #endif

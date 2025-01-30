@@ -554,9 +554,12 @@ void OLED_Process(void)
 		extern int Vd;
 		extern uint64_t nCycleUsed;
 
-		temp=motor.apidd.parameter.present;
+		//temp=motor.apidd.parameter.present;
+		temp=motor.phase_resistor_moh;
+		
 		//sprintf(display_buff3,"%s%lld%s","p:",perfc_convert_ticks_to_us(nCycleUsed),"us");
-		sprintf(display_buff3,"%s%lld%s","p:",perfc_convert_ticks_to_us(dd),"us");
+		//sprintf(display_buff3,"%s%lld%s","p:",perfc_convert_ticks_to_us(dd),"us");
+		sprintf(display_buff3,"%s%lld%s","p:",motor.phase_resistor_moh,"moh");
 		
 	  OLED_ShowString(0,2,(u8*)display_buff,12);
 	  OLED_ShowString(0,3,(u8*)display_buff1,12);

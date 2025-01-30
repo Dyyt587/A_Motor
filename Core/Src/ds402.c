@@ -39,7 +39,7 @@ void DS402_process(void)
 
 				if (motor.wkc.lic_aprove.bits.commutation_founded == 0)
 				{
-					find_commutation();
+					//find_commutation();
 					delay_ms(1);
 				}
 				if (motor.wkc.lic_aprove.bits.commutation_founded == 1)

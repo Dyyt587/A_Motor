@@ -314,7 +314,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>4</Optim>
+            <Optim>2</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -640,6 +640,11 @@
               <FileName>sin_table.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\sin_table.c</FilePath>
+            </File>
+            <File>
+              <FileName>works.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\works.c</FilePath>
             </File>
           </Files>
         </Group>

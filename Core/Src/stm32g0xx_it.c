@@ -159,12 +159,6 @@ void SysTick_Handler(void)
 void DMA1_Channel1_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
-
-t2=SysTick->VAL;
-	t3=t1-t2;
-t2=t1;
-	if(t3>t4)
-		t4=t3;
   /* USER CODE END DMA1_Channel1_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_adc1);
   /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
@@ -224,7 +218,7 @@ void TIM1_CC_IRQHandler(void)
 	memcpy(ADCValue,ADC_Value,sizeof(ADCValue));
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value, 6);
 	
-	vbus_voltage=(ADCValue[3]*19)/106;
+	motor.motion.vbus_voltage=(ADCValue[3]*19)/106;
 
 	NTC_R_Value=1000*ADCValue[2]/(4096-ADCValue[2]);
 	device_temperature=Get_NTC_Temperature(NTC_R_Value);

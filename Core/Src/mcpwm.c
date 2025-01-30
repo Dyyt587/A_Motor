@@ -58,7 +58,7 @@ Motor_t motor = {
 	.PhaseW_current_ma = 0,
 
 	.shunt_conductance = 500, // 100 means 1 mOh, current sensing resistor
-	.phase_resistor = 5,	  //[S]
+	.phase_resistor_moh = 5,	  //[S]
 	.phase_inductance = 5,	  //[S]
 	.encoder_timer = &htim3,
 	.encoder_offset = 0,
@@ -73,6 +73,7 @@ Motor_t motor = {
 		.feedback_resolution = 4000,
 		.commutation_time = 1000,
 		.work_mode = Default_Mode,
+	
 	},
 	.param = {
 		.poles_num = 2,
@@ -84,111 +85,12 @@ Motor_t motor = {
 
 	.feedback_type = Default,
 };
-int update_motor_work_handle(wkc_t *wkc)
-{
-	send_to_tamagawa();
-	update_motor((Motor_t *)wkc->user_date, tamagawa_angle); // 更新电角度
-	Update_Speed((Motor_t *)wkc->user_date);
-	pos_actual = ((Motor_t *)wkc->user_date)->encoder_state - pos_offest;
-
-	return 0;
-}
-int Current_loop_work_handle(wkc_t *wkc)
-{
-	Current_loop((Motor_t *)wkc->user_date, Id_demand, Iq_demand);
-	return 0;
-}
-
-int Velocity_loop_work_handle(wkc_t *wkc) // 电流环控制
-{
-	Velocity_loop((Motor_t *)wkc->user_date, speed_demand);
-	return 0;
-}
-int Position_loop_work_handle(wkc_t *wkc)
-{
-	// Position_Loop((Motor_t *)wkc->user_date, 0);
-	Position_Loop((Motor_t *)wkc->user_date, position_demand);
-	return 0;
-}
-int Apply_SVM_PWM_work_handle(wkc_t *wkc)
-{
-	// Apply SVM
-	queue_modulation_timings((Motor_t *)wkc->user_date);
-	return 0;
-}
 /* Private constant data -----------------------------------------------------*/
 static const int one_by_sqrt3 = 577;
 static const int sqrt3_by_2 = 866;
 
 /* Function implementations --------------------------------------------------*/
-wkc_work_t update_motor_work = {
-	.name = "update_motor",
-	.handle = update_motor_work_handle,
-	.licence = {
-		.bits.drv_ready = 1,
-		.bits.drv_init = 1,
-	},
-	.trig_level = 0, // 触发等级，每次触发
-	.trig_cnt = 0,
-	.next = 0,
-	.user_date = &motor,
-};
-wkc_work_t Current_loop_work = {
-	.name = "Current_loop",
-	.handle = Current_loop_work_handle,
-	.licence = {
-		.bits.drv_ready = 1,
-		.bits.drv_init = 1,
-		.bits.torque_mode = 1,
 
-	},
-	.trig_level = 0, // 触发等级，每次触发
-	.trig_cnt = 0,
-	.next = 0,
-	.user_date = &motor,
-};
-wkc_work_t Velocity_loop_work = {
-	.name = "Velocity_loop",
-	.handle = Velocity_loop_work_handle,
-	.licence = {
-		.bits.drv_ready = 1,
-		.bits.drv_init = 1,
-		.bits.commutation_founded = 1,
-		.bits.motor_on = 1,
-		.bits.velocity_mode = 1,
-	},
-	.trig_level = 3, // 触发等级，每4次触发
-	.trig_cnt = 1,	 // 防止第一次超时
-	.next = 0,
-	.user_date = &motor,
-};
-wkc_work_t Position_loop_work = {
-	.name = "Position_loop",
-	.handle = Position_loop_work_handle,
-	.licence = {
-		.bits.drv_ready = 1,
-		.bits.drv_init = 1,
-		.bits.commutation_founded = 1,
-		.bits.motor_on = 1,
-		.bits.position_mode = 1,
-	},
-	.trig_level = 7, // 触发等级，每8次触发
-	.trig_cnt = 2,
-	.next = 0,
-	.user_date = &motor,
-};
-wkc_work_t Apply_SVM_PWM_work = {
-	.name = "Apply_SVM_PWM",
-	.handle = Apply_SVM_PWM_work_handle,
-	.licence = {
-		.bits.drv_ready = 1,
-		.bits.drv_init = 1,
-	},
-	.trig_level = 0, // 触发等级，每次触发
-	.trig_cnt = 0,
-	.next = 0,
-	.user_date = &motor,
-};
 // Initalises the low level motor control and then starts the motor control threads
 void init_motor_control(void)
 {
@@ -211,13 +113,8 @@ void init_motor_control(void)
 	APID_Set_Integral_Limit(&motor.apidp, kpi_sum_limit);
 	APID_Set_Out_Limit(&motor.apidp, vel_lim);
 
-	wkc_init(&motor.wkc);
-	motor.wkc.user_date = &motor;
-	wkc_work_add(&motor.wkc, &update_motor_work);
-	wkc_work_add(&motor.wkc, &Current_loop_work);
-	wkc_work_add(&motor.wkc, &Velocity_loop_work);
-	wkc_work_add(&motor.wkc, &Position_loop_work);
-	wkc_work_add(&motor.wkc, &Apply_SVM_PWM_work);
+	extern void works_init(void);
+	works_init();
 	delay_ms(10);
 	// if(vbus_voltage<140)
 	// motor.motion.Error_State=motor.motion.Error_State|0x0010;
@@ -353,29 +250,17 @@ void queue_modulation_timings(Motor_t *motors)
 
 	SVM(motors->svpwm.Alpha, motors->svpwm.Beta, &tA, &tB, &tC);
 
-
 	motors->PWM1_Duty = (tC * TIM_1_8_PERIOD_CLOCKS) / 1000;
 	motors->PWM2_Duty = (tB * TIM_1_8_PERIOD_CLOCKS) / 1000;
 	motors->PWM3_Duty = (tA * TIM_1_8_PERIOD_CLOCKS) / 1000;
 
-	// motors->PWM1_Duty = (0 * TIM_1_8_PERIOD_CLOCKS) / 1000;
-	// motors->PWM2_Duty = (0 * TIM_1_8_PERIOD_CLOCKS) / 1000;
-	// motors->PWM3_Duty = (900 * TIM_1_8_PERIOD_CLOCKS) / 1000;
+	//  motors->PWM1_Duty = (0 * TIM_1_8_PERIOD_CLOCKS) / 1000;
+	//  motors->PWM2_Duty = (1000 * TIM_1_8_PERIOD_CLOCKS) / 1000;
+	//  motors->PWM3_Duty = (1000 * TIM_1_8_PERIOD_CLOCKS) / 1000;
 
 	motors->motor_timer->Instance->CCR1 = motors->PWM1_Duty;
 	motors->motor_timer->Instance->CCR2 = motors->PWM2_Duty;
 	motors->motor_timer->Instance->CCR3 = motors->PWM3_Duty;
-}
-
-int32_t get_electric_phase(int commutation_current)
-{
-	int32_t phase_offset, current_step, i;
-
-	Iq_demand = commutation_current;
-	delay_ms(motor.motion.commutation_time);
-	phase_offset = motor.encoder_state;
-	delay_ms(motor.motion.commutation_time);
-	return phase_offset;
 }
 
 void find_commutation(void)
@@ -406,7 +291,6 @@ void find_commutation(void)
 				motor.param.phase_dir = 1;
 				if ((motor.motion.feedback_resolution / (5 * motor.param.poles_num)) < (my_p1 - my_p0) && (my_p1 - my_p0) < (motor.motion.feedback_resolution / (3 * motor.param.poles_num)))
 				{
-					// motor.motion.commutation_founded = 1;
 					motor.wkc.lic_aprove.bits.commutation_founded = 1;
 					motor.encoder_state = 0;
 					motor.encoder_offset = my_p0 % motor.motion.feedback_resolution;

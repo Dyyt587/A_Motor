@@ -66,7 +66,7 @@ typedef struct{
     short commutation_founded , commutation_mode , commutation_time;
     int feedback_resolution;
     Operation_Type_e work_mode;
-
+		short vbus_voltage;
 }motion_t;
 
 typedef struct{
@@ -86,7 +86,7 @@ typedef struct {
     int PhaseW_current_ma;
     int shunt_conductance; // 100 means 1 mOh, current sensing resistor
     int phase_inductance; // 1 means 1 uH
-    int phase_resistor; // 1 means 1 mOh
+    int64_t phase_resistor_moh; // 1 means 1 mOh
     TIM_HandleTypeDef* encoder_timer;
     int16_t encoder_offset;
     int32_t encoder_state; //编码器角度
@@ -108,7 +108,8 @@ typedef struct {
     apid_t apidv;//vel
     apid_t apidp;//pos
 		
-	wkc_t wkc;
+		wkc_t wkc;
+		wkc_t wkc_;
 
     Encoder_Type_e feedback_type;
 

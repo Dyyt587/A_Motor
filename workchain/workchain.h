@@ -73,6 +73,7 @@ struct wkc_work{
 struct wkc{
 	LicenseDomain lic_aprove;
 	wkc_work_t* works;//工作的链表头
+	wkc_work_t* current_work;//当前工作
 	void* user_date;//用于标记电机
 
 };
@@ -81,6 +82,7 @@ bool check_licence(wkc_t*wc,LicenseDomain licence);
 void wkc_init(wkc_t *wkc);
 int wkc_handle(wkc_t *wkc);
 void wkc_work_add(wkc_t *wkc,wkc_work_t* work);
+void wkc_work_del(wkc_t *wkc, wkc_work_t *work);
 #ifdef __cplusplus
 }
 #endif

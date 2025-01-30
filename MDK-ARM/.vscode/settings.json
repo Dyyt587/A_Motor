@@ -1,10 +1,10 @@
 {
+  "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
   "C_Cpp_Runner.debuggerPath": "gdb",
   "C_Cpp_Runner.cStandard": "",
   "C_Cpp_Runner.cppStandard": "",
-  "C_Cpp_Runner.msvcBatchPath": "",
   "C_Cpp_Runner.useMsvc": false,
   "C_Cpp_Runner.warnings": [
     "-Wall",
@@ -37,20 +37,7 @@
   "C_Cpp_Runner.warningsAsError": false,
   "C_Cpp_Runner.compilerArgs": [],
   "C_Cpp_Runner.linkerArgs": [],
-  "C_Cpp_Runner.includePaths": [
-    "d:\\A_Motor\\Core\\Inc",
-    "d:\\A_Motor\\Drivers\\STM32G0xx_HAL_Driver\\Inc",
-    "d:\\A_Motor\\Drivers\\STM32G0xx_HAL_Driver\\Inc\\Legacy",
-    "d:\\A_Motor\\Drivers\\CMSIS\\Device\\ST\\STM32G0xx\\Include",
-    "d:\\A_Motor\\Drivers\\CMSIS\\Include",
-    "C:\\Keil_v5\\ARM\\ARMCLANG\\include",
-    "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\arm_linux",
-    "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\arm_linux_compat",
-    "C:\\Keil_v5\\ARM\\ARMCLANG\\include\\libcxx",
-    "d:\\A_Motor\\MDK-ARM",
-    "d:\\A_Motor\\Core\\Src",
-    "d:\\A_Motor\\Drivers\\STM32G0xx_HAL_Driver\\Src"
-  ],
+  "C_Cpp_Runner.includePaths": [],
   "C_Cpp_Runner.includeSearch": [
     "*",
     "**/*"
@@ -68,11 +55,5 @@
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
-  "C_Cpp_Runner.msvcSecureNoWarnings": false,
-  "files.associations": {
-    "Kconfig": "python",
-    "mcpwm.h": "c",
-    "utils.h": "c",
-    "workchain.h": "c"
-  }
+  "C_Cpp_Runner.msvcSecureNoWarnings": false
 }

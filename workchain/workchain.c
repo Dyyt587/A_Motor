@@ -23,6 +23,7 @@ int wkc_handle(wkc_t *wkc)
 			{
 				WKC_HANDLE_CHECK(work)
 				{
+					wkc->current_work = work;
 					work->handle(wkc);
 				}
 				work->trig_cnt = 0;
@@ -50,5 +51,29 @@ void wkc_work_add(wkc_t *wkc, wkc_work_t *work)
 			return;
 		}
 		works->next = work;
+	}
+}
+void wkc_work_del(wkc_t *wkc, wkc_work_t *work)
+{
+	wkc_work_t *works = wkc->works;
+	if (wkc && work)
+	{
+		if (works)
+		{
+			if (works == work)
+			{
+				wkc->works = works->next;
+				return;
+			}
+			while (works->next)
+			{
+				if (works->next == work)
+				{
+					works->next = works->next->next;
+					return;
+				}
+				works = works->next;
+			}
+		}
 	}
 }
