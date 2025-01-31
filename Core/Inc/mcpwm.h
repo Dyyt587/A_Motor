@@ -191,12 +191,12 @@ extern short tamagawa_offset, tamagawa_dir;
 //   extern union error_uint32_t  Error_State;
 //
 //   extern int Vq_out_limit,Vd_out_limit,kci_sum_limit;
-extern int real_speed, real_speed_filter, speed_err, kvi_sum, kvi_sum_limit, Ilim;
+extern int real_speed, real_speed_filter, speed_err;// kvi_sum, kvi_sum_limit, Ilim;
 // extern short real_speed_filter_num,low_pass_filter_on;
 // extern short kvp,kvi;
 // extern short speed_in_lpf_a,speed_out_lpf_a;
 // extern short kpp,kpi;
-extern int vel_lim, kpi_sum_limit;
+//extern int vel_lim, kpi_sum_limit;
 
 extern short position_in_lpf_a, position_out_lpf_a;
 

@@ -47,8 +47,8 @@ void Init_Motor_Parameter(void)
 //	ENC_Z_Offset=2680;
 //	hall_phase_offset=708;
 	motor.param.phase_dir=1;            //矢量控制的相位方向，1或-1，由于调整适应电机方向的。
-	tamagawa_dir=1;        //通讯编码器方向，1或-1
-	tamagawa_offset=0;      //通讯编码器位置偏移
+	// tamagawa_dir=1;        //通讯编码器方向，1或-1
+	// tamagawa_offset=0;      //通讯编码器位置偏移
 	motor.feedback_type=Tamagawa;       	//编码器反馈类型，1表示增量式编码器，4表示多摩川通讯式编码器
 	
 }
@@ -69,22 +69,22 @@ void Init_Control_Parameter(void)
 //	kci_sum_limit=10000000;   //电流环积分限制
 //	current_in_lpf_a=1000;
 //	current_out_lpf_a=600;
-	Ilim=3000;     //输出电流限制，单位是mA
+//	Ilim=3000;     //输出电流限制，单位是mA
 	
 //	kvp=200;      //速度环比例增益kp
 //	kvi=1;					//速度环积分增益ki
-	kvi_sum_limit=5000;  //速度环积分限制
+//	kvi_sum_limit=5000;  //速度环积分限制
 //	low_pass_filter_on=1;
 //	real_speed_filter_num=4;
 //	speed_in_lpf_a=500;
 //	speed_out_lpf_a=300;
-	vel_lim=50000;   //速度限制，单位是0.001转每秒
+//	vel_lim=50000;   //速度限制，单位是0.001转每秒
 	
 //	kpp=10;		//位置环比例增益kp
 //	kpi=1;		//位置环积分增益ki
-	kpi_sum_limit=100;  //位置环积分限制
-	position_in_lpf_a=1000;
-	position_out_lpf_a=1000;
+//	kpi_sum_limit=100;  //位置环积分限制
+//	position_in_lpf_a=1000;
+//	position_out_lpf_a=1000;
 	
 //	profile_target_position=0;  //带加减速的目标位置
 //	profile_speed=30000;    //带加减速的最大速度，，单位0.001转每秒

@@ -230,7 +230,7 @@ void TIM1_CC_IRQHandler(void)
 	
 	static int32_t nCycles = 0;
 	dd  = stop_cycle_counter()-nCycles;
-	nCycles = stop_cycle_counter();  //!< 第一次获取从�?始以来的时间
+	nCycles = stop_cycle_counter();  //!< ç¬¬ä¸€æ¬¡èŽ·å�–ä»Žå¼?å§‹ä»¥æ�¥çš„æ—¶é—´
   /* USER CODE END TIM1_CC_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
   /* USER CODE BEGIN TIM1_CC_IRQn 1 */
@@ -245,15 +245,6 @@ void TIM6_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM6_IRQn 0 */
 
-		// if(position_loop_ready==1)
-		// {
-		// 	//HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, GPIO_PIN_SET);
-		// 	if(motor_on)
-		// 		Motion_process();
-		// 	position_loop_ready=0;
-			
-		// 	//HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, GPIO_PIN_RESET);
-		// }
 					if(motor.wkc.lic_aprove.bits.motor_on)
 				Motion_process();
   /* USER CODE END TIM6_IRQn 0 */
@@ -277,17 +268,17 @@ void USART1_IRQHandler(void)
 	u32 timeout=0;
 	
 	timeout=0;
-    while (HAL_UART_GetState(&huart1) != HAL_UART_STATE_READY)//|?§???ì??ì??y???ìaD??
+    while (HAL_UART_GetState(&huart1) != HAL_UART_STATE_READY)//|?Â§???Ã¬??Ã¬??y???Ã¬aD??
 	{
-	 timeout++;////3???ìo??§?è??|??ì?¨¨??ìa
+	 timeout++;////3???Ã¬o??Â§?Ã¨??|??Ã¬?Â¨Â¨??Ã¬a
      if(timeout>HAL_MAX_DELAY) break;		
 	
 	}
      
 	timeout=0;
-	while(HAL_UART_Receive_IT(&huart1, (u8 *)USART1RxBuffer, RXBUFFERSIZE) != HAL_OK)//??ì????????|??ì?¨¨??ìa??ìa??ìo3??ì|??o??ì???§o???D??a???D??2??§|??ì|??ì??ì??RxXferCount?a1
+	while(HAL_UART_Receive_IT(&huart1, (u8 *)USART1RxBuffer, RXBUFFERSIZE) != HAL_OK)//??Ã¬????????|??Ã¬?Â¨Â¨??Ã¬a??Ã¬a??Ã¬o3??Ã¬|??o??Ã¬???Â§o???D??a???D??2??Â§|??Ã¬|??Ã¬??Ã¬??RxXferCount?a1
 	{
-	 timeout++; //3???ìo??§?è??|??ì?¨¨??ìa
+	 timeout++; //3???Ã¬o??Â§?Ã¨??|??Ã¬?Â¨Â¨??Ã¬a
 	 if(timeout>HAL_MAX_DELAY) break;	
 	}
   /* USER CODE END USART1_IRQn 1 */
@@ -307,22 +298,45 @@ void USART2_IRQHandler(void)
 	u32 timeout=0;
 	
 	timeout=0;
-    while (HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)//|?§???ì??ì??y???ìaD??
+    while (HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)//|?Â§???Ã¬??Ã¬??y???Ã¬aD??
 	{
-	 timeout++;////3???ìo??§?è??|??ì?¨¨??ìa
+	 timeout++;////3???Ã¬o??Â§?Ã¨??|??Ã¬?Â¨Â¨??Ã¬a
      if(timeout>HAL_MAX_DELAY) break;		
 	
 	}
      
 	timeout=0;
-	while(HAL_UART_Receive_IT(&huart2, (u8 *)USART2RxBuffer, RXBUFFERSIZE) != HAL_OK)//??ì????????|??ì?¨¨??ìa??ìa??ìo3??ì|??o??ì???§o???D??a???D??2??§|??ì|??ì??ì??RxXferCount?a1
+	while(HAL_UART_Receive_IT(&huart2, (u8 *)USART2RxBuffer, RXBUFFERSIZE) != HAL_OK)//??Ã¬????????|??Ã¬?Â¨Â¨??Ã¬a??Ã¬a??Ã¬o3??Ã¬|??o??Ã¬???Â§o???D??a???D??2??Â§|??Ã¬|??Ã¬??Ã¬??RxXferCount?a1
 	{
-	 timeout++; //3???ìo??§?è??|??ì?¨¨??ìa
+	 timeout++; //3???Ã¬o??Â§?Ã¨??|??Ã¬?Â¨Â¨??Ã¬a
 	 if(timeout>HAL_MAX_DELAY) break;	
 	}
   /* USER CODE END USART2_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+	memcpy(ADCValue,ADC_Value,sizeof(ADCValue));
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value, 6);
+	
+	motor.motion.vbus_voltage=(ADCValue[3]*19)/106;
+
+	NTC_R_Value=1000*ADCValue[2]/(4096-ADCValue[2]);
+	device_temperature=Get_NTC_Temperature(NTC_R_Value);
+	
+
+
+	extern void motor_driver_handle(void);
+
+	motor_driver_handle();
+	// if(Scop_Start)
+	// 	Process_Scop_Data();
+	
+	static int32_t nCycles = 0;
+	dd  = stop_cycle_counter()-nCycles;
+	nCycles = stop_cycle_counter();  
+}
+
 
 /* USER CODE END 1 */

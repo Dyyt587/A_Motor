@@ -617,10 +617,10 @@ void KEY_Process(void)
 		break;
 	case 1:
 		if (key1_state < key1_state_b)
-			motor.control.target_position += 16535;
+			motor.control.target_position  += 16535;
 			//motor.motion.position_demand += 16535;
 		if (key2_state < key2_state_b)
-			motor.motion.position_demand -= 16535;
+			motor.control.target_position -= 16535;
 		break;
 	case 4:
 		if (key1_state < key1_state_b)

@@ -101,10 +101,10 @@ void send_to_tamagawa(void)
 			{
 				Tamagawa_lost++;
 			}
-			if (Tamagawa_count_temp > 20)
+			if (Tamagawa_count_temp > 40)
 			{
-				if (set_tamagawa_zero == 0)
-					motor.motion.Error_State.bits.ENC_error = 1;
+				//if (set_tamagawa_zero == 0)
+					//motor.motion.Error_State.bits.ENC_error = 1;
 			}
 		}
 	}

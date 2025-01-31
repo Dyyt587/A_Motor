@@ -32,17 +32,17 @@ extern "C"
     -----------------------------------------------------------------------------*/
     typedef struct
     {
-        /*                     clark      range      park         ipark             desc                         */
-        DateType As;     //   << Input             ---------    ---------        phase-a stator variable
-        DateType Bs;     //   << Input             ---------    ---------        phase-b stator variable
-        DateType Cs;     //   << Input             ---------    ---------        phase-c stator variable
-        DateType Alpha;  //   >> Output   0-1000   << Input     >> Output        stationary d-axis stator variable
-        DateType Beta;   //   >> Output   0-1000   << Input     >> Output        stationary q-axis stator variable
-        DateType Angle;  //   ---------            << Input     << Input         rotating angle (pu)
-        DateType Ds;     //   ---------            >> Output    << Input         rotating d-axis stator variable
-        DateType Qs;     //   ---------            >> Output    << Input         rotating q-axis stator variable
-        DateType Sine;   //  ---------            << Input     << Input         Sine term
-        DateType Cosine; //  ---------            << Input     << Input         Cosine term
+        /*                    clark          range             park         ipark             desc                         */
+        DateType As;     //  << Input    ?~? 0~1000(0-1)     ---------    ---------        phase-a stator variable
+        DateType Bs;     //  << Input    ?~? 0~1000(0-1)     ---------    ---------        phase-b stator variable
+        DateType Cs;     //  << Input    ?~? 0~1000(0-1)     ---------    ---------        phase-c stator variable
+        DateType Alpha;  //  >> Output   ?~? 0~1000(0-1)     << Input     >> Output        stationary d-axis stator variable
+        DateType Beta;   //  >> Output   ?~? 0~1000(0-1)     << Input     >> Output        stationary q-axis stator variable
+        DateType Angle;  //  ---------   ?~?[0~3124(0~pi)]   << Input     << Input         rotating angle (pu)
+        DateType Ds;     //  ---------   ?~? 0~1000(0-1)     >> Output    << Input         rotating d-axis stator variable
+        DateType Qs;     //  ---------   ?~? 0~1000(0-1)     >> Output    << Input         rotating q-axis stator variable
+        DateType Sine;   //  ---------   -16384~16384(-1~1)  << Input     << Input         Sine term
+        DateType Cosine; //  ---------   -16384~16384(-1~1)  << Input     << Input         Cosine term
     } svpwm_t;
 
 /*-----------------------------------------------------------------------------

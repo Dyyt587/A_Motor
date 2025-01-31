@@ -33,7 +33,7 @@ int update_motor_work_handle(wkc_t *wkc)
 }
 int Current_loop_work_handle(wkc_t *wkc)
 {
-		Motor_t * motors = (Motor_t *)wkc->user_date;
+	Motor_t *motors = (Motor_t *)wkc->user_date;
 
 	Current_loop((Motor_t *)wkc->user_date, motors->motion.Id_demand, motors->motion.Iq_demand);
 	return 0;
@@ -41,16 +41,16 @@ int Current_loop_work_handle(wkc_t *wkc)
 
 int Velocity_loop_work_handle(wkc_t *wkc) // 电流环控制
 {
-	Motor_t * motors = (Motor_t *)wkc->user_date;
+	Motor_t *motors = (Motor_t *)wkc->user_date;
 	Velocity_loop((Motor_t *)wkc->user_date, motors->motion.speed_demand);
 	return 0;
 }
 int Position_loop_work_handle(wkc_t *wkc)
 {
-		Motor_t * motors = (Motor_t *)wkc->user_date;
+	Motor_t *motors = (Motor_t *)wkc->user_date;
 
 	// Position_Loop((Motor_t *)wkc->user_date, 0);
-	Position_Loop((Motor_t *)wkc->user_date,  motors->motion.position_demand);
+	Position_Loop((Motor_t *)wkc->user_date, motors->motion.position_demand);
 	return 0;
 }
 int Apply_SVM_PWM_work_handle(wkc_t *wkc)
@@ -59,7 +59,7 @@ int Apply_SVM_PWM_work_handle(wkc_t *wkc)
 	queue_modulation_timings((Motor_t *)wkc->user_date);
 	return 0;
 }
-//int32_t get_electric_phase(int commutation_current)
+// int32_t get_electric_phase(int commutation_current)
 //{
 //	int32_t phase_offset, current_step, i;
 
@@ -117,7 +117,7 @@ int Find_Commutation_Jitter_work_handle(wkc_t *wkc)
 		}
 		break;
 	case 3:
-		if (++cnt == 3) // 3: 0  pi/2  0//第一次0消抖，后面两次记录数据
+		if (++cnt == 3) //11// 3: 0  pi/2  0//第一次0消抖，后面两次记录数据
 		{
 			/*完成角度获取*/
 			motors->motion.Iq_demand = 0;
@@ -278,6 +278,56 @@ int Measure_Resistance_work_handle(wkc_t *wkc)
 
 	return 0;
 }
+
+int Find_Poles_num_work_handle(wkc_t *wkc)
+{
+	Motor_t *motors = (Motor_t *)wkc->user_date;
+	static int step = 0;
+	static int64_t start_time_ms = 0;
+	static int Vd = 300;
+	static int cnt = 0;
+	static svpwm_t svpwm;
+	static int angle = 0;
+	volatile int64_t tmp;
+	switch (step)
+	{
+	case 0:
+		// 修改许可域,启动电机,记录时间
+		motors->wkc.lic_aprove.bits.torque_mode = 0;
+		motors->wkc.lic_aprove.bits.velocity_mode = 0;
+		motors->wkc.lic_aprove.bits.position_mode = 0;
+		start_time_ms = get_time_ms();
+		step = 1;
+	case 1:
+		if (angle<=3140*4)//(angle < 65535)
+		{
+			ipark_calc(&motors->svpwm, Vd, 0, angle);
+			if (get_time_ms() - start_time_ms > 50)
+			{
+				start_time_ms = get_time_ms();
+				angle+=31;
+			}
+		}
+		/* code */
+		break;
+	case 2:
+		step = 0;
+		motors->wkc.lic_aprove.bits.torque_mode = 1;
+		motors->wkc.lic_aprove.bits.velocity_mode = 1;
+		motors->wkc.lic_aprove.bits.position_mode = 1;
+		wkc_work_del(wkc, wkc->current_work);
+
+		/* code */
+		break;
+
+	default:
+		break;
+	}
+
+	return 0;
+	return 0;
+}
+
 wkc_work_t update_motor_work = {
 	.name = "update_motor",
 	.handle = update_motor_work_handle,
@@ -391,8 +441,23 @@ wkc_work_t Safe_Check_work = {
 	.licence = {
 		.bits.drv_ready = 1,
 		.bits.drv_init = 1,
+		.bits.commutation_founded = 1,
 	},
 	.trig_level = 5, // 触发等级，每6次触发
+	.trig_cnt = 0,
+	.next = 0,
+	.user_date = &motor,
+};
+
+wkc_work_t Find_Poles_num_work = {
+	.name = "Find_Poles_num",
+	.handle = Find_Poles_num_work_handle,
+	.licence = {
+		.bits.drv_ready = 1,
+		.bits.drv_init = 1,
+		.bits.commutation_founded = 1,
+	},
+	.trig_level = 0, // 触发等级，每次触发
 	.trig_cnt = 0,
 	.next = 0,
 	.user_date = &motor,
@@ -406,8 +471,11 @@ void works_init(void)
 	// wkc_work_add(&motor.wkc, &Measure_Resistance_work);
 
 	// 注意，根据实际情况，动态加载工作可能不会被调用
-	 wkc_work_add(&motor.wkc, &Find_Commutation_Jitter_work);
-	//wkc_work_add(&motor.wkc, &Find_Commutation_Saved_work);
+ //wkc_work_add(&motor.wkc, &Find_Commutation_Jitter_work);
+	wkc_work_add(&motor.wkc, &Find_Commutation_Saved_work);
+
+	wkc_work_add(&motor.wkc, &Find_Poles_num_work);
+
 	wkc_work_add(&motor.wkc, &update_motor_work);
 	wkc_work_add(&motor.wkc, &Current_loop_work);
 	wkc_work_add(&motor.wkc, &Velocity_loop_work);
