@@ -55,9 +55,9 @@ static const int sqrt3_by_2 = 866;
 /* Function implementations --------------------------------------------------*/
 
 // Initalises the low level motor control and then starts the motor control threads
-void init_motor_control(void)
+void init_motor_control(Motor_t* motors)
 {
-	Motor_t* motors = &motor;
+	//Motor_t* motors = &motor;
 // #define kp 600
 // #define ki 30
 	APID_Init(&motors->apidd, PID_INCREMENT, motors->param.pid_id.kp, motors->param.pid_id.ki, motors->param.pid_id.kd);

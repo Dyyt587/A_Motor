@@ -41,7 +41,7 @@ Motor_t motor = {
 		.poles_num = 2, .phase_dir = 1, .pid_id = {600, 30, 0, 100 * 10, 700 * 1000}, .pid_iq = {600, 30, 0, 100 * 10, 700 * 1000},
 
 		.pid_vel = {200, 1, 0, -1, 3000 * 1000},
-		.pid_pos = {10, 1, 0, 100, 50000}, // 50000;   //速度限制，单位是0.001转每秒
+		.pid_pos = {5, 1, 0, 100, 50000}, // 50000;   //速度限制，单位是0.001转每秒
 
 	},
 	.control = {
@@ -53,7 +53,7 @@ Motor_t motor = {
 };
 void amotor_part_init(void)
 {
-	init_motor_control();
+	init_motor_control(&motor);
 }
 void pwm_start(Motor_t *motors)
 {

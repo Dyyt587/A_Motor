@@ -216,7 +216,7 @@ extern short OLED_count, OLED_Period;
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions --------------------------------------------------------*/
 void safe_assert(int arg);
-void init_motor_control(void);
+void init_motor_control(Motor_t* motors);
 void pwm_trig_adc_cb(ADC_HandleTypeDef *hadc);
 void vbus_sense_adc_cb(ADC_HandleTypeDef *hadc);
 

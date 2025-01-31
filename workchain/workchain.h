@@ -44,8 +44,8 @@ typedef union LicenseDomain
 		uint8_t :1;											//24
 		uint8_t :1;											//25
 		uint8_t commutation_founded:1;											//26
-		uint8_t :1;											//27
-		uint8_t :1;											//28
+		uint8_t motor_require_on:1;											//27
+		uint8_t motor_require_off:1;											//28
 		uint8_t :1;											//29
 		uint8_t :1;											//30
 		uint8_t :1;											//31

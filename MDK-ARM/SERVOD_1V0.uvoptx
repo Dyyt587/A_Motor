@@ -157,66 +157,34 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>49</LineNumber>
+          <LineNumber>622</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134227360</Address>
+          <Address>134241606</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>D:\A_Motor\Core\Src\ds402.c</Filename>
+          <Filename>..\Core\Src\motion_control.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\SERVOD_1V0\../Core/Src/ds402.c\49</Expression>
+          <Expression>\\SERVOD_1V0\../Core/Src/motion_control.c\622</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>57</LineNumber>
+          <LineNumber>623</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134227394</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>D:\A_Motor\Core\Src\ds402.c</Filename>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\Core\Src\motion_control.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\SERVOD_1V0\../Core/Src/ds402.c\57</Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>31</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134227312</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>D:\A_Motor\Core\Src\ds402.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\SERVOD_1V0\../Core/Src/ds402.c\31</Expression>
-        </Bp>
-        <Bp>
-          <Number>3</Number>
-          <Type>0</Type>
-          <LineNumber>28</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>134227300</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>D:\A_Motor\Core\Src\ds402.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression>\\SERVOD_1V0\../Core/Src/ds402.c\28</Expression>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -581,6 +549,11 @@
           <count>7</count>
           <WinNumber>2</WinNumber>
           <ItemText>control_word</ItemText>
+        </Ww>
+        <Ww>
+          <count>8</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>motor.control.target_position,0x0A</ItemText>
         </Ww>
       </WatchWindow2>
       <Tracepoint>
