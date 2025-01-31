@@ -31,61 +31,6 @@
 //}
 
 
-#if !defined(__MICROLIB)  
- 
-#if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
-__asm (".global __use_no_semihosting\n\t");
- 
-//FILE __stdout;
- 
-/* __use_no_semihosting was requested, but _sys_exit was */
-void _sys_exit(int x)
-{
-    x = x;
-}
-/* __use_no_semihosting was requested, but _ttywrch was */
-void _ttywrch(int ch)
-{
-    ch = ch;
-}
-#elif defined(__CC_ARM)
-#pragma import(__use_no_semihosting)
- 
-struct __FILE
-{
-    int handle;
-};
-FILE __stdout;
- 
-/* __use_no_semihosting was requested, but _sys_exit was */
-void _sys_exit(int x)
-{
-    x = x;
-}
-#endif /* __ARMCC_VERSION */
- 
-#endif /* __MICROLIB */
- 
-#if defined ( __GNUC__ ) && !defined (__clang__) 
-/* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
-   set to 'Yes') calls __io_putchar() */
-#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-#else
-#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-#endif /* __GNUC__ */
- 
-/**
- * @brief  Retargets the C library printf function to the USART.
- * @param  None
- * @retval None
- */
-PUTCHAR_PROTOTYPE
-{
-	HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 1000);
-	return ch;
-}
-
-
 
 //接收状态
 //bit15，	接收完成标志
@@ -166,16 +111,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   char res;
 	if(huart->Instance==USART3)
 	{
-		switch(motor.feedback_type)
-		{
-			case Tamagawa:
+
 				Tamagawa_calCRC=Tamagawa_RX_BUFF[0]^Tamagawa_RX_BUFF[1]^Tamagawa_RX_BUFF[2]^Tamagawa_RX_BUFF[3]^Tamagawa_RX_BUFF[4]^Tamagawa_RX_BUFF[5];
 				if(Tamagawa_calCRC==0)
 				{
 					Tamagawa_count_temp=0;
 					tamagawa_angle_32=Tamagawa_RX_BUFF[4]*0x10000+Tamagawa_RX_BUFF[3]*0x100+Tamagawa_RX_BUFF[2];
 					tamagawa_angle=tamagawa_angle_32>>2;
-		
 					if(Tamagawa_First<10)
 						Tamagawa_First++;
 						//tamagawa_angle=Tamagawa_RX_BUFF[3]*0x40+(Tamagawa_RX_BUFF[2]>>2);
@@ -184,10 +126,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				{
 					Tamagawa_CRC_count++;
 				}
-			break;
-			default:
-			break;				
-		}
+
 	}
 	if(huart->Instance==USART2)//如果是串口3
 	{

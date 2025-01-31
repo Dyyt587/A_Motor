@@ -26,13 +26,14 @@ extern uint16_t Wait_Tamagawa,tamagawa_count,tamagawa_angle,tamagawa_angle_b,tam
 extern uint16_t set_tamagawa_zero,set_tamagawa_zero_count;
 extern uint32_t tamagawa_angle_32,tamagawa_ENID,tamagawa_ALMC;
 extern int16_t tamagawa_multi_turn;
-extern uint16_t tamagawa_angle_1,tamagawa_angle_2,tamagawa_angle_3,tamagawa_angle_4,tamagawa_angle_delta,tamagawa_angle_delta_1,tamagawa_angle_delta_2,tamagawa_angle_delta_3;
+//extern uint16_t tamagawa_angle_1,tamagawa_angle_2,tamagawa_angle_3,tamagawa_angle_4,tamagawa_angle_delta,tamagawa_angle_delta_1,tamagawa_angle_delta_2,tamagawa_angle_delta_3;
 
 #define RXBUFFERSIZE   1 					//缓存大小
 extern u8 USART3RxBuffer[RXBUFFERSIZE];			//HAL库USART接收Buffer
 
 void uart3_init(u32 baudrate);
-void Tamagawa_Read_Cmd(uint8_t *buf,uint16_t len);
+void Tamagawa_Read_Cmd(uint8_t cmd);
 void send_to_tamagawa(void);
+uint16_t get_Tamagawa_encoder(void);
 #endif
 

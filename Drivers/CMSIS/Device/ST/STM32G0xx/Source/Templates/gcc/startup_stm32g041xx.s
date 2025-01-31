@@ -127,7 +127,6 @@ Infinite_Loop:
 ******************************************************************************/
   .section .isr_vector,"a",%progbits
   .type g_pfnVectors, %object
-  .size g_pfnVectors, .-g_pfnVectors
 
 g_pfnVectors:
   .word _estack
@@ -178,6 +177,8 @@ g_pfnVectors:
   .word LPUART1_IRQHandler                /* LPUART1                      */
   .word 0                                 /* reserved                     */
   .word AES_RNG_IRQHandler                /* AES and RNG                  */
+
+  .size g_pfnVectors, .-g_pfnVectors
 
 /*******************************************************************************
 *
@@ -288,6 +289,3 @@ g_pfnVectors:
 
   .weak      AES_RNG_IRQHandler
   .thumb_set AES_RNG_IRQHandler,Default_Handler
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

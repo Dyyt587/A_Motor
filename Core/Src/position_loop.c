@@ -46,7 +46,7 @@ void Position_Loop(Motor_t *motors, int target_pos)
 		APID_Set_Present(&motors->apidp, pos_actual);
 		APID_Hander(&motors->apidp, 1);
 
-		speed_demand = Low_pass_filter_1(position_out_lpf_a, motors->apidp.parameter.out, speed_demand);
+		 motors->motion.speed_demand = Low_pass_filter_1(position_out_lpf_a, motors->apidp.parameter.out, motors->motion.speed_demand);
 	// ENC_Z_Check();
 //	switch (operation_mode)
 //	{
@@ -199,7 +199,7 @@ void Error_process(void)
 {
 	if (motor.motion.Error_State.all)
 	{
-		status_word.bits.operation_enable = 0;
-		status_word.bits.error = 1;
+		//status_word.bits.operation_enable = 0;
+		//status_word.bits.error = 1;
 	}
 }

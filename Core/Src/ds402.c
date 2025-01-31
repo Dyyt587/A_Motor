@@ -15,6 +15,7 @@
 #include <utils.h>
 #include "delay.h"
 #include "perf_counter.h"
+#include "amotor_port.h"
 
 short operation_mode = 1, operation_mode_buff = 0;
 union Status_uint16_t status_word;
@@ -46,7 +47,7 @@ void DS402_process(void)
 				{
 					if (motor.motion.Error_State.all == 0)
 					{
-						start_pwm(&htim1);
+						pwm_start(&motor);
 						motor.wkc.lic_aprove.bits.motor_on = 1;
 					}
 				}
@@ -54,7 +55,7 @@ void DS402_process(void)
 				{
 					if (motor.motion.Error_State.all == 0)
 					{
-						start_pwm(&htim1);
+						pwm_start(&motor);
 						motor.wkc.lic_aprove.bits.motor_on = 1;
 					}
 				}
@@ -68,11 +69,11 @@ void DS402_process(void)
 			}
 			break;
 		case 0x06:
-			stop_pwm(&htim1);
+			pwm_stop(&motor);
 			motor.wkc.lic_aprove.bits.motor_on = 0;
 			break;
 		case 0x86:
-			stop_pwm(&htim1);
+			pwm_stop(&motor);
 			motor.wkc.lic_aprove.bits.motor_on = 0;
 			// drv8301_error=0;
 			motor.motion.Error_State.all = 0;
@@ -83,9 +84,9 @@ void DS402_process(void)
 		}
 		control_word_b = control_word;
 	}
-	if (motor.motion.Error_State.all)
-	{
-		stop_pwm(&htim1);
-		motor.wkc.lic_aprove.bits.motor_on = 0;
-	}
+	// if (motor.motion.Error_State.all)
+	// {
+	// 	pwm_stop(&htim1);
+	// 	motor.wkc.lic_aprove.bits.motor_on = 0;
+	// }
 }

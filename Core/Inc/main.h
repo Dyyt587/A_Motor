@@ -238,6 +238,7 @@ void Error_Handler(void);
 #define SPI1_CS_GPIO_Port GPIOB
 #define OLED_RES_Pin GPIO_PIN_9
 #define OLED_RES_GPIO_Port GPIOB
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

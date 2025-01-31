@@ -33,6 +33,7 @@
 #include "math.h"
 #include "apid.h"
 #include "perf_counter.h"
+#include "amotor_port.h"
 
 /* USER CODE END Includes */
 
@@ -69,8 +70,6 @@ int i,j,k;
 int chanel1=2000,chanel2=2000,chanel3=2000
 	,chanel4=10;
 /* USER CODE END 0 */
-//apid_t apidd = {0};
-//apid_t apidq = {0};
 
 /**
   * @brief  The application entry point.
@@ -78,6 +77,7 @@ int chanel1=2000,chanel2=2000,chanel3=2000
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -112,6 +112,12 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	//delay_init(64);
 	start_cycle_counter();
+	
+	
+	//HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
+
+	//HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value, 6);
+
 	Init_Modbus_Addr_List();
 
 	Init_System_Parameter();
@@ -128,12 +134,14 @@ int main(void)
 	Init_Driver_State();
 	HAL_TIM_Base_Start_IT(&htim6);
 	
-	init_motor_control();
+	//init_motor_control();
+	amotor_part_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	control_word.all=0x0f;
+//	control_word.all=0x0f;
+motor.wkc.lic_aprove.bits.motor_on=1;
   motor.motion.work_mode = Position_Mode;
 	//motor.control.target_Iq  =600;
 	//motor.control.target_speed  =6000;
@@ -145,7 +153,7 @@ int main(void)
 			OLED_Process();
 			OLED_count=0;
 		}
-		DS402_process();
+		//DS402_process();
 		KEY_Process();
 		//RS232_Process();
 		//RS232_Solve_Service();

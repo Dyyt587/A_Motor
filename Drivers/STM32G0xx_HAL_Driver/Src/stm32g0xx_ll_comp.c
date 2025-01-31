@@ -6,16 +6,16 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2018 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2018 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
+
 #if defined(USE_FULL_LL_DRIVER)
 
 /* Includes ------------------------------------------------------------------*/
@@ -50,7 +50,7 @@
 /* COMP instance.                                                             */
 
 #define IS_LL_COMP_POWER_MODE(__POWER_MODE__)                                  \
-  (   ((__POWER_MODE__) == LL_COMP_POWERMODE_HIGHSPEED)                        \
+  (((__POWER_MODE__) == LL_COMP_POWERMODE_HIGHSPEED)                           \
    || ((__POWER_MODE__) == LL_COMP_POWERMODE_MEDIUMSPEED)                      \
   )
 
@@ -59,7 +59,7 @@
 /*       However, comparator instance kept as macro parameter for             */
 /*       compatibility with other STM32 families.                             */
 #define IS_LL_COMP_INPUT_PLUS(__COMP_INSTANCE__, __INPUT_PLUS__)               \
-  (   ((__INPUT_PLUS__) == LL_COMP_INPUT_PLUS_IO1)                             \
+  (((__INPUT_PLUS__) == LL_COMP_INPUT_PLUS_IO1)                                \
    || ((__INPUT_PLUS__) == LL_COMP_INPUT_PLUS_IO2)                             \
    || ((__INPUT_PLUS__) == LL_COMP_INPUT_PLUS_IO3)                             \
   )
@@ -69,7 +69,7 @@
 /*       However, comparator instance kept as macro parameter for             */
 /*       compatibility with other STM32 families.                             */
 #define IS_LL_COMP_INPUT_MINUS(__COMP_INSTANCE__, __INPUT_MINUS__)             \
-  (   ((__INPUT_MINUS__) == LL_COMP_INPUT_MINUS_1_4VREFINT)                    \
+  (((__INPUT_MINUS__) == LL_COMP_INPUT_MINUS_1_4VREFINT)                       \
    || ((__INPUT_MINUS__) == LL_COMP_INPUT_MINUS_1_2VREFINT)                    \
    || ((__INPUT_MINUS__) == LL_COMP_INPUT_MINUS_3_4VREFINT)                    \
    || ((__INPUT_MINUS__) == LL_COMP_INPUT_MINUS_VREFINT)                       \
@@ -81,19 +81,19 @@
   )
 
 #define IS_LL_COMP_INPUT_HYSTERESIS(__INPUT_HYSTERESIS__)                      \
-  (   ((__INPUT_HYSTERESIS__) == LL_COMP_HYSTERESIS_NONE)                      \
+  (((__INPUT_HYSTERESIS__) == LL_COMP_HYSTERESIS_NONE)                         \
    || ((__INPUT_HYSTERESIS__) == LL_COMP_HYSTERESIS_LOW)                       \
    || ((__INPUT_HYSTERESIS__) == LL_COMP_HYSTERESIS_MEDIUM)                    \
    || ((__INPUT_HYSTERESIS__) == LL_COMP_HYSTERESIS_HIGH)                      \
   )
 
 #define IS_LL_COMP_OUTPUT_POLARITY(__POLARITY__)                               \
-  (   ((__POLARITY__) == LL_COMP_OUTPUTPOL_NONINVERTED)                        \
+  (((__POLARITY__) == LL_COMP_OUTPUTPOL_NONINVERTED)                           \
    || ((__POLARITY__) == LL_COMP_OUTPUTPOL_INVERTED)                           \
   )
 
 #define IS_LL_COMP_OUTPUT_BLANKING_SOURCE(__OUTPUT_BLANKING_SOURCE__)          \
-  (   ((__OUTPUT_BLANKING_SOURCE__) == LL_COMP_BLANKINGSRC_NONE)               \
+  (((__OUTPUT_BLANKING_SOURCE__) == LL_COMP_BLANKINGSRC_NONE)               \
    || ((__OUTPUT_BLANKING_SOURCE__) == LL_COMP_BLANKINGSRC_TIM1_OC4)           \
    || ((__OUTPUT_BLANKING_SOURCE__) == LL_COMP_BLANKINGSRC_TIM1_OC5)           \
    || ((__OUTPUT_BLANKING_SOURCE__) == LL_COMP_BLANKINGSRC_TIM2_OC3)           \
@@ -165,7 +165,7 @@ ErrorStatus LL_COMP_DeInit(COMP_TypeDef *COMPx)
   *          - SUCCESS: COMP registers are initialized
   *          - ERROR: COMP registers are not initialized
   */
-ErrorStatus LL_COMP_Init(COMP_TypeDef *COMPx, LL_COMP_InitTypeDef *COMP_InitStruct)
+ErrorStatus LL_COMP_Init(COMP_TypeDef *COMPx, const LL_COMP_InitTypeDef *COMP_InitStruct)
 {
   ErrorStatus status = SUCCESS;
 
@@ -251,5 +251,3 @@ void LL_COMP_StructInit(LL_COMP_InitTypeDef *COMP_InitStruct)
   */
 
 #endif /* USE_FULL_LL_DRIVER */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -14,6 +14,7 @@
 #include "delay.h"
 #include "perf_counter.h"
 #include "workchain.h"
+#include "amotor_port.h"
 
 /* Private defines -----------------------------------------------------------*/
 
@@ -36,7 +37,7 @@ short tamagawa_offset = 0, tamagawa_dir = 1;
 
 // ENC_Z enc_z = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 // Hall_t hall = {0, 0, 0, 0, 0, 0}; // 霍尔传感器结构体
-//  svpwm_t motor.svpwm = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//  svpwm_t motors->svpwm = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 int encoder_direction_temp = 0, encoder_direction_temp_b = 0;
 short hall_phase[8], ENC_Z_Offset = 2680, hall_phase_offset = 0, ENC_Z_Phase = 0, ENC_Z_Phase_B = 0, ENC_Z_Phase_Err = 0;
@@ -47,44 +48,6 @@ int led_blink_counter = 0, led_blink_period = 1000;
 
 u16 store_parameter = 0;
 
-Motor_t motor = {
-	.motor_timer = &htim1,
-	.PWM1_Duty = TIM_1_8_PERIOD_CLOCKS / 2,
-	.PWM2_Duty = TIM_1_8_PERIOD_CLOCKS / 2,
-	.PWM3_Duty = TIM_1_8_PERIOD_CLOCKS / 2,
-	.control_deadline = TIM_1_8_PERIOD_CLOCKS,
-	.PhaseU_current_ma = 0,
-	.PhaseV_current_ma = 0,
-	.PhaseW_current_ma = 0,
-
-	.shunt_conductance = 500, // 100 means 1 mOh, current sensing resistor
-	.phase_resistor_moh = 5,	  //[S]
-	.phase_inductance = 5,	  //[S]
-	.encoder_timer = &htim3,
-	.encoder_offset = 0,
-	.encoder_state = 0,
-	.phase = 0.0f,	 // [rad]
-	.pll_pos = 0.0f, // [rad]
-	.pll_vel = 0.0f, // [rad/s]
-	.pll_kp = 0.0f,	 // [rad/s / rad]
-	.pll_ki = 0.0f,	 // [(rad/s^2) / rad]
-
-	.motion = {
-		.feedback_resolution = 4000,
-		.commutation_time = 1000,
-		.work_mode = Default_Mode,
-	
-	},
-	.param = {
-		.poles_num = 2,
-		.phase_dir = 1,
-	},
-	.control = {
-		.requested_operation_mode = Default_Mode,
-	},
-
-	.feedback_type = Default,
-};
 /* Private constant data -----------------------------------------------------*/
 static const int one_by_sqrt3 = 577;
 static const int sqrt3_by_2 = 866;
@@ -94,32 +57,32 @@ static const int sqrt3_by_2 = 866;
 // Initalises the low level motor control and then starts the motor control threads
 void init_motor_control(void)
 {
+	Motor_t* motors = &motor;
+// #define kp 600
+// #define ki 30
+	APID_Init(&motors->apidd, PID_INCREMENT, motors->param.pid_id.kp, motors->param.pid_id.ki, motors->param.pid_id.kd);
+	APID_Set_Integral_Limit(&motors->apidd, motors->param.pid_id.integral_limit);
+	APID_Set_Out_Limit(&motors->apidd, motors->param.pid_id.out_limit);
 
-#define kp 600
-#define ki 30
-	APID_Init(&motor.apidd, PID_INCREMENT, kp, ki, 0);
-	APID_Set_Integral_Limit(&motor.apidd, kci_sum_limit * 10);
-	APID_Set_Out_Limit(&motor.apidd, Vd_out_limit * 1000);
+	APID_Init(&motors->apidq, PID_INCREMENT, motors->param.pid_iq.kp, motors->param.pid_iq.ki, motors->param.pid_iq.kd);
+	APID_Set_Integral_Limit(&motors->apidq, motors->param.pid_iq.integral_limit);
+	APID_Set_Out_Limit(&motors->apidq, motors->param.pid_iq.out_limit);
 
-	APID_Init(&motor.apidq, PID_INCREMENT, kp, ki, 0);
-	APID_Set_Integral_Limit(&motor.apidq, kci_sum_limit * 10);
-	APID_Set_Out_Limit(&motor.apidq, Vq_out_limit * 1000);
+	APID_Init(&motors->apidv, PID_INCREMENT, motors->param.pid_vel.kp, motors->param.pid_vel.ki, motors->param.pid_vel.kd);
+	// APID_Set_Integral_Limit(&motors->apidv, kvi_sum_limit * 10);
+	APID_Set_Out_Limit(&motors->apidv, motors->param.pid_vel.out_limit);
 
-	APID_Init(&motor.apidv, PID_INCREMENT, 25, 1, 0);
-	// APID_Set_Integral_Limit(&motor.apidv, kvi_sum_limit * 10);
-	APID_Set_Out_Limit(&motor.apidv, Ilim * 1000);
-
-	APID_Init(&motor.apidp, PID_POSITION, kpp, kpi, 0);
-	APID_Set_Integral_Limit(&motor.apidp, kpi_sum_limit);
-	APID_Set_Out_Limit(&motor.apidp, vel_lim);
+	APID_Init(&motors->apidp, PID_POSITION, motors->param.pid_pos.kp, motors->param.pid_pos.ki, motors->param.pid_pos.kd);
+	APID_Set_Integral_Limit(&motors->apidp, motors->param.pid_pos.integral_limit);
+	APID_Set_Out_Limit(&motors->apidp, motors->param.pid_pos.out_limit);
 
 	extern void works_init(void);
 	works_init();
 	delay_ms(10);
 	// if(vbus_voltage<140)
-	// motor.motion.Error_State=motor.motion.Error_State|0x0010;
+	// motors->motion.Error_State=motors->motion.Error_State|0x0010;
 
-	// if(motor.motion.Error_State*0x10==0)
+	// if(motors->motion.Error_State*0x10==0)
 	start_adc();
 
 	Calibrate_ADC_Offset();
@@ -127,25 +90,25 @@ void init_motor_control(void)
 	// Start Encoders
 	HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
 
-	motor.wkc.lic_aprove.bits.drv_init = 1;
-	motor.wkc.lic_aprove.bits.drv_ready = 1;
+	motors->wkc.lic_aprove.bits.drv_init = 1;
+	motors->wkc.lic_aprove.bits.drv_ready = 1;
 
-	motor.wkc.lic_aprove.bits.torque_mode = 1;
-	motor.wkc.lic_aprove.bits.velocity_mode = 1;
-	motor.wkc.lic_aprove.bits.position_mode = 1;
+	motors->wkc.lic_aprove.bits.torque_mode = 1;
+	motors->wkc.lic_aprove.bits.velocity_mode = 1;
+	motors->wkc.lic_aprove.bits.position_mode = 1;
 
 	delay_ms(20);
-	if (motor.feedback_type == Tamagawa)
+	if (motors->feedback_type == Tamagawa)
 	{
 		if (Tamagawa_First < 10)
 		{
-			motor.motion.Error_State.bits.ENC_error = 1;
+			motors->motion.Error_State.bits.ENC_error = 1;
 		}
 		else
 		{
-			motor.angle_b = motor.angle = tamagawa_angle;
+			motors->angle_b = motors->angle = tamagawa_angle;
 			pos_offest = tamagawa_angle;
-			motor.encoder_state = pos_offest;
+			motors->encoder_state = pos_offest;
 		}
 	}
 	delay_ms(10);
@@ -164,6 +127,7 @@ void safe_assert(int arg)
 
 void start_adc(void)
 {
+	Motor_t* motors = &motor;
 
 	/* Run the ADC calibration */
 	if (HAL_ADCEx_Calibration_Start(&hadc1) != HAL_OK)
@@ -176,49 +140,6 @@ void start_adc(void)
 }
 
 /**
- * @brief 启动motor.svpwm
- *
- * @param htim
- */
-void start_pwm(TIM_HandleTypeDef *htim)
-{
-	// Init PWM
-	int half_load = TIM_1_8_PERIOD_CLOCKS / 2;
-	htim->Instance->CCR1 = half_load;
-	htim->Instance->CCR2 = half_load;
-	htim->Instance->CCR3 = half_load;
-
-	// This hardware obfustication layer really is getting on my nerves
-	HAL_TIM_PWM_Start(htim, TIM_CHANNEL_1);
-	HAL_TIMEx_PWMN_Start(htim, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Start(htim, TIM_CHANNEL_2);
-	HAL_TIMEx_PWMN_Start(htim, TIM_CHANNEL_2);
-	HAL_TIM_PWM_Start(htim, TIM_CHANNEL_3);
-	HAL_TIMEx_PWMN_Start(htim, TIM_CHANNEL_3);
-}
-
-/**
- * @brief 停止motor.svpwm
- *
- * @param htim
- */
-void stop_pwm(TIM_HandleTypeDef *htim)
-{
-	// Init PWM
-	int half_load = TIM_1_8_PERIOD_CLOCKS / 2;
-	htim->Instance->CCR1 = half_load;
-	htim->Instance->CCR2 = half_load;
-	htim->Instance->CCR3 = half_load;
-
-	// This hardware obfustication layer really is getting on my nerves
-	HAL_TIM_PWM_Stop(htim, TIM_CHANNEL_1);
-	HAL_TIMEx_PWMN_Stop(htim, TIM_CHANNEL_1);
-	HAL_TIM_PWM_Stop(htim, TIM_CHANNEL_2);
-	HAL_TIMEx_PWMN_Stop(htim, TIM_CHANNEL_2);
-	HAL_TIM_PWM_Stop(htim, TIM_CHANNEL_3);
-	HAL_TIMEx_PWMN_Stop(htim, TIM_CHANNEL_3);
-}
-/**
  * @brief 计算电流
  *
  * @param ADCValue
@@ -226,145 +147,43 @@ void stop_pwm(TIM_HandleTypeDef *htim)
  */
 int phase_current_from_adcval(uint32_t ADCValue)
 {
+		Motor_t* motors = &motor;
+
 	int amp_gain = AMP_GAIN;
 
 	int amp_out_volt = ONE_ADC_VOLTAGE * ADCValue;				   // adc value to voltage /unit uv
 	int shunt_volt = amp_out_volt / amp_gain;					   // 实际电阻两端电压/unit uv
-	int current_ma = (shunt_volt * 100) / motor.shunt_conductance; // unit mA=uv/mohm
+	int current_ma = (shunt_volt * 100) / motors->shunt_conductance; // unit mA=uv/mohm
 	return current_ma;
 }
 
 void Calibrate_ADC_Offset(void)
-{
+{	Motor_t* motors = &motor;
+
 	delay_ms(200);
 	ADC_Offset[0] = ADCValue[0];
 	ADC_Offset[1] = ADCValue[1];
 	if ((ADC_Offset[0] < 1800) || (ADC_Offset[0] > 2200))
-		motor.motion.Error_State.bits.ADC_error = 1;
+		motors->motion.Error_State.bits.ADC_error = 1;
 	if ((ADC_Offset[1] < 1800) || (ADC_Offset[1] > 2200))
-		motor.motion.Error_State.bits.ADC_error = 1;
-}
-int tA, tB, tC;
-void queue_modulation_timings(Motor_t *motors)
-{
-
-	SVM(motors->svpwm.Alpha, motors->svpwm.Beta, &tA, &tB, &tC);
-
-	motors->PWM1_Duty = (tC * TIM_1_8_PERIOD_CLOCKS) / 1000;
-	motors->PWM2_Duty = (tB * TIM_1_8_PERIOD_CLOCKS) / 1000;
-	motors->PWM3_Duty = (tA * TIM_1_8_PERIOD_CLOCKS) / 1000;
-
-	//  motors->PWM1_Duty = (0 * TIM_1_8_PERIOD_CLOCKS) / 1000;
-	//  motors->PWM2_Duty = (1000 * TIM_1_8_PERIOD_CLOCKS) / 1000;
-	//  motors->PWM3_Duty = (1000 * TIM_1_8_PERIOD_CLOCKS) / 1000;
-
-	motors->motor_timer->Instance->CCR1 = motors->PWM1_Duty;
-	motors->motor_timer->Instance->CCR2 = motors->PWM2_Duty;
-	motors->motor_timer->Instance->CCR3 = motors->PWM3_Duty;
+		motors->motion.Error_State.bits.ADC_error = 1;
 }
 
-void find_commutation(void)
-{
-	static int my_p0, my_p1, my_dir;
-	switch (motor.motion.commutation_mode)
-	{
-	case 0:
-		switch (motor.feedback_type)
-		{
-		case Default:
-		case Tamagawa:
-		case Unknown_8:
-			motor.param.phase_dir = 1; // must set back to the default value
-			start_pwm(&htim1);
-			motor.wkc.lic_aprove.bits.motor_on = 1;
-			motor.phase = 0;
-			my_p0 = get_electric_phase(commutation_current);
-			motor.phase = PI / 2;
-			my_p1 = get_electric_phase(commutation_current);
-			motor.phase = 0;
-			my_p0 = get_electric_phase(commutation_current);
 
-			Iq_demand = 0;
-
-			if (my_p1 >= my_p0)
-			{
-				motor.param.phase_dir = 1;
-				if ((motor.motion.feedback_resolution / (5 * motor.param.poles_num)) < (my_p1 - my_p0) && (my_p1 - my_p0) < (motor.motion.feedback_resolution / (3 * motor.param.poles_num)))
-				{
-					motor.wkc.lic_aprove.bits.commutation_founded = 1;
-					motor.encoder_state = 0;
-					motor.encoder_offset = my_p0 % motor.motion.feedback_resolution;
-				}
-			}
-			else
-			{
-				motor.param.phase_dir = -1;
-				if ((motor.motion.feedback_resolution / (5 * motor.param.poles_num)) < (my_p0 - my_p1) && (my_p1 - my_p0) < (motor.motion.feedback_resolution / (3 * motor.param.poles_num)))
-				{
-					motor.wkc.lic_aprove.bits.commutation_founded = 1;
-					motor.encoder_state = 0;
-					motor.encoder_offset = motor.motion.feedback_resolution - my_p0 % motor.motion.feedback_resolution;
-				}
-			}
-			if (motor.feedback_type == Tamagawa)
-			{
-				if (motor.wkc.lic_aprove.bits.commutation_founded == 1)
-				{
-					tamagawa_dir = motor.param.phase_dir;
-					tamagawa_offset = motor.encoder_offset;
-				}
-			}
-			if (motor.wkc.lic_aprove.bits.commutation_founded == 0)
-			{
-				stop_pwm(&htim1);
-				motor.wkc.lic_aprove.bits.motor_on = 0;
-			}
-			break;
-		default:
-			break;
-		}
-		break;
-	case 1:
-	case 2:
-		switch (motor.feedback_type)
-		{
-		case Default:
-			motor.encoder_state = 0;
-			//			enc_z.count = 0;
-			//			enc_z.count_back = 0;
-			//			enc_z.first = 0;
-			motor.wkc.lic_aprove.bits.commutation_founded = 1;
-			break;
-		case Tamagawa:
-			motor.param.phase_dir = tamagawa_dir;
-			motor.encoder_state = tamagawa_angle;
-			motor.encoder_offset = tamagawa_offset;
-			motor.wkc.lic_aprove.bits.commutation_founded = 1;
-			break;
-		default:
-			break;
-		}
-		break;
-	default:
-		break;
-	}
-
-	// motors[0].rotor.encoder_offset=get_electric_phase(commutation_current)+motor.motion.feedback_resolution/(4*motor.param.poles_num);
-}
 int rad_of_round = 2 * PI * 2;
 void update_motor(Motor_t *motors, uint16_t angle)
 {
 	int16_t delta_enc;
 	//@TODO stick parameter into struct
-	rad_of_round = 2 * PI * motor.param.poles_num;
+	rad_of_round = 2 * PI * motors->param.poles_num;
 
 	motors->angle = angle;
 
 	delta_enc = motors->angle - motors->angle_b;
-	if (delta_enc < (-motor.motion.feedback_resolution / 2))
-		delta_enc += motor.motion.feedback_resolution;
-	if (delta_enc > (motor.motion.feedback_resolution / 2))
-		delta_enc -= motor.motion.feedback_resolution;
+	if (delta_enc < (-motors->motion.feedback_resolution / 2))
+		delta_enc += motors->motion.feedback_resolution;
+	if (delta_enc > (motors->motion.feedback_resolution / 2))
+		delta_enc -= motors->motion.feedback_resolution;
 	motors->angle_b = motors->angle;
 	motors->encoder_state += (int32_t)delta_enc;
 
@@ -379,22 +198,25 @@ void update_motor(Motor_t *motors, uint16_t angle)
 	// ph = fmod(ph, 2 * PI);
 	ph = ph % (2 * PI);
 
-	if (motor.wkc.lic_aprove.bits.commutation_founded)
+	if (motors->wkc.lic_aprove.bits.commutation_founded)
 		motors->phase = ph;
 }
 
 u32 calibrate_timechk;
 void calibrate_tamagawa_encoder(void)
 {
+		Motor_t* motors = &motor;
+
 	if (set_tamagawa_zero == 2)
 	{
 		auto_reverse_p_time = 0;
 		auto_reverse_n_time = 0;
-		motor.control.target_Iq = commutation_current;
-		motor.control.target_speed = 0;
-		motor.param.phase_dir = 1;
-		operation_mode = 0;
-		control_word.all = 0x0f;
+		motors->control.target_Iq = commutation_current;
+		motors->control.target_speed = 0;
+		motors->param.phase_dir = 1;
+		//operation_mode = 0;
+		motors->wkc.lic_aprove.bits.motor_on = 1;
+		//control_word.all = 0x0f;
 		calibrate_timechk = HAL_GetTick();
 		set_tamagawa_zero = 3;
 	}
@@ -418,11 +240,12 @@ void calibrate_tamagawa_encoder(void)
 	{
 		if ((HAL_GetTick() - calibrate_timechk) > 500)
 		{
-			motor.control.target_Iq = 0;
-			motor.control.target_speed = 0;
-			operation_mode = 2; // const speed
+			motors->control.target_Iq = 0;
+			motors->control.target_speed = 0;
+			//operation_mode = 2; // const speed
 			Tamagawa_count_temp = 0;
-			control_word.all = 0x86;
+			motors->wkc.lic_aprove.bits.motor_on=0;
+			//control_word.all = 0x86;
 			set_tamagawa_zero = 0;
 		}
 	}
@@ -430,5 +253,7 @@ void calibrate_tamagawa_encoder(void)
 
 void motor_driver_handle(void)
 {
-	wkc_handle(&motor.wkc);
+		Motor_t* motors = &motor;
+
+	wkc_handle(&motors->wkc);
 }

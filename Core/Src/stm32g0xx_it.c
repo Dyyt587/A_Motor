@@ -45,9 +45,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-int t1,t2,t3,t4,t5,t6;
-int tt1,tt2,tt3,tt4,tt5,tt6;
-int ttt1,ttt2,ttt3=0,ttt4=0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -69,7 +67,7 @@ extern DMA_HandleTypeDef hdma_usart3_rx;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 /* USER CODE BEGIN EV */
-
+uint32_t dd;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -207,7 +205,6 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 
   /* USER CODE END TIM1_BRK_UP_TRG_COM_IRQn 1 */
 }
-int32_t dd = 0;
 
 /**
   * @brief This function handles TIM1 capture compare interrupt.
@@ -233,7 +230,7 @@ void TIM1_CC_IRQHandler(void)
 	
 	static int32_t nCycles = 0;
 	dd  = stop_cycle_counter()-nCycles;
-	nCycles = stop_cycle_counter();  //!< 第一次获取从开始以来的时间
+	nCycles = stop_cycle_counter();  //!< 第一次获取从�?始以来的时间
   /* USER CODE END TIM1_CC_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
   /* USER CODE BEGIN TIM1_CC_IRQn 1 */

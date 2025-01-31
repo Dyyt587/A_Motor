@@ -17,6 +17,7 @@
 #include "oled.h"
 #include "apid.h"
 #include "perf_counter.h"
+#include "amotor_port.h"
 
 s32 profile_acce=5000,profile_dece=5000,profile_speed=5000,end_speed=0,profile_speed_b,target_speed_now=0,direction=1;
 s32 profile_target_position,profile_target_position_b;
@@ -54,7 +55,7 @@ void Motion_process(void)
 	
 	int temp32a,temp32b;
 	int64_t temp64a,temp64b,temp64c,temp64d;
-	switch(operation_mode)
+	switch(1)
 	{
 		case 1:
 		case 11:
@@ -139,7 +140,7 @@ void Motion_process(void)
 			}
 			
 			//position_demand=Low_pass_filter_1(motion_out_lpf_a,target_pos_now,position_demand);
-			position_demand=target_pos_now;
+			motor.motion.position_demand=target_pos_now;
 			
 			if((motor.control.target_position!=profile_target_position_b)&&(motion_state==0))
 			{
@@ -213,23 +214,23 @@ void Motion_process(void)
 			step_dst=(temp64a*temp64b)/1000000000;
 			target_pos_now=target_pos_now+step_dst;
 			
-			position_demand=target_pos_now;
+			motor.motion.position_demand=target_pos_now;
 			break;
 		case 7:
 		case 17:
-			position_demand=motor.control.target_position;
+			motor.motion.position_demand=motor.control.target_position;
 			break;
 		case 2:
 		case 12:
-			speed_demand=motor.control.target_speed;
+			motor.motion.speed_demand=motor.control.target_speed;
 			break;
 		case 0:
-			speed_demand=motor.control.target_speed;
-			Iq_demand=motor.control.target_Iq;
+			motor.motion.speed_demand=motor.control.target_speed;
+			motor.motion.Iq_demand=motor.control.target_Iq;
 			break;
 		case 4:
 		case 14:
-			Iq_demand=motor.control.target_Iq;
+			motor.motion.Iq_demand=motor.control.target_Iq;
 			break;
 		case 5:	
 			if(motor.wkc.lic_aprove.bits.commutation_founded )
@@ -243,13 +244,13 @@ void Motion_process(void)
 				{
 					//pluse_num+=delta_pulse;
 					pluse_num_beforegear+=pluse_num;
-					position_demand+=(pluse_num*gear_factor_a+pluse_num_r)/gear_factor_b;
+					motor.motion.position_demand+=(pluse_num*gear_factor_a+pluse_num_r)/gear_factor_b;
 					pluse_num_r=(pluse_num*gear_factor_a+pluse_num_r)%gear_factor_b;
 				}
 				else
 				{
 					pluse_num_beforegear-=pluse_num;
-					position_demand-=(pluse_num*gear_factor_a+pluse_num_r)/gear_factor_b;
+					motor.motion.position_demand-=(pluse_num*gear_factor_a+pluse_num_r)/gear_factor_b;
 					pluse_num_r=(delta_pulse*gear_factor_a+pluse_num_r)%gear_factor_b;
 					//pluse_num-=delta_pulse;
 				}
@@ -434,7 +435,7 @@ void LED_Process(void)
 void OLED_Process(void)
 {
 	float temp;
-		switch(operation_mode)
+		switch(1)
 		{
 			case 2:
 			case 3:
@@ -511,7 +512,7 @@ void OLED_Process(void)
 			{
 				sprintf(display_buff4," OFF ");
 			}
-			switch(operation_mode)
+			switch(1)
 			{
 				case 2:
 				case 3:
@@ -581,7 +582,7 @@ void KEY_Process(void)
 	DIN1_state=HAL_GPIO_ReadPin(DIN1_GPIO_Port,DIN1_Pin);
 	DIN2_state=HAL_GPIO_ReadPin(DIN2_GPIO_Port,DIN2_Pin);
 	DIN3_state=HAL_GPIO_ReadPin(DIN3_GPIO_Port,DIN3_Pin);
-	switch(operation_mode)
+	switch(1)
 	{
 		case 0:
 			//motor.control.target_Iq=Ilim/2;
@@ -621,10 +622,18 @@ void KEY_Process(void)
 
 	if(key3_state<key3_state_b)
 	{
-		if((control_word.all==0x06)||(control_word.all==0x86))
-			control_word.all=0x0f;
-		else if(control_word.all==0x0f)
-			control_word.all=0x06;
+		//motor.wkc.lic_aprove.bits.motor_on = !motor.wkc.lic_aprove.bits.motor_on; 
+		if(motor.wkc.lic_aprove.bits.motor_on)
+		{
+			motor.wkc.lic_aprove.bits.motor_on=0;
+			pwm_stop(&motor);
+		}
+		else
+		{
+			motor.wkc.lic_aprove.bits.motor_on=1;
+			pwm_start(&motor);
+		}
+
 	}	
 			
 	key1_state_b=key1_state;

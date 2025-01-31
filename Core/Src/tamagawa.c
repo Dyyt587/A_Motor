@@ -53,7 +53,7 @@ void uart3_init(u32 baudrate)
 
 	// HAL_UART_Receive_IT(&huart1, (u8 *)USART1RxBuffer, RXBUFFERSIZE);//该函数会开启接收中断：标志位UART_IT_RXNE，并且设置接收缓冲以及接收缓冲接收最大数据量
 }
-void Tamagawa_Read_Cmd(uint8_t *buf, uint16_t len)
+void Tamagawa_Read_Cmd(uint8_t cmd)
 {
 	uint16_t i;
 	USART3_RX_STA |= 0x8000;
@@ -61,12 +61,10 @@ void Tamagawa_Read_Cmd(uint8_t *buf, uint16_t len)
 	Tamagawa_RX_CNT = USART3_RX_STA & 0X3FFF;
 	Tamagawa_TX_EN = 1;
 	HAL_GPIO_WritePin(TAMAGAWA_TX_EN_GPIO_Port, TAMAGAWA_TX_EN_Pin, GPIO_PIN_SET);
-	for (i = 0; i < len; i++)
-	{
+
 		while ((USART3->ISR & 0X40) == 0)
 			; // 循环发送,直到发送完毕
-		USART3->TDR = buf[i];
-	}
+		USART3->TDR = cmd;
 	while ((USART3->ISR & 0X40) == 0)
 	{
 	} // 循环发送,直到发送完毕
@@ -93,8 +91,8 @@ void send_to_tamagawa(void)
 	if (set_tamagawa_zero == 0)
 	{
 
-		Tamagawa_TX_BUFF[0] = 0x02;
-		Tamagawa_Read_Cmd(Tamagawa_TX_BUFF, 1);
+		//Tamagawa_TX_BUFF[0] = 0x02;
+		Tamagawa_Read_Cmd(0x02);
 
 		if (Tamagawa_First == 10)
 		{
@@ -113,8 +111,13 @@ void send_to_tamagawa(void)
 	else if (set_tamagawa_zero == 1)
 	{
 
-		Tamagawa_TX_BUFF[0] = 0xAA;
-		Tamagawa_Read_Cmd(Tamagawa_TX_BUFF, 1);
+		//Tamagawa_TX_BUFF[0] = 0xAA;
+		Tamagawa_Read_Cmd(0xAA);
 		set_tamagawa_zero = 0;
 	}
+}
+
+uint16_t get_Tamagawa_encoder()
+{
+		return tamagawa_angle;
 }

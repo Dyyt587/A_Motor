@@ -37,7 +37,7 @@ void Velocity_loop(Motor_t *motors, int target_vel)
 	// APID_Set_Present(&motors->apidv, real_speed_filter);
 	APID_Hander(&motors->apidv, 1);
 
-	Iq_demand = Low_pass_filter_1(speed_out_lpf_a, -motors->apidv.parameter.out / 1000, Iq_demand);
+	motors->motion.Iq_demand = Low_pass_filter_1(speed_out_lpf_a, -motors->apidv.parameter.out / 1000,  motors->motion.Iq_demand);
 	// Iq_demand=Iq_temp;
 }
 void Update_Speed(Motor_t *motors)
