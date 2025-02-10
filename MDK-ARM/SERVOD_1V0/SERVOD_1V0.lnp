@@ -53,6 +53,7 @@
 ".\servod_1v0\stm32g0xx_hal_uart_ex.o"
 ".\servod_1v0\system_stm32g0xx.o"
 ".\servod_1v0\workchain.o"
+".\servod_1v0\filter_1.o"
 ".\servod_1v0\perf_counter.o"
 ".\servod_1v0\perfc_port_default.o"
 ".\servod_1v0\systick_wrapper_ual.o"

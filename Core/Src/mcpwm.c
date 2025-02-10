@@ -92,6 +92,7 @@ void init_motor_control(Motor_t* motors)
 
 	motors->wkc.lic_aprove.bits.drv_init = 1;
 	motors->wkc.lic_aprove.bits.drv_ready = 1;
+	motors->wkc.lic_aprove.bits.svm_apply = 1;
 
 	motors->wkc.lic_aprove.bits.torque_mode = 1;
 	motors->wkc.lic_aprove.bits.velocity_mode = 1;
@@ -173,6 +174,10 @@ void Calibrate_ADC_Offset(void)
 int rad_of_round = 2 * PI * 2;
 void update_motor(Motor_t *motors, uint16_t angle)
 {
+	//////////////////////TODO:临界区域///////////////////////////////////
+	motors->encoder_time_us_b = motors->encoder_time_us;
+	motors->encoder_time_us = get_time_us();
+//////////////////////////////////////////////////////////
 	int16_t delta_enc;
 	//@TODO stick parameter into struct
 	rad_of_round = 2 * PI * motors->param.poles_num;

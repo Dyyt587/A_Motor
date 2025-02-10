@@ -55,11 +55,6 @@ void uart3_init(u32 baudrate)
 }
 void Tamagawa_Read_Cmd(uint8_t cmd)
 {
-	uint16_t i;
-	USART3_RX_STA |= 0x8000;
-	Tamagawa_FrameFlag = 1;
-	Tamagawa_RX_CNT = USART3_RX_STA & 0X3FFF;
-	Tamagawa_TX_EN = 1;
 	HAL_GPIO_WritePin(TAMAGAWA_TX_EN_GPIO_Port, TAMAGAWA_TX_EN_Pin, GPIO_PIN_SET);
 
 		while ((USART3->ISR & 0X40) == 0)
@@ -69,20 +64,23 @@ void Tamagawa_Read_Cmd(uint8_t cmd)
 	{
 	} // 循环发送,直到发送完毕
 	// delay_us(2);
+		HAL_UART_Receive_DMA(&huart3, Tamagawa_RX_BUFF, 6);
+
 	HAL_GPIO_WritePin(TAMAGAWA_TX_EN_GPIO_Port, TAMAGAWA_TX_EN_Pin, GPIO_PIN_RESET);
 	// delay_us(5);
-	switch (motor.feedback_type)
-	{
-	case Tamagawa:
-		HAL_UART_Receive_DMA(&huart3, Tamagawa_RX_BUFF, 6);
-		// UART_Start_Receive_DMA(&huart3,Tamagawa_RX_BUFF,6);
-		break;
-	case Tamagawa_1:
-		HAL_UART_Receive_DMA(&huart3, Tamagawa_RX_BUFF, 11);
-		break;
-	default:
-		break;
-	}
+
+//	switch (motor.feedback_type)
+//	{
+//	case Tamagawa:
+//		HAL_UART_Receive_DMA(&huart3, Tamagawa_RX_BUFF, 6);
+//		// UART_Start_Receive_DMA(&huart3,Tamagawa_RX_BUFF,6);
+//		break;
+//	case Tamagawa_1:
+//		HAL_UART_Receive_DMA(&huart3, Tamagawa_RX_BUFF, 11);
+//		break;
+//	default:
+//		break;
+//	}
 	Tamagawa_TX_EN = 0;
 }
 
@@ -90,23 +88,7 @@ void send_to_tamagawa(void)
 {
 	if (set_tamagawa_zero == 0)
 	{
-
-		//Tamagawa_TX_BUFF[0] = 0x02;
 		Tamagawa_Read_Cmd(0x02);
-
-		if (Tamagawa_First == 10)
-		{
-			Tamagawa_count_temp++;
-			if (Tamagawa_count_temp > 1)
-			{
-				Tamagawa_lost++;
-			}
-			if (Tamagawa_count_temp > 40)
-			{
-				//if (set_tamagawa_zero == 0)
-					//motor.motion.Error_State.bits.ENC_error = 1;
-			}
-		}
 	}
 	else if (set_tamagawa_zero == 1)
 	{

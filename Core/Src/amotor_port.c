@@ -55,6 +55,51 @@ void amotor_part_init(void)
 {
 	init_motor_control(&motor);
 }
+
+void pwm_U_start(Motor_t *motors)
+{
+	motor_user_date_t *date = (motor_user_date_t *)motors->user_date;
+	TIM_HandleTypeDef *htim = date->htim;
+
+	// Init PWM
+	int half_load = TIM_1_8_PERIOD_CLOCKS / 2;
+	htim->Instance->CCR3 = half_load;
+
+	// This hardware obfustication layer really is getting on my nerves
+	HAL_TIM_PWM_Start(htim, TIM_CHANNEL_3);
+	HAL_TIMEx_PWMN_Start(htim, TIM_CHANNEL_3);
+}
+
+void pwm_V_start(Motor_t *motors)
+{
+	motor_user_date_t *date = (motor_user_date_t *)motors->user_date;
+	TIM_HandleTypeDef *htim = date->htim;
+
+	// Init PWM
+	int half_load = TIM_1_8_PERIOD_CLOCKS / 2;
+	htim->Instance->CCR2 = half_load;
+
+	// This hardware obfustication layer really is getting on my nerves
+	HAL_TIM_PWM_Start(htim, TIM_CHANNEL_2);
+	HAL_TIMEx_PWMN_Start(htim, TIM_CHANNEL_2);
+
+
+}
+
+void pwm_W_start(Motor_t *motors)
+{
+	motor_user_date_t *date = (motor_user_date_t *)motors->user_date;
+	TIM_HandleTypeDef *htim = date->htim;
+
+	// Init PWM
+	int half_load = TIM_1_8_PERIOD_CLOCKS / 2;
+	htim->Instance->CCR1 = half_load;
+
+	// This hardware obfustication layer really is getting on my nerves
+	HAL_TIM_PWM_Start(htim, TIM_CHANNEL_1);
+	HAL_TIMEx_PWMN_Start(htim, TIM_CHANNEL_1);
+}
+
 void pwm_start(Motor_t *motors)
 {
 	motor_user_date_t *date = (motor_user_date_t *)motors->user_date;
@@ -75,16 +120,32 @@ void pwm_start(Motor_t *motors)
 	HAL_TIMEx_PWMN_Start(htim, TIM_CHANNEL_3);
 }
 
+void pwm_U_stop(Motor_t *motors)
+{
+	motor_user_date_t *date = (motor_user_date_t *)motors->user_date;
+	TIM_HandleTypeDef *htim = date->htim;
+	HAL_TIM_PWM_Stop(htim, TIM_CHANNEL_1);
+	HAL_TIMEx_PWMN_Stop(htim, TIM_CHANNEL_1);
+}
+void pwm_V_stop(Motor_t *motors)
+{
+	motor_user_date_t *date = (motor_user_date_t *)motors->user_date;
+	TIM_HandleTypeDef *htim = date->htim;
+	HAL_TIM_PWM_Stop(htim, TIM_CHANNEL_2);
+	HAL_TIMEx_PWMN_Stop(htim, TIM_CHANNEL_2);
+
+}
+void pwm_W_stop(Motor_t *motors)
+{
+	motor_user_date_t *date = (motor_user_date_t *)motors->user_date;
+	TIM_HandleTypeDef *htim = date->htim;
+	HAL_TIM_PWM_Stop(htim, TIM_CHANNEL_3);
+	HAL_TIMEx_PWMN_Stop(htim, TIM_CHANNEL_3);
+}
 void pwm_stop(Motor_t *motors)
 {
 	motor_user_date_t *date = (motor_user_date_t *)motors->user_date;
 	TIM_HandleTypeDef *htim = date->htim;
-
-	// Init PWM
-	int half_load = TIM_1_8_PERIOD_CLOCKS / 2;
-	htim->Instance->CCR1 = half_load;
-	htim->Instance->CCR2 = half_load;
-	htim->Instance->CCR3 = half_load;
 
 	// This hardware obfustication layer really is getting on my nerves
 	HAL_TIM_PWM_Stop(htim, TIM_CHANNEL_1);

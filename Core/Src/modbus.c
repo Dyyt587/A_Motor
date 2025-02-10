@@ -106,6 +106,10 @@ void uart2_init(u32 baudrate)
 }
 char shot=0;
 int tamagawa_angle_delta_4;
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
+{
+	while(1);
+}
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   char res;
@@ -118,6 +122,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 					Tamagawa_count_temp=0;
 					tamagawa_angle_32=Tamagawa_RX_BUFF[4]*0x10000+Tamagawa_RX_BUFF[3]*0x100+Tamagawa_RX_BUFF[2];
 					tamagawa_angle=tamagawa_angle_32>>2;
+					update_motor(&motor, get_Tamagawa_encoder()); // 更新电角度
 					if(Tamagawa_First<10)
 						Tamagawa_First++;
 						//tamagawa_angle=Tamagawa_RX_BUFF[3]*0x40+(Tamagawa_RX_BUFF[2]>>2);

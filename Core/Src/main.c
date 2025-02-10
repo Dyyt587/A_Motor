@@ -69,6 +69,18 @@ int i,j,k;
 //uint32_t ADC_Value[10];
 int chanel1=2000,chanel2=2000,chanel3=2000
 	,chanel4=10;
+
+
+//typedef struct{
+//	float float_d[5];
+//	uint8_t tail[4];
+//}vofa_date;
+
+//vofa_date date={
+//	.float_d={1.2,1.3,12.5,1.2},
+//	.tail={0x00,0x00,0x80,0x7f},
+//};
+
 /* USER CODE END 0 */
 
 /**
@@ -113,7 +125,7 @@ int main(void)
 	//delay_init(64);
 	start_cycle_counter();
 	
-	
+		uint8_t ch = 0x0a;
 	//HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
 
 	//HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value, 6);
@@ -128,24 +140,25 @@ int main(void)
 	Exchange_motor_code();
 	
 	uart1_init(RS485_Baudrate);
-	uart2_init(RS232_Baudrate);
+//	uart2_init(RS232_Baudrate);
 	uart3_init(Tamagawa_Baudrate);
+	send_to_tamagawa();
 	delay_ms(100);
-	Init_Driver_State();
 	HAL_TIM_Base_Start_IT(&htim6);
 	
-	//init_motor_control();
 	amotor_part_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-//	control_word.all=0x0f;
-motor.wkc.lic_aprove.bits.motor_on=1;
+		motor.control.target_position=0;
+
+	motor.wkc.lic_aprove.bits.motor_on=1;
   motor.motion.work_mode = Position_Mode;
 	//motor.control.target_Iq  =600;
 	//motor.control.target_speed  =6000;
-	
+
+		//HAL_UART_Transmit_DMA(&huart2, (uint8_t *)&date, sizeof(vofa_date));
   while (1)
   {
 		if(OLED_count>OLED_Period)
@@ -159,9 +172,8 @@ motor.wkc.lic_aprove.bits.motor_on=1;
 		//RS232_Solve_Service();
 		//RS485_Process();
 		//Modbus_Solve_Service();
-		
 		//Auto_reserve_process();
-		
+
 		//calibrate_hall_phase();
 		//calibrate_tamagawa_encoder();
     /* USER CODE END WHILE */

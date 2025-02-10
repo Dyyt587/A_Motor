@@ -16,7 +16,7 @@ typedef union LicenseDomain
 		uint8_t drv_ready:1;						//1
 		uint8_t motor_on:1;											//2
 		uint8_t enc_touched:1;						//3
-		uint8_t :1;			//4
+		uint8_t svm_apply:1;			//4
 		uint8_t :1;		//5
 		uint8_t time_triged:1;			//6
 		uint8_t :1;											//7
@@ -28,10 +28,10 @@ typedef union LicenseDomain
 		uint8_t :1;											//13
 		uint8_t :1;											//14
 		uint8_t :1;											//15
-		uint8_t :1;											//11
-		uint8_t :1;											//12
-		uint8_t :1;											//13
-		uint8_t :1;											//14
+		uint8_t commutation_founded:1;											//11
+		uint8_t resistance_measured:1;											//12
+		uint8_t poles_num_measured:1;											//13
+		uint8_t inductance_measured:1;											//14
 		uint8_t :1;											//15
 		uint8_t torque_mode:1;											//16
 		uint8_t :1;											//17
@@ -43,7 +43,7 @@ typedef union LicenseDomain
 		uint8_t :1;											//23
 		uint8_t :1;											//24
 		uint8_t :1;											//25
-		uint8_t commutation_founded:1;											//26
+		uint8_t :1;											//26
 		uint8_t motor_require_on:1;											//27
 		uint8_t motor_require_off:1;											//28
 		uint8_t :1;											//29

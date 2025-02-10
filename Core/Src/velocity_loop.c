@@ -16,7 +16,7 @@
 #include "delay.h"
 
 int32_t encoder_state_b;
-int real_speed, real_speed_filter, speed_err, kvi_sum = 0, kvi_sum_limit = 3000;
+int  real_speed_filter, speed_err, kvi_sum = 0, kvi_sum_limit = 3000;
 short kvp = 253, kvi = 8;
 int real_speed_buff[32];
 int buff_sum = 0;
@@ -28,30 +28,56 @@ int Iq_temp = 0, Ilim = 5000;
 int check_vel_overshot_p = 0, check_vel_overshot_n = 0;
 int hall_speed_loop_count = 0, hall_speed_update = 0;
 int display_speed_loop_count = 0, display_speed_update = 0, display_speed = 0, display_encoder_state_b = 0;
+
+int32_t speed;
 void Velocity_loop(Motor_t *motors, int target_vel)
 {
 
 	APID_Set_Target(&motors->apidv, target_vel);
 
-	APID_Set_Present(&motors->apidv, real_speed);
+	APID_Set_Present(&motors->apidv, speed);
 	// APID_Set_Present(&motors->apidv, real_speed_filter);
 	APID_Hander(&motors->apidv, 1);
 
 	motors->motion.Iq_demand = Low_pass_filter_1(speed_out_lpf_a, -motors->apidv.parameter.out / 1000,  motors->motion.Iq_demand);
 	// Iq_demand=Iq_temp;
 }
+int delta_encoder_est;
+int delta_encoder;
 void Update_Speed(Motor_t *motors)
 {
-	real_speed = (motors->encoder_state - encoder_state_b) * 1000 * 4000 / motor.motion.feedback_resolution;
-	encoder_state_b = motors->encoder_state;
-	real_speed_filter = Low_pass_filter_1(speed_in_lpf_a, real_speed, real_speed_filter);
-	display_speed_loop_count++;
-	if (display_speed_loop_count > 399) // 100ms
-	{
-		display_speed_loop_count = 0;
-		display_speed = (motors->encoder_state - display_encoder_state_b) * 600 / motor.motion.feedback_resolution;
-		display_encoder_state_b = motors->encoder_state;
-	}
+	int32_t delta_time_us = motors->encoder_time_us - motors->encoder_time_us_b;
+	//int64_t = (motor.motion.feedback_resolution*delta_time_us);
+	int tmp = (motor.motion.feedback_resolution/(2*PI));
+	delta_encoder_est = motors->speed_encoder_b*delta_time_us*tmp/1000000;
+	delta_encoder=(motors->encoder_state - motors->encoder_state_b);
+	
+	
+	
+	int delta_encoder_error = delta_encoder_est-delta_encoder;
+//	#define kp 2
+//	#define ki ((kp*kp)/4)
+	int kp =2;
+	int ki =((kp*kp)/4);
+	static int e_i ;
+	e_i = ki*delta_encoder_error;
+	delta_encoder -=(delta_encoder_error*kp + e_i)/100;
+	speed = delta_encoder * 1000*1000*2*PI / delta_time_us;
+	//speed = (motors->encoder_state - motors->encoder_state_b) * 1000*1000*2*PI / delta_time_us;
+	speed =speed*1000/motor.motion.feedback_resolution;
+	motors->encoder_state_b = motors->encoder_state;
+	
+	real_speed_filter = Low_pass_filter_1(500, speed, real_speed_filter);
+	motors->speed_encoder_b = motors->speed_encoder;
+
+	motors->speed_encoder = real_speed_filter;
+//	display_speed_loop_count++;
+//	if (display_speed_loop_count > 399) // 100ms
+//	{
+//		display_speed_loop_count = 0;
+//		display_speed = (motors->encoder_state - display_encoder_state_b) * 600 / motor.motion.feedback_resolution;
+//		display_encoder_state_b = motors->encoder_state;
+//	}
 }
 
 int Low_pass_filter(int *Buffer, int X, int n)

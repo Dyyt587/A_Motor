@@ -71,6 +71,7 @@ typedef struct
 {
     uint16_t poles_num;
     uint8_t phase_dir;
+	  uint16_t inductance;
     uint16_t motor_code;
 
     pid_param_t pid_vel;
@@ -88,7 +89,7 @@ typedef struct
     short commutation_founded, commutation_mode, commutation_time;
     int feedback_resolution;
     Operation_Type_e work_mode;
-    short vbus_voltage;
+    int vbus_voltage;
     int Iq_demand, Id_demand, speed_demand, position_demand;
 } motion_t;
 
@@ -105,6 +106,12 @@ typedef struct
     uint16_t PWM1_Duty;
     uint16_t PWM2_Duty;
     uint16_t PWM3_Duty;
+
+    int Voltage_U;
+    int Voltage_V;
+    int Voltage_W;
+
+
     uint16_t control_deadline;
     int PhaseU_current_ma;
     int PhaseV_current_ma;
@@ -115,6 +122,7 @@ typedef struct
     // TIM_HandleTypeDef* encoder_timer;
     int16_t encoder_offset;
     int32_t encoder_state; // 编码器角度
+    int32_t encoder_state_b;
     int phase;
     float pll_pos;
     float pll_vel;
@@ -124,6 +132,11 @@ typedef struct
     uint16_t angle; // 编码器原始角度
     uint16_t angle_b;
     control_t control;
+    uint64_t encoder_time_us;
+    uint64_t encoder_time_us_b;
+    int32_t speed_encoder;
+    int32_t speed_encoder_b;
+    
     motion_t motion;
     param_t param;
 

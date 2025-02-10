@@ -1,21 +1,21 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file    stm32g0xx_it.c
-  * @brief   Interrupt Service Routines.
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    stm32g0xx_it.c
+ * @brief   Interrupt Service Routines.
+ ******************************************************************************
+ * @attention
+ *
+ * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
+ * All rights reserved.</center></h2>
+ *
+ * This software component is licensed by ST under BSD 3-Clause license,
+ * the "License"; You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at:
+ *                        opensource.org/licenses/BSD-3-Clause
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
@@ -40,6 +40,16 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
+typedef struct
+{
+  float float_d[6];
+  uint8_t tail[4];
+} vofa_date;
+
+vofa_date date = {
+    .float_d = {1.2, 1.3, 12.5, 1.2},
+    .tail = {0x00, 0x00, 0x80, 0x7f},
+};
 
 /* USER CODE END PM */
 
@@ -63,6 +73,7 @@ extern DMA_HandleTypeDef hdma_adc1;
 extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim6;
+extern DMA_HandleTypeDef hdma_usart2_tx;
 extern DMA_HandleTypeDef hdma_usart3_rx;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
@@ -74,8 +85,8 @@ uint32_t dd;
 /*           Cortex-M0+ Processor Interruption and Exception Handlers          */
 /******************************************************************************/
 /**
-  * @brief This function handles Non maskable interrupt.
-  */
+ * @brief This function handles Non maskable interrupt.
+ */
 void NMI_Handler(void)
 {
   /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
@@ -89,8 +100,8 @@ void NMI_Handler(void)
 }
 
 /**
-  * @brief This function handles Hard fault interrupt.
-  */
+ * @brief This function handles Hard fault interrupt.
+ */
 void HardFault_Handler(void)
 {
   /* USER CODE BEGIN HardFault_IRQn 0 */
@@ -104,8 +115,8 @@ void HardFault_Handler(void)
 }
 
 /**
-  * @brief This function handles System service call via SWI instruction.
-  */
+ * @brief This function handles System service call via SWI instruction.
+ */
 void SVC_Handler(void)
 {
   /* USER CODE BEGIN SVC_IRQn 0 */
@@ -117,8 +128,8 @@ void SVC_Handler(void)
 }
 
 /**
-  * @brief This function handles Pendable request for system service.
-  */
+ * @brief This function handles Pendable request for system service.
+ */
 void PendSV_Handler(void)
 {
   /* USER CODE BEGIN PendSV_IRQn 0 */
@@ -130,13 +141,13 @@ void PendSV_Handler(void)
 }
 
 /**
-  * @brief This function handles System tick timer.
-  */
+ * @brief This function handles System tick timer.
+ */
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	LED_Process();
-	OLED_count++;
+  LED_Process();
+  OLED_count++;
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
@@ -152,8 +163,8 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles DMA1 channel 1 interrupt.
-  */
+ * @brief This function handles DMA1 channel 1 interrupt.
+ */
 void DMA1_Channel1_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
@@ -165,8 +176,8 @@ void DMA1_Channel1_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles DMA1 channel 2 and channel 3 interrupts.
-  */
+ * @brief This function handles DMA1 channel 2 and channel 3 interrupts.
+ */
 void DMA1_Channel2_3_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Channel2_3_IRQn 0 */
@@ -179,8 +190,22 @@ void DMA1_Channel2_3_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles ADC1 interrupt.
-  */
+ * @brief This function handles DMA1 channel 4, channel 5, channel 6, channel 7 and DMAMUX1 interrupts.
+ */
+void DMA1_Ch4_7_DMAMUX1_OVR_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Ch4_7_DMAMUX1_OVR_IRQn 0 */
+
+  /* USER CODE END DMA1_Ch4_7_DMAMUX1_OVR_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart2_tx);
+  /* USER CODE BEGIN DMA1_Ch4_7_DMAMUX1_OVR_IRQn 1 */
+
+  /* USER CODE END DMA1_Ch4_7_DMAMUX1_OVR_IRQn 1 */
+}
+
+/**
+ * @brief This function handles ADC1 interrupt.
+ */
 void ADC1_IRQHandler(void)
 {
   /* USER CODE BEGIN ADC1_IRQn 0 */
@@ -193,8 +218,8 @@ void ADC1_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles TIM1 break, update, trigger and commutation interrupts.
-  */
+ * @brief This function handles TIM1 break, update, trigger and commutation interrupts.
+ */
 void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_BRK_UP_TRG_COM_IRQn 0 */
@@ -207,30 +232,28 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles TIM1 capture compare interrupt.
-  */
+ * @brief This function handles TIM1 capture compare interrupt.
+ */
 void TIM1_CC_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_CC_IRQn 0 */
-	memcpy(ADCValue,ADC_Value,sizeof(ADCValue));
-	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value, 6);
-	
-	motor.motion.vbus_voltage=(ADCValue[3]*19)/106;
+  memcpy(ADCValue, ADC_Value, sizeof(ADCValue));
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)ADC_Value, 6);
 
-	NTC_R_Value=1000*ADCValue[2]/(4096-ADCValue[2]);
-	device_temperature=Get_NTC_Temperature(NTC_R_Value);
-	
+  motor.motion.vbus_voltage = (ADCValue[3] * 1900) / 106;
 
+  NTC_R_Value = 1000 * ADCValue[2] / (4096 - ADCValue[2]);
+  device_temperature = Get_NTC_Temperature(NTC_R_Value);
 
-	extern void motor_driver_handle(void);
+  extern void motor_driver_handle(void);
 
-	motor_driver_handle();
-	// if(Scop_Start)
-	// 	Process_Scop_Data();
-	
-	static int32_t nCycles = 0;
-	dd  = stop_cycle_counter()-nCycles;
-	nCycles = stop_cycle_counter();  //!< ç¬¬ä¸€æ¬¡èŽ·å�–ä»Žå¼?å§‹ä»¥æ�¥çš„æ—¶é—´
+  motor_driver_handle();
+  // if(Scop_Start)
+  // 	Process_Scop_Data();
+
+  static int32_t nCycles = 0;
+  dd = stop_cycle_counter() - nCycles;
+  nCycles = stop_cycle_counter();
   /* USER CODE END TIM1_CC_IRQn 0 */
   HAL_TIM_IRQHandler(&htim1);
   /* USER CODE BEGIN TIM1_CC_IRQn 1 */
@@ -239,14 +262,31 @@ void TIM1_CC_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles TIM6 global interrupt.
-  */
+ * @brief This function handles TIM6 global interrupt.
+ */
 void TIM6_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM6_IRQn 0 */
 
-					if(motor.wkc.lic_aprove.bits.motor_on)
-				Motion_process();
+  //					if(motor.wkc.lic_aprove.bits.motor_on)
+  //				Motion_process();
+  // date.float_d[0]=motor.PhaseU_current_ma;
+  // date.float_d[1]=motor.PhaseV_current_ma;
+  // date.float_d[2]=motor.PhaseW_current_ma;
+  // 	extern int  delta_encoder_est;
+  // 	extern int  delta_encoder;
+
+  // date.float_d[3]= motor.Voltage_U;
+  // date.float_d[4]= motor.Voltage_V;
+  // date.float_d[5]= motor.Voltage_W;
+  // //date.float_d[4]= delta_encoder_est;
+  static int cntt = 1;
+  if (cntt == 1)
+  {
+
+    cntt = 0;
+    HAL_UART_Transmit_DMA(&huart2, (uint8_t *)&date, sizeof(vofa_date));
+  }
   /* USER CODE END TIM6_IRQn 0 */
   HAL_TIM_IRQHandler(&htim6);
   /* USER CODE BEGIN TIM6_IRQn 1 */
@@ -255,8 +295,8 @@ void TIM6_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles USART1 global interrupt / USART1 wake-up interrupt through EXTI line 25.
-  */
+ * @brief This function handles USART1 global interrupt / USART1 wake-up interrupt through EXTI line 25.
+ */
 void USART1_IRQHandler(void)
 {
   /* USER CODE BEGIN USART1_IRQn 0 */
@@ -265,28 +305,29 @@ void USART1_IRQHandler(void)
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
 
-	u32 timeout=0;
-	
-	timeout=0;
-    while (HAL_UART_GetState(&huart1) != HAL_UART_STATE_READY)//|?Â§???Ã¬??Ã¬??y???Ã¬aD??
-	{
-	 timeout++;////3???Ã¬o??Â§?Ã¨??|??Ã¬?Â¨Â¨??Ã¬a
-     if(timeout>HAL_MAX_DELAY) break;		
-	
-	}
-     
-	timeout=0;
-	while(HAL_UART_Receive_IT(&huart1, (u8 *)USART1RxBuffer, RXBUFFERSIZE) != HAL_OK)//??Ã¬????????|??Ã¬?Â¨Â¨??Ã¬a??Ã¬a??Ã¬o3??Ã¬|??o??Ã¬???Â§o???D??a???D??2??Â§|??Ã¬|??Ã¬??Ã¬??RxXferCount?a1
-	{
-	 timeout++; //3???Ã¬o??Â§?Ã¨??|??Ã¬?Â¨Â¨??Ã¬a
-	 if(timeout>HAL_MAX_DELAY) break;	
-	}
+  u32 timeout = 0;
+
+  timeout = 0;
+  while (HAL_UART_GetState(&huart1) != HAL_UART_STATE_READY) //|?Â§???Ã¬??Ã¬??y???Ã¬aD??
+  {
+    timeout++; ////3???Ã¬o??Â§?Ã¨??|??Ã¬?Â¨Â¨??Ã¬a
+    if (timeout > HAL_MAX_DELAY)
+      break;
+  }
+
+  timeout = 0;
+  while (HAL_UART_Receive_IT(&huart1, (u8 *)USART1RxBuffer, RXBUFFERSIZE) != HAL_OK) //??Ã¬????????|??Ã¬?Â¨Â¨??Ã¬a??Ã¬a??Ã¬o3??Ã¬|??o??Ã¬???Â§o???D??a???D??2??Â§|??Ã¬|??Ã¬??Ã¬??RxXferCount?a1
+  {
+    timeout++; // 3???Ã¬o??Â§?Ã¨??|??Ã¬?Â¨Â¨??Ã¬a
+    if (timeout > HAL_MAX_DELAY)
+      break;
+  }
   /* USER CODE END USART1_IRQn 1 */
 }
 
 /**
-  * @brief This function handles USART2 global interrupt / USART2 wake-up interrupt through EXTI line 26.
-  */
+ * @brief This function handles USART2 global interrupt / USART2 wake-up interrupt through EXTI line 26.
+ */
 void USART2_IRQHandler(void)
 {
   /* USER CODE BEGIN USART2_IRQn 0 */
@@ -294,49 +335,31 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
-
-	u32 timeout=0;
-	
-	timeout=0;
-    while (HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)//|?Â§???Ã¬??Ã¬??y???Ã¬aD??
-	{
-	 timeout++;////3???Ã¬o??Â§?Ã¨??|??Ã¬?Â¨Â¨??Ã¬a
-     if(timeout>HAL_MAX_DELAY) break;		
-	
-	}
-     
-	timeout=0;
-	while(HAL_UART_Receive_IT(&huart2, (u8 *)USART2RxBuffer, RXBUFFERSIZE) != HAL_OK)//??Ã¬????????|??Ã¬?Â¨Â¨??Ã¬a??Ã¬a??Ã¬o3??Ã¬|??o??Ã¬???Â§o???D??a???D??2??Â§|??Ã¬|??Ã¬??Ã¬??RxXferCount?a1
-	{
-	 timeout++; //3???Ã¬o??Â§?Ã¨??|??Ã¬?Â¨Â¨??Ã¬a
-	 if(timeout>HAL_MAX_DELAY) break;	
-	}
   /* USER CODE END USART2_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
-	memcpy(ADCValue,ADC_Value,sizeof(ADCValue));
-	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)ADC_Value, 6);
-	
-	motor.motion.vbus_voltage=(ADCValue[3]*19)/106;
-
-	NTC_R_Value=1000*ADCValue[2]/(4096-ADCValue[2]);
-	device_temperature=Get_NTC_Temperature(NTC_R_Value);
-	
-
-
-	extern void motor_driver_handle(void);
-
-	motor_driver_handle();
-	// if(Scop_Start)
-	// 	Process_Scop_Data();
-	
-	static int32_t nCycles = 0;
-	dd  = stop_cycle_counter()-nCycles;
-	nCycles = stop_cycle_counter();  
 }
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART2)
+  {
+    date.float_d[0] = motor.PhaseU_current_ma;
+    date.float_d[1] = motor.PhaseV_current_ma;
+    date.float_d[2] = motor.PhaseW_current_ma;
+    date.float_d[3] = motor.Voltage_U;
+    date.float_d[4] = motor.Voltage_V;
+    date.float_d[5] = motor.Voltage_W;
+    // extern int delta_encoder_est;
+    // extern int delta_encoder;
 
+    // date.float_d[4] = delta_encoder;
+    // date.float_d[4]= delta_encoder_est;
+
+    HAL_UART_Transmit_DMA(&huart2, (uint8_t *)&date, sizeof(vofa_date));
+  }
+}
 
 /* USER CODE END 1 */

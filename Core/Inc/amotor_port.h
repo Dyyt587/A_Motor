@@ -13,7 +13,16 @@
 #include "apid.h"
 #include "workchain.h"
 
+void pwm_U_start(Motor_t* motors);
+void pwm_V_start(Motor_t* motors);
+void pwm_W_start(Motor_t* motors);
+
+
 void pwm_start(Motor_t* motors);
+
+void pwm_U_stop(Motor_t* motors);
+void pwm_V_stop(Motor_t* motors);
+void pwm_W_stop(Motor_t* motors);
 
 void pwm_stop(Motor_t* motors);
 

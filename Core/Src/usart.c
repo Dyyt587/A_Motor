@@ -28,6 +28,7 @@
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
+DMA_HandleTypeDef hdma_usart2_tx;
 DMA_HandleTypeDef hdma_usart3_rx;
 
 /* USART1 init function */
@@ -88,7 +89,7 @@ void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 2500000;
+  huart2.Init.BaudRate = 1500000;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -224,6 +225,24 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     GPIO_InitStruct.Alternate = GPIO_AF0_USART2;
     HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
+    /* USART2 DMA Init */
+    /* USART2_TX Init */
+    hdma_usart2_tx.Instance = DMA1_Channel4;
+    hdma_usart2_tx.Init.Request = DMA_REQUEST_USART2_TX;
+    hdma_usart2_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+    hdma_usart2_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_usart2_tx.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_usart2_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    hdma_usart2_tx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
+    hdma_usart2_tx.Init.Mode = DMA_NORMAL;
+    hdma_usart2_tx.Init.Priority = DMA_PRIORITY_LOW;
+    if (HAL_DMA_Init(&hdma_usart2_tx) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    __HAL_LINKDMA(uartHandle,hdmatx,hdma_usart2_tx);
+
     /* USART2 interrupt Init */
     HAL_NVIC_SetPriority(USART2_IRQn, 2, 0);
     HAL_NVIC_EnableIRQ(USART2_IRQn);
@@ -313,6 +332,9 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     */
     HAL_GPIO_DeInit(GPIOD, GPIO_PIN_5|GPIO_PIN_6);
 
+    /* USART2 DMA DeInit */
+    HAL_DMA_DeInit(uartHandle->hdmatx);
+
     /* USART2 interrupt Deinit */
     HAL_NVIC_DisableIRQ(USART2_IRQn);
   /* USER CODE BEGIN USART2_MspDeInit 1 */
@@ -348,13 +370,22 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 #if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 __asm (".global __use_no_semihosting\n\t");
  
-//FILE __stdout;
+struct __FILE 
+{ 
+    int handle; 
+}; 
+ 
+FILE __stdout; 
  
 /* __use_no_semihosting was requested, but _sys_exit was */
 void _sys_exit(int x)
 {
     x = x;
 }
+//void _sys_open(int x)
+//{
+//    x = x;
+//}
 /* __use_no_semihosting was requested, but _ttywrch was */
 void _ttywrch(int ch)
 {
@@ -393,9 +424,8 @@ void _sys_exit(int x)
  */
 PUTCHAR_PROTOTYPE
 {
-	HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 1000);
+	HAL_UART_Transmit(&huart2, (uint8_t *)&ch, 1, 1000);
 	return ch;
 }
-
 
 /* USER CODE END 1 */
